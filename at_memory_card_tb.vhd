@@ -177,6 +177,26 @@ begin
 	xms_only_n <= '1';
 	wait for  1 us;
 
+	a <= x"11";
+	sa0 <= '0';
+	sbhe <= '0';
+	wait for  1 us;
+
+	a <= x"12";
+	sa0 <= '1';
+	sbhe <= '0';
+	wait for  1 us;
+	
+	a <= x"13";
+	sa0 <= '0';
+	sbhe <= '1';
+	wait for  1 us;
+	
+	a <= x"14";
+	sa0 <= '1';
+	sbhe <= '1';
+	wait for  1 us;
+	
 	a <= x"00";
 	umbd_n <= '0';
 	umbe_n <= '0';

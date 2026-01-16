@@ -50,11 +50,13 @@ begin
 				"1000000000000000" when unsigned(a(23 downto 16)) >= x"F0" and unsigned(a(23 downto 16)) < x"FD" else 	-- 0xF00000 to 0xFDFFFF	
 				"0000000000000000";
 
-	ram_cs_l_n 	<= 	not ram_cs(15 downto 1) when xms_only_n = '0' else
-					not ram_cs(14 downto 0);
+	ram_cs_l_n 	<= 	not ram_cs(15 downto 1) when sa0 = '0' and xms_only_n = '0' else
+					not ram_cs(14 downto 0) when sa0 = '0' and xms_only_n = '1' else
+					(others => '1');
 
-	ram_cs_h_n 	<= 	not ram_cs(15 downto 1) when xms_only_n = '0' else
-					not ram_cs(14 downto 0);
+	ram_cs_h_n 	<= 	not ram_cs(15 downto 1) when sbhe = '0' and xms_only_n = '0' else
+					not ram_cs(14 downto 0) when sbhe = '0' and xms_only_n = '1' else
+					(others => '1');
 
 	-- If you don't specify outputs then the fitter will crash			
 	md_dir 	<= 	'0';
