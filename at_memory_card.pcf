@@ -1,0 +1,26 @@
+### ISA Bus Signals
+
+set_io 	a[15]			12
+set_io  a[16]			9
+set_io 	a[17]			37
+set_io 	a[18]			35
+set_io 	a[19]			33
+set_io 	a[20]			36
+set_io 	a[21]			34
+set_io 	a[22]			31
+set_io 	a[23]			30
+set_io 	ale				46
+# set_io 	gate_ale 	45
+# set_io 	BM_10 		57
+set_io 	mem_cs_16_n		22
+set_io 	sa0 			83
+set_io 	sbhe			2
+set_io 	memr_n			29
+set_io 	md_dir			28
+# set_io 	CMDLY		39
+# set_io 	FSYS_16		52
+# set_io 	LMEG_CS		55
+
+### Switches
+set_io 	umbd_n			6
+set_io 	umbe_n			8

@@ -8,8 +8,8 @@ export FITTERDIR=$(winepath -w ${ROOT}/vendor)
 # Process command line args
 
 DEVICE=ATF1508AS
-PACKAGE=PLCC82
-SPEED=15
+PACKAGE=PLCC84
+SPEED=10
 
 usage() {
     echo "Usage: $0 [-h] [-d <device>] [-p <package>] [-s <speed>] <name> [ fitter options ]" 1>&2
