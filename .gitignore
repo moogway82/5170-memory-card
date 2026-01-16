@@ -1,0 +1,13 @@
+at_memory_card
+at_memory_card_tb
+*.edif
+*.fit
+*.io
+*.jed
+*.o
+*.pin
+*.svf
+*.tt3
+*.o
+*.vcd
+*.cf

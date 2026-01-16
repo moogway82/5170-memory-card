@@ -48,27 +48,43 @@ begin
 	umbd_n <= '1';
 	umbe_n <= '1';
 	xms_only_n <= '1';
+	refresh_n <= '1';
+	ale <= '0';
+	sa0 <= '0';
+	sbhe <= '0';
 	wait for  1 us;
 
 	a <= x"0D";
 	umbd_n <= '0';
+	ale <= '1';
+	wait for  500 ns;
+	ale <= '0';
 	wait for  1 us;
 
 	a <= x"0D";
 	umbd_n <= '1';
+	ale <= '1';
+	wait for  500 ns;
+	ale <= '0';
 	wait for  1 us;
 
 	a <= x"0D";
 	umbd_n <= '0';
 	xms_only_n <= '0';
+	ale <= '1';
+	wait for  500 ns;
+	ale <= '0';
 	wait for  1 us;
 
 	a <= x"0E";
 	umbd_n <= '1';
 	umbe_n <= '0';
 	xms_only_n <= '1';
+	ale <= '1';
+	wait for  500 ns;
+	ale <= '0';
 	wait for  1 us;
-
+	
 	a <= x"10";
 	umbd_n <= '1';
 	umbe_n <= '1';
@@ -195,6 +211,23 @@ begin
 	a <= x"14";
 	sa0 <= '1';
 	sbhe <= '1';
+	wait for  1 us;
+
+	a <= x"10";
+	sa0 <= '0';
+	sbhe <= '0';
+	refresh_n <= '0';
+	wait for  1 us;
+
+	refresh_n <= '1';
+	wait for  1 us;
+
+	a <= x"A0";
+	refresh_n <= '0';
+	wait for  1 us;
+
+	a <= x"A0";
+	refresh_n <= '1';
 	wait for  1 us;
 	
 	a <= x"00";
