@@ -10,8 +10,10 @@ entity at_memory_card is
 		refresh_n	: in 	std_logic;
 		sa0			: in 	std_logic;
 		sbhe 		: in 	std_logic;
+		-- switches
 		umbd_n 		: in 	std_logic;
 		umbe_n 		: in 	std_logic;
+		xms_only_n 	: in 	std_logic;
 
 		md_dir 		: out 	std_logic;
 		ram_cs_l_n	: out 	std_logic_vector(15 downto 1);
@@ -45,11 +47,14 @@ begin
 				"0001000000000000" when a(23 downto 20) = x"C" else
 				"0010000000000000" when a(23 downto 20) = x"D" else
 				"0100000000000000" when a(23 downto 20) = x"E" else
-				"1000000000000000" when unsigned(a(23 downto 16)) > x"F0" and unsigned(a(23 downto 16)) < x"FD" else 	-- 0xF00000 to 0xFDFFFF	
+				"1000000000000000" when unsigned(a(23 downto 16)) >= x"F0" and unsigned(a(23 downto 16)) < x"FD" else 	-- 0xF00000 to 0xFDFFFF	
 				"0000000000000000";
 
-	ram_cs_l_n <= not ram_cs(14 downto 0);
-	ram_cs_h_n <= not ram_cs(14 downto 0);
+	ram_cs_l_n 	<= 	not ram_cs(15 downto 1) when xms_only_n = '0' else
+					not ram_cs(14 downto 0);
+
+	ram_cs_h_n 	<= 	not ram_cs(15 downto 1) when xms_only_n = '0' else
+					not ram_cs(14 downto 0);
 
 	-- If you don't specify outputs then the fitter will crash			
 	md_dir 	<= 	'0';
