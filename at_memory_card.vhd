@@ -25,9 +25,12 @@ entity at_memory_card is
 end;
 
 architecture behavioral of at_memory_card is
-	signal 	ram_cs 			: std_logic_vector(15 downto 0); -- Active High, One more CS than output so that full possible RAM is decoded internally
+	signal 	ram_cs 				: std_logic_vector(15 downto 0); -- Active High, One more CS than output so that full possible RAM is decoded internally
 	signal 	ram_cs_l_int_n	: std_logic_vector(15 downto 1);
 	signal 	ram_cs_h_int_n	: std_logic_vector(15 downto 1);
+	signal 	ram_cs_l_latch_n	: std_logic_vector(15 downto 1);
+	signal 	ram_cs_h_latch_n	: std_logic_vector(15 downto 1);
+
 
 begin
 	-- Decode initially, assuming that the RAM for the missing bits from 512KB to 1MB is required and will use SRAM1.
@@ -53,6 +56,7 @@ begin
 				"1000000000000000" when unsigned(a(23 downto 16)) >= x"F0" and unsigned(a(23 downto 16)) < x"FD" else 	-- 0xF00000 to 0xFDFFFF	
 				"0000000000000000";
 
+	-- Invert, transpose if needed and add more conditions to when it applies
 	ram_cs_l_int_n 	<= 	not ram_cs(15 downto 1) when sa0 = '0' and xms_only_n = '0' and refresh_n = '1' else
 						not ram_cs(14 downto 0) when sa0 = '0' and xms_only_n = '1' and refresh_n = '1' else
 						(others => '1');
@@ -61,16 +65,25 @@ begin
 						not ram_cs(14 downto 0) when sbhe = '0' and xms_only_n = '1' and refresh_n = '1' else
 						(others => '1');
 
-	ram_cs_latch : process(ale)
+	-- Convaluted way to implement a transparent latch, GHDL doesn't like transparent latches
+	ram_cs_latch : process(ram_cs_l_int_n, ram_cs_h_int_n, ale)
     begin
-    	if falling_edge(ale) then
-    		ram_cs_l_n <= ram_cs_l_int_n;
-    		ram_cs_h_n <= ram_cs_h_int_n;
+    	if rising_edge(ale) then
+    		ram_cs_l_latch_n <= ram_cs_l_int_n;
+    		ram_cs_h_latch_n <= ram_cs_h_int_n;
     	end if;
     end process ram_cs_latch;
 
-	-- If you don't specify outputs then the fitter will crash			
-	md_dir 	<= 	'0';
+   	ram_cs_l_n <= 	ram_cs_l_int_n when ale = '1' else 
+    				ram_cs_l_latch_n;
+
+    ram_cs_h_n <= 	ram_cs_h_int_n when ale = '1' else 
+    				ram_cs_h_latch_n;
+
+	-- If you don't specify outputs then the fitter will crash		
+	-- TODO: This is the only way to stop the disconnect the card form the bus on a READ when not selected
+	-- Must be '1' when NOT selected (ie, INPUT on bus)	
+	md_dir 	<= 	'1';
 	--ram_cs_l_n <= (others => '0');
 	--ram_cs_h_n <= (others => '0');
 	mem_cs_16_n <= '1';
