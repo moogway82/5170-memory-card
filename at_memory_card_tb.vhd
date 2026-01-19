@@ -65,7 +65,7 @@ begin
 	end if;
 end process cpu_clock_count;
 
-ale <= '1' when cpu_clk = '0' and cpu_clk_no = 0 else
+ale <= 	'1' when cpu_clk = '0' and cpu_clk_no = 0 else
 		'0';	
 
 cycle_all_addresses_inputs : process(cpu_clk)
@@ -160,6 +160,77 @@ begin
 
 	sa0 <= '1';
 	sbhe_n <= '0';
+	umbd_n <= '1';
+	umbe_n <= '1';
+	xms_only_n <= '1';
+	wait until a = x"00";
+	umbd_n <= '0';
+	umbe_n <= '1';
+	xms_only_n <= '1';
+	wait until a = x"00";
+	umbd_n <= '1';
+	umbe_n <= '0';
+	xms_only_n <= '1';
+	wait until a = x"00";
+	umbd_n <= '0';
+	umbe_n <= '0';
+	xms_only_n <= '1';
+	wait until a = x"00";
+	umbd_n <= '1';
+	umbe_n <= '1';
+	xms_only_n <= '0';
+	wait until a = x"00";
+	umbd_n <= '0';
+	umbe_n <= '1';
+	xms_only_n <= '0';
+	wait until a = x"00";
+	umbd_n <= '1';
+	umbe_n <= '0';
+	xms_only_n <= '0';
+	wait until a = x"00";
+	umbd_n <= '0';
+	umbe_n <= '0';
+	xms_only_n <= '0';
+	wait until a = x"00";
+
+	sa0 <= '0';
+	sbhe_n <= '1';
+	umbd_n <= '1';
+	umbe_n <= '1';
+	xms_only_n <= '1';
+	wait until a = x"00";
+	umbd_n <= '0';
+	umbe_n <= '1';
+	xms_only_n <= '1';
+	wait until a = x"00";
+	umbd_n <= '1';
+	umbe_n <= '0';
+	xms_only_n <= '1';
+	wait until a = x"00";
+	umbd_n <= '0';
+	umbe_n <= '0';
+	xms_only_n <= '1';
+	wait until a = x"00";
+	umbd_n <= '1';
+	umbe_n <= '1';
+	xms_only_n <= '0';
+	wait until a = x"00";
+	umbd_n <= '0';
+	umbe_n <= '1';
+	xms_only_n <= '0';
+	wait until a = x"00";
+	umbd_n <= '1';
+	umbe_n <= '0';
+	xms_only_n <= '0';
+	wait until a = x"00";
+	umbd_n <= '0';
+	umbe_n <= '0';
+	xms_only_n <= '0';
+	wait until a = x"00";
+
+	sa0 <= '1';
+	sbhe_n <= '1';
+	refresh_n <= '0';
 	umbd_n <= '1';
 	umbe_n <= '1';
 	xms_only_n <= '1';

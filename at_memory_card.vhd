@@ -213,7 +213,7 @@ begin
     mem_cs_16_n <= not	card_cs;
 
     -- this follows MEMR when Selected
-    md_dir <= 	memr_n when card_cs = '0' else
+    md_dir <= 	memr_n when card_cs = '1' else
     			'1';
 
 
