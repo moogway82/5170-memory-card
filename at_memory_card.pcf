@@ -24,3 +24,36 @@ set_io 	md_dir			28
 ### Switches
 set_io 	umbd_n			6
 set_io 	umbe_n			8
+
+//PIN: CHIP "counter" ASSIGNED TO AN PLCC84
+//PIN: clock      : 83
+//PIN: counter_0  : 37
+//PIN: counter_1  : 39
+
+CHIP "counter" ASSIGNED TO AN PLCC84
+TDI					: 14
+TMS					: 23
+counter_1					: 39
+counter_0					: 37
+TCK					: 62
+TDO					: 71
+clock					: 83
+
+--PIN: CHIP "at_memory_card" ASSIGNED TO AN PLCC84
+--PIN: a_0      : 12
+--PIN: a_1  	: 9
+--PIN: a_2 		: 37
+--PIN: a_3 		: 35
+--PIN: a_4 		: 33
+--PIN: a_5 		: 36
+--PIN: a_6 		: 34
+--PIN: a_7 		: 31
+--PIN: a_8 		: 30
+--PIN: ale 		: 46
+--PIN: mem_cs_16_n	:22
+--PIN: sa0 		: 83
+--PIN: sbhe 	: 2
+--PIN: memr_n 	: 29
+--PIN: md_dir 	: 28
+--PIN: umbd_n 	: 6
+--PIN: umbe_n 	: 8

@@ -91,7 +91,7 @@ echo Options = ${OPTS}
 
 FITTER=fit${DEVICE//[!0-9]/}.exe
 
-grep '//PIN:' ${NAME}.v | cut -d' ' -f2- > ${NAME}.pin
+grep '\-\-PIN:' ${NAME}.vhd | cut -d' ' -f2- > ${NAME}.pin
 
 rm -f ${NAME}.fit
 

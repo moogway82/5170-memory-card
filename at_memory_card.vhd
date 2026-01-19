@@ -236,3 +236,96 @@ begin
 	 --mem_cs_16_n <= '1';
 
 end behavioral;
+
+
+--PIN: CHIP "at_memory_card" ASSIGNED TO AN PLCC84
+--PIN: a_0      : 12
+--PIN: a_1  	: 9
+--PIN: a_2 		: 37
+--PIN: a_3 		: 35
+--PIN: a_4 		: 33
+--PIN: a_5 		: 36
+--PIN: a_6 		: 34
+--PIN: a_7 		: 31
+--PIN: a_8 		: 30
+--PIN: ale 		: 46
+--Can't place for some reason... PIN: mem_cs_16_n	:22
+--PIN: sa0 		: 83
+--PIN: sbhe 	: 2
+--PIN: memr_n 	: 29
+--PIN: md_dir 	: 28
+--PIN: umbd_n 	: 6
+--PIN: umbe_n 	: 8
+
+
+
+
+
+--id00140					: 601
+--id00139					: 602
+--ram_cs_h_n_9					: 12
+--id00141					: 604
+--ram_cs_h_n_8					: 11
+--ram_cs_h_n_10					: 10
+--id00137					: 607
+--ram_cs_h_n_12					: 9
+--id00138					: 609
+--id00151					: 610
+--ram_cs_h_n_11					: 8
+--id00136					: 612
+--ram_cs_h_n_13					: 6
+--ram_cs_h_n_14					: 5
+--mem_cs_16_n					: 4
+--ram_cs_h_n_1					: 22
+--id00149					: 618
+--ram_cs_h_n_2					: 21
+--id00150					: 620
+--ram_cs_h_n_3					: 20
+--id00148					: 622
+--id00146					: 623
+--ram_cs_h_n_4					: 18
+--ram_cs_h_n_6					: 17
+--id00147					: 626
+--ram_cs_h_n_5					: 16
+--id00145					: 628
+--ram_cs_h_n_7					: 15
+--id00143					: 630
+--id00142					: 631
+--TDI					: 14
+--id00144					: 632
+--ram_cs_l_n_8					: 31
+--ram_cs_l_n_12					: 30
+--ram_cs_l_n_10					: 29
+--ram_cs_l_n_11					: 28
+--ram_cs_l_n_13					: 27
+--ram_cs_h_n_0					: 25
+--ram_cs_l_n_14					: 24
+--TMS					: 23
+--ram_cs_l_n_1					: 41
+--ram_cs_l_n_3					: 40
+--ram_cs_l_n_2					: 39
+--ram_cs_l_n_4					: 37
+--ram_cs_l_n_6					: 36
+--ram_cs_l_n_5					: 35
+--ram_cs_l_n_7					: 34
+--ram_cs_l_n_9					: 33
+--xms_only_n					: 44
+--sbhe_n					: 45
+--sa0					: 46
+--refresh_n					: 48
+--A_7					: 49
+--A_6					: 50
+--md_dir					: 51
+--ram_cs_l_n_0					: 52
+--A_4					: 54
+--A_5					: 55
+--A_2					: 56
+--A_0					: 57
+--A_1					: 58
+--A_3					: 60
+--umbd_n					: 61
+--TCK					: 62
+--umbe_n					: 63
+--memr_n					: 64
+--TDO					: 71
+--ale					: 83
