@@ -150,10 +150,12 @@ begin
 
 	end process chip_select_decoding;
 
-	ram_cs_l_n 	<= 	not ram_cs(15 downto 1) when sa0 = '0' else
+	ram_cs_l_n 	<= 	not ram_cs(15 downto 1) when sa0 = '0' and xms_only_n = '0' else
+					not ram_cs(14 downto 0) when sa0 = '0' and xms_only_n = '1' else
 				 	(others => '1');
 
-	ram_cs_h_n 	<= 	not ram_cs(15 downto 1) when sbhe_n = '0' else
+	ram_cs_h_n 	<= 	not ram_cs(15 downto 1) when sbhe_n = '0' and xms_only_n = '0' else
+					not ram_cs(14 downto 0) when sbhe_n = '0' and xms_only_n = '1' else
 					(others => '1');
 
 
