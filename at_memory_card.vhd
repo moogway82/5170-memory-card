@@ -249,13 +249,45 @@ end behavioral;
 --PIN: a_7 		: 31
 --PIN: a_8 		: 30
 --PIN: ale 		: 46
---Can't place for some reason... PIN: mem_cs_16_n	:22
+--#PIN: mem_cs_16_n	:22
 --PIN: sa0 		: 83
 --PIN: sbhe 	: 2
 --PIN: memr_n 	: 29
 --PIN: md_dir 	: 28
---PIN: umbd_n 	: 6
---PIN: umbe_n 	: 8
+--#PIN: ram_cs 	: 11
+--#PIN: rom_cs 	: 8
+--PIN: ram_cs_l_n_0 	: 74
+--PIN: ram_cs_l_n_1 	: 24
+--PIN: ram_cs_l_n_2 	: 70
+--PIN: ram_cs_l_n_3 	: 58
+--PIN: ram_cs_l_n_4 	: 68
+--PIN: ram_cs_l_n_5 	: 61
+--PIN: ram_cs_l_n_6 	: 75
+--PIN: ram_cs_l_n_7 	: 63
+--PIN: ram_cs_l_n_8 	: 56
+--PIN: ram_cs_l_n_9 	: 25
+--PIN: ram_cs_l_n_10 	: 48
+--PIN: ram_cs_l_n_11 	: 27
+--PIN: ram_cs_l_n_12 	: 51
+--PIN: ram_cs_l_n_13 	: 60
+--PIN: ram_cs_l_n_14 	: 50
+--PIN: ram_cs_h_n_0 	: 76
+--PIN: ram_cs_h_n_1 	: 64
+--PIN: ram_cs_h_n_2 	: 69
+--PIN: ram_cs_h_n_3 	: 21
+--PIN: ram_cs_h_n_4 	: 73
+--PIN: ram_cs_h_n_5 	: 18
+--PIN: ram_cs_h_n_6 	: 67
+--PIN: ram_cs_h_n_7 	: 16
+--PIN: ram_cs_h_n_8 	: 49
+--PIN: ram_cs_h_n_9 	: 65
+--PIN: ram_cs_h_n_10 	: 44
+--PIN: ram_cs_h_n_11 	: 20
+--PIN: ram_cs_h_n_12 	: 54
+--PIN: ram_cs_h_n_13 	: 17
+--PIN: ram_cs_h_n_14 	: 77
+
+
 
 
 
