@@ -66,19 +66,25 @@ begin
 						(others => '1');
 
 	-- Convaluted way to implement a transparent latch, GHDL doesn't like transparent latches
-	ram_cs_latch : process(ram_cs_l_int_n, ram_cs_h_int_n, ale)
+	--ram_cs_latch : process(ram_cs_l_int_n, ram_cs_h_int_n, ale)
+    --begin
+    --	if rising_edge(ale) then
+    --		ram_cs_l_latch_n <= ram_cs_l_int_n;
+    --		ram_cs_h_latch_n <= ram_cs_h_int_n;
+    --	end if;
+    --end process ram_cs_latch;
+
+   	--ram_cs_l_n <= 	ram_cs_l_int_n when ale = '1' else 
+    --				ram_cs_l_latch_n;
+
+    --ram_cs_h_n <= 	ram_cs_h_int_n when ale = '1' else 
+    --				ram_cs_h_latch_n;
+
+    ram_cs_latch : block(ale = '1')
     begin
-    	if rising_edge(ale) then
-    		ram_cs_l_latch_n <= ram_cs_l_int_n;
-    		ram_cs_h_latch_n <= ram_cs_h_int_n;
-    	end if;
-    end process ram_cs_latch;
-
-   	ram_cs_l_n <= 	ram_cs_l_int_n when ale = '1' else 
-    				ram_cs_l_latch_n;
-
-    ram_cs_h_n <= 	ram_cs_h_int_n when ale = '1' else 
-    				ram_cs_h_latch_n;
+    	ram_cs_l_n <= guarded ram_cs_l_int_n;
+    	ram_cs_h_n <= guarded ram_cs_h_int_n;
+    end block ram_cs_latch;
 
 	-- If you don't specify outputs then the fitter will crash		
 	-- TODO: This is the only way to stop the disconnect the card form the bus on a READ when not selected
