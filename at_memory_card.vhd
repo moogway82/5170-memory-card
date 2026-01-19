@@ -26,10 +26,13 @@ end;
 
 architecture behavioral of at_memory_card is
 	signal 	ram_cs 				: std_logic_vector(15 downto 0); -- Active High, One more CS than output so that full possible RAM is decoded internally
-	signal 	ram_cs_l_int_n	: std_logic_vector(15 downto 1);
-	signal 	ram_cs_h_int_n	: std_logic_vector(15 downto 1);
+	signal 	ram_cs_l_int_n		: std_logic_vector(15 downto 1);
+	signal 	ram_cs_h_int_n		: std_logic_vector(15 downto 1);
 	signal 	ram_cs_l_latch_n	: std_logic_vector(15 downto 1);
 	signal 	ram_cs_h_latch_n	: std_logic_vector(15 downto 1);
+	signal 	ram_cs_l_out_n		: std_logic_vector(15 downto 1);
+	signal 	ram_cs_h_out_n		: std_logic_vector(15 downto 1);
+	signal  card_cs 			: std_logic;
 
 
 begin
@@ -74,11 +77,25 @@ begin
     	end if;
     end process ram_cs_latch;
 
-   	ram_cs_l_n <= 	ram_cs_l_int_n when ale = '1' else 
+   	ram_cs_l_out_n <= 	ram_cs_l_int_n when ale = '1' else 
     				ram_cs_l_latch_n;
 
-    ram_cs_h_n <= 	ram_cs_h_int_n when ale = '1' else 
+    ram_cs_h_out_n <= 	ram_cs_h_int_n when ale = '1' else 
     				ram_cs_h_latch_n;
+
+    ram_cs_l_n <= ram_cs_l_out_n;
+    ram_cs_h_n <= ram_cs_h_out_n;
+
+    card_cs <= 	'1' when ram_cs_l_out_n = "111111111111111" and ram_cs_h_out_n = "111111111111111" else
+    			'0';
+
+    mem_cs_16_n <= 	card_cs;
+
+    -- this follows MEMR when Selected
+    md_dir <= 	memr_n when card_cs = '0' else
+    			'1';
+
+
 
     -- Neater transparent latch solution, but don't think it's synthasisable as Flip-Flops = 0 on Fitter report
     --ram_cs_latch : block(ale = '1')
@@ -90,9 +107,9 @@ begin
 	-- If you don't specify outputs then the fitter will crash		
 	-- TODO: This is the only way to stop the disconnect the card form the bus on a READ when not selected
 	-- Must be '1' when NOT selected (ie, INPUT on bus)	
-	md_dir 	<= 	'1';
+	-- md_dir 	<= 	'1';
 	--ram_cs_l_n <= (others => '0');
 	--ram_cs_h_n <= (others => '0');
-	mem_cs_16_n <= '1';
+	-- mem_cs_16_n <= '1';
 
 end behavioral;

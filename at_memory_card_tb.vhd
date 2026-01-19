@@ -73,9 +73,11 @@ begin
 	if(reset = '1') then
 		a <= x"00";
 	elsif(rising_edge(ale)) then
-			a <= std_logic_vector(unsigned(a) + 1);
+		a <= std_logic_vector(unsigned(a) + 1);
 	end if;
 end process cycle_all_addresses_inputs;
+
+memr_n <= a(16);
 
 tb : process
 begin
