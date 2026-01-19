@@ -68,12 +68,14 @@ end process cpu_clock_count;
 ale <= '1' when cpu_clk = '0' and cpu_clk_no = 0 else
 		'0';	
 
-cycle_all_addresses_inputs : process(ale)
+cycle_all_addresses_inputs : process(cpu_clk)
 begin
 	if(reset = '1') then
 		a <= x"00";
-	elsif(rising_edge(ale)) then
-		a <= std_logic_vector(unsigned(a) + 1);
+	elsif(falling_edge(cpu_clk)) then
+		if(cpu_clk_no = 2) then
+			a <= std_logic_vector(unsigned(a) + 1);
+		end if;
 	end if;
 end process cycle_all_addresses_inputs;
 
