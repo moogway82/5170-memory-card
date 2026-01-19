@@ -12,7 +12,7 @@ architecture behavioral of at_memory_card_tb is
 		signal memr_n 		: std_logic;
 		signal refresh_n	: std_logic;
 		signal sa0			: std_logic;
-		signal sbhe 		: std_logic;
+		signal sbhe_n 		: std_logic;
 		signal umbd_n 		: std_logic;
 		signal umbe_n 		: std_logic;
 		signal xms_only_n 	: std_logic;
@@ -37,7 +37,7 @@ port map(
 	memr_n => memr_n,
 	refresh_n => refresh_n,
 	sa0 => sa0,
-	sbhe => sbhe,
+	sbhe_n => sbhe_n,
 	umbd_n => umbd_n,
 	umbe_n => umbe_n,
 	xms_only_n => xms_only_n,
@@ -85,7 +85,7 @@ begin
 	xms_only_n <= '1';
 	refresh_n <= '1';
 	sa0 <= '0';
-	sbhe <= '0';
+	sbhe_n <= '0';
 	wait for  1 us;
 	reset <= '0';
 
@@ -120,7 +120,11 @@ begin
 	wait until a = x"00";
 
 	sa0 <= '0';
-	sbhe <= '1';
+	sbhe_n <= '1';
+	umbd_n <= '1';
+	umbe_n <= '1';
+	xms_only_n <= '1';
+	wait until a = x"00";
 	umbd_n <= '0';
 	umbe_n <= '1';
 	xms_only_n <= '1';
@@ -151,7 +155,11 @@ begin
 	wait until a = x"00";
 
 	sa0 <= '1';
-	sbhe <= '0';
+	sbhe_n <= '0';
+	umbd_n <= '1';
+	umbe_n <= '1';
+	xms_only_n <= '1';
+	wait until a = x"00";
 	umbd_n <= '0';
 	umbe_n <= '1';
 	xms_only_n <= '1';

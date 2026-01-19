@@ -9,7 +9,7 @@ entity at_memory_card is
 		memr_n 		: in 	std_logic;
 		refresh_n	: in 	std_logic;
 		sa0			: in 	std_logic;
-		sbhe 		: in 	std_logic;
+		sbhe_n 		: in 	std_logic;
 		-- switches
 		umbd_n 		: in 	std_logic;
 		umbe_n 		: in 	std_logic;
@@ -61,30 +61,31 @@ begin
 						not ram_cs(14 downto 0) when sa0 = '0' and xms_only_n = '1' and refresh_n = '1' else
 						(others => '1');
 
-	ram_cs_h_int_n 	<= 	not ram_cs(15 downto 1) when sbhe = '0' and xms_only_n = '0' and refresh_n = '1' else
-						not ram_cs(14 downto 0) when sbhe = '0' and xms_only_n = '1' and refresh_n = '1' else
+	ram_cs_h_int_n 	<= 	not ram_cs(15 downto 1) when sbhe_n = '0' and xms_only_n = '0' and refresh_n = '1' else
+						not ram_cs(14 downto 0) when sbhe_n = '0' and xms_only_n = '1' and refresh_n = '1' else
 						(others => '1');
 
-	-- Convaluted way to implement a transparent latch, GHDL doesn't like transparent latches
-	--ram_cs_latch : process(ram_cs_l_int_n, ram_cs_h_int_n, ale)
-    --begin
-    --	if rising_edge(ale) then
-    --		ram_cs_l_latch_n <= ram_cs_l_int_n;
-    --		ram_cs_h_latch_n <= ram_cs_h_int_n;
-    --	end if;
-    --end process ram_cs_latch;
-
-   	--ram_cs_l_n <= 	ram_cs_l_int_n when ale = '1' else 
-    --				ram_cs_l_latch_n;
-
-    --ram_cs_h_n <= 	ram_cs_h_int_n when ale = '1' else 
-    --				ram_cs_h_latch_n;
-
-    ram_cs_latch : block(ale = '1')
+	--Convaluted way to implement a transparent latch, GHDL doesn't like transparent latches
+	ram_cs_latch : process(ale)
     begin
-    	ram_cs_l_n <= guarded ram_cs_l_int_n;
-    	ram_cs_h_n <= guarded ram_cs_h_int_n;
-    end block ram_cs_latch;
+    	if falling_edge(ale) then
+    		ram_cs_l_latch_n <= ram_cs_l_int_n;
+    		ram_cs_h_latch_n <= ram_cs_h_int_n;
+    	end if;
+    end process ram_cs_latch;
+
+   	ram_cs_l_n <= 	ram_cs_l_int_n when ale = '1' else 
+    				ram_cs_l_latch_n;
+
+    ram_cs_h_n <= 	ram_cs_h_int_n when ale = '1' else 
+    				ram_cs_h_latch_n;
+
+    -- Neater transparent latch solution, but don't think it's synthasisable as Flip-Flops = 0 on Fitter report
+    --ram_cs_latch : block(ale = '1')
+    --begin
+    --	ram_cs_l_n <= guarded ram_cs_l_int_n;
+    --	ram_cs_h_n <= guarded ram_cs_h_int_n;
+    --end block ram_cs_latch;
 
 	-- If you don't specify outputs then the fitter will crash		
 	-- TODO: This is the only way to stop the disconnect the card form the bus on a READ when not selected
