@@ -20,6 +20,7 @@ entity at_memory_card is
 		ram_cs_l_n	: out 	std_logic_vector(15 downto 1);
 		ram_cs_h_n	: out 	std_logic_vector(15 downto 1);
 		mem_cs_16_n : out 	std_logic;
+		-- zero_ws  : out 	std_logic;
 		led_ram_cs_n 	: out 	std_logic;
 		led_rom_cs_n 	: out 	std_logic
 	);
@@ -34,7 +35,6 @@ architecture behavioral of at_memory_card is
 	signal 	ram_cs_l_out_n		: std_logic_vector(15 downto 1);
 	signal 	ram_cs_h_out_n		: std_logic_vector(15 downto 1);
 	signal  card_cs 			: std_logic;
-
 
 begin
 	chip_select_decoding : process(ale)
@@ -175,8 +175,7 @@ begin
     mem_cs_16_n <= 	'0' when card_cs = '1' else
     				'Z';
     -- TODO: Look at enabling 0WS also if testing well, oooh the power
-
-    --zero_ws_m 	<=	'0' when card_cs = '1' else
+    --zero_ws_n 	<=	'0' when card_cs = '1' else
     --				'Z';
 
     -- Memory chip Data transciever direction
