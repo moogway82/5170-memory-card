@@ -139,7 +139,7 @@ begin
 						card_cs <= '1';
 
 					when x"F" =>
-						if(unsigned(a(19 downto 16)) >= x"0" and unsigned(a(19 downto 16)) < x"D") then
+						if(unsigned(a(19 downto 16)) >= x"0" and unsigned(a(19 downto 16)) < x"E") then
 							if(xms_only_n = '0') then 
 								ram_cs <= (15 => '1', others => '0');
 								card_cs <= '1';
