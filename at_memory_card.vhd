@@ -28,12 +28,6 @@ end;
 
 architecture behavioral of at_memory_card is
 	signal 	ram_cs 				: std_logic_vector(15 downto 0); -- Active High, One more CS than output so that full possible RAM is decoded internally
-	signal 	ram_cs_l_int_n		: std_logic_vector(15 downto 1);
-	signal 	ram_cs_h_int_n		: std_logic_vector(15 downto 1);
-	signal 	ram_cs_l_latch_n	: std_logic_vector(15 downto 1);
-	signal 	ram_cs_h_latch_n	: std_logic_vector(15 downto 1);
-	signal 	ram_cs_l_out_n		: std_logic_vector(15 downto 1);
-	signal 	ram_cs_h_out_n		: std_logic_vector(15 downto 1);
 	signal  card_cs 			: std_logic;
 
 begin
