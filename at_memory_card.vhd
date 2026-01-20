@@ -236,6 +236,6 @@ end behavioral;
 --PIN: ram_cs_h_n_14 	: 77
 --PIN: umbd_n 			: 6
 --PIN: umbe_n 			: 1
---PIN: xms_only_n 		: 45
+--PIN: xms_only_n 		: 57
 --PIN: mem_cs_16_n 		: 22
 --PIN: refresh_n 		: 10
