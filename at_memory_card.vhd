@@ -198,7 +198,8 @@ end behavioral;
 --PIN: a_7 		: 31
 --PIN: a_8 		: 30
 --PIN: ale 		: 46
---#PIN: mem_cs_16_n	:22
+--Weird if I set mem_cs_16_n to pin 4 fitter fails, but then it asigns it to pin 4 anyways?
+--#PIN: mem_cs_16_n	:4
 --PIN: sa0 		: 83
 --PIN: sbhe_n 	: 2
 --PIN: memr_n 	: 29
@@ -235,3 +236,6 @@ end behavioral;
 --PIN: ram_cs_h_n_12 	: 54
 --PIN: ram_cs_h_n_13 	: 17
 --PIN: ram_cs_h_n_14 	: 77
+--PIN: umbd_n 			: 6
+--PIN: umbe_n 			: 1
+--PIN: xms_only_n 		: 10
