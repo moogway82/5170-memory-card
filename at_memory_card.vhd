@@ -172,8 +172,12 @@ begin
 					(others => '1');
 
 	-- Activate the 16-bit transfer signal (1-wait state) if card selected
-	-- TODO: Look at enabling 0WS also if testing well, oooh the power
-    mem_cs_16_n <= not	card_cs;
+    mem_cs_16_n <= 	'0' when card_cs = '1' else
+    				'Z';
+    -- TODO: Look at enabling 0WS also if testing well, oooh the power
+
+    --zero_ws_m 	<=	'0' when card_cs = '1' else
+    --				'Z';
 
     -- Memory chip Data transciever direction
     -- same as MEMR_N unless it's not selected then it's set to INPUT (ie write) as I can't tristate it
