@@ -1,12 +1,12 @@
 at_memory_card
 at_memory_card_tb
 *.edif
-*.fit
+#*.fit
 *.io
-*.jed
+#*.jed
 *.o
-*.pin
-*.svf
+#*.pin
+#*.svf
 *.tt3
 *.o
 *.vcd
