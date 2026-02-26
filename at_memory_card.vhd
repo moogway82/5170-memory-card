@@ -8,6 +8,7 @@ entity at_memory_card is
 		a 			: in 	std_logic_vector(23 downto 16);
 		ale 		: in 	std_logic;
 		memr_n 		: in 	std_logic;
+		memw_n 		: in 	std_logic;
 		refresh_n	: in 	std_logic;
 		sa0			: in 	std_logic;
 		sbhe_n 		: in 	std_logic;
@@ -40,7 +41,7 @@ begin
 			led_rom_cs_n <= '1';
 			
 			-- don't select during DRAM refresh cycles
-			if refresh_n = '1' then
+			if refresh_n = '1' and (memr_n = '0' or memw_n = '0') then
 
 				case a(23 downto 20) is
 
@@ -175,7 +176,8 @@ begin
     -- Memory chip Data transciever direction
     -- same as MEMR_N unless it's not selected then it's set to INPUT (ie write) as I can't tristate it
    	-- TODO: If this doesn't work might need to mod the hardware to add the ENABLE signal so can tristate
-    md_dir <= 	memr_n when card_cs = '1' else
+    md_dir <= 	'0' when memr_n = '0' and card_cs = '1' else
+    			'1' when memw_n = '0' and card_cs = '1' else
     			'1';
 
     -- Light the RAM LED when the card is being accessed
@@ -185,22 +187,22 @@ end behavioral;
 
 
 --PIN: CHIP "at_memory_card" ASSIGNED TO AN PLCC84
---PIN: a_0      : 12
---PIN: a_1  	: 9
---PIN: a_2 		: 37
---PIN: a_3 		: 35
---PIN: a_4 		: 33
---PIN: a_5 		: 36
---PIN: a_6 		: 34
---PIN: a_7 		: 31
---PIN: a_8 		: 30
+--PIN: a_0      : 9
+--PIN: a_1  	: 37
+--PIN: a_2 		: 35
+--PIN: a_3 		: 33
+--PIN: a_4 		: 36
+--PIN: a_5 		: 34
+--PIN: a_6 		: 31
+--PIN: a_7 		: 30
 --PIN: ale 		: 46
 --PIN: sa0 		: 83
 --PIN: sbhe_n 	: 2
 --PIN: memr_n 	: 29
+--PIN: memw_n 	: 1
 --PIN: md_dir 	: 28
 --PIN: led_ram_cs_n 	: 11
---PIN: led_rom_cs_n 	: 8
+--PIN: led_rom_cs_n 	: 15
 --PIN: ram_cs_l_n_0 	: 74
 --PIN: ram_cs_l_n_1 	: 24
 --PIN: ram_cs_l_n_2 	: 70
@@ -232,7 +234,7 @@ end behavioral;
 --PIN: ram_cs_h_n_13 	: 17
 --PIN: ram_cs_h_n_14 	: 77
 --PIN: umbd_n 			: 6
---PIN: umbe_n 			: 1
+--PIN: umbe_n 			: 8
 --PIN: xms_only_n 		: 57
 --PIN: mem_cs_16_n 		: 22
 --PIN: refresh_n 		: 10
