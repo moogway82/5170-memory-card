@@ -41,7 +41,7 @@ begin
 			led_rom_cs_n <= '1';
 			
 			-- Select only on memory operations and but not during DRAM refresh cycles
-			if refresh_n = '1' and (memr_n = '0' or memw_n = '0') then
+			if refresh_n = '1' then
 
 				case a(23 downto 20) is
 
@@ -181,7 +181,8 @@ begin
     			'1';
 
     -- Light the RAM LED when the card is being accessed
-    led_ram_cs_n <= not	card_cs;
+    led_ram_cs_n <= '0' when card_cs = '1' and (memr_n = '0' or memw_n = '0') else
+    				'1';
 
 end behavioral;
 
