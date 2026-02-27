@@ -9,8 +9,8 @@ architecture behavioral of at_memory_card_tb is
 		-- in
 		signal a 			: std_logic_vector(23 downto 16) := x"00";
 		signal ale 			: std_logic;
-		signal memr_n 		: std_logic;
-		signal memw_n 		: std_logic;
+		signal memr_n 		: std_logic := '1';
+		signal memw_n 		: std_logic := '1';
 		signal refresh_n	: std_logic;
 		signal sa0			: std_logic;
 		signal sbhe_n 		: std_logic;
@@ -85,8 +85,10 @@ begin
 	end if;
 end process cycle_all_addresses_inputs;
 
-memr_n <= a(16);
-memw_n <= '1';
+memr_n <= 	'0' when a(17 downto 16) = "00" else
+			'1';
+memw_n <= 	'0' when a(17 downto 16) = "01" else
+			'1';
 
 tb : process
 begin

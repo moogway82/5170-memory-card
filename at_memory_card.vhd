@@ -40,7 +40,7 @@ begin
 			card_cs <= '0';
 			led_rom_cs_n <= '1';
 			
-			-- don't select during DRAM refresh cycles
+			-- Select only on memory operations and but not during DRAM refresh cycles
 			if refresh_n = '1' and (memr_n = '0' or memw_n = '0') then
 
 				case a(23 downto 20) is
