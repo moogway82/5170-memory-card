@@ -34,7 +34,7 @@ architecture behavioral of at_memory_card is
 begin
 	chip_select_decoding : process(ale)
 	begin
-		if rising_edge(ale) then
+		if falling_edge(ale) then
 			-- set defaults, prevents latches
 			ram_cs <= (others => '0');
 			card_cs <= '0';
