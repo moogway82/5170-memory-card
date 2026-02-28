@@ -11,3 +11,4 @@ at_memory_card_tb
 *.o
 *.vcd
 *.cf
+sram

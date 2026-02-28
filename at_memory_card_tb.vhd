@@ -7,8 +7,9 @@ end;
 
 architecture behavioral of at_memory_card_tb is
 		-- in
-		signal a 			: std_logic_vector(23 downto 16) := x"00";
-		signal ale 			: std_logic;
+		signal a 			: std_logic_vector(23 downto 0) := (others => '0');
+		signal data 		: std_logic_vector(15 downto 0);
+		signal ale 			: std_logic := '0';
 		signal memr_n 		: std_logic := '1';
 		signal memw_n 		: std_logic := '1';
 		signal refresh_n	: std_logic;
@@ -27,7 +28,8 @@ architecture behavioral of at_memory_card_tb is
 		signal led_rom_cs_n : std_logic;
 
 		-- test signal
-		signal cpu_clk 		: std_logic;
+		signal clk 				: std_logic;
+		signal cpu_clk 		: std_logic := '1';
 		signal cpu_clk_no  	: integer := 0; 
 		signal reset 		: std_logic := '1';
 
@@ -35,7 +37,7 @@ begin
 
 at_memory_card_sim : entity work.at_memory_card
 port map( 
-	a => a,
+	a => a(23 downto 16),
 	ale => ale, 
 	memr_n => memr_n,
 	memw_n => memw_n,
@@ -53,235 +55,270 @@ port map(
 	led_rom_cs_n => led_rom_cs_n
 );
 
-cpu_clock : process
-begin
-	cpu_clk <= '1';
-	wait for 0.166666667 us;
-	cpu_clk <= '0';
-	wait for 0.166666667 us;
-end process cpu_clock;
+--ram1h : entity work.SRAM
+--  port map (
+--    A => a(18 downto 0),
+--    D => data(15 downto 8),
+--    OE_n => memr_n,
+--    WE_n => memw_n,
+--    CE_n => ram_cs_h_n(1)
+--  );
 
-cpu_clock_count : process(cpu_clk)
+--ram1l : entity work.SRAM
+--  port map (
+--    A => a(18 downto 0),
+--    D => data(7 downto 0),
+--    OE_n => memr_n,
+--    WE_n => memw_n,
+--    CE_n => ram_cs_l_n(1)
+--  );
+
+p_clk : process
 begin
-	if(rising_edge(cpu_clk)) then
-		cpu_clk_no <= cpu_clk_no + 1;
-		if(cpu_clk_no = 2) then
-			cpu_clk_no <= 0;
+	clk <= '0';
+	wait for 62.5 ns;
+	clk <= '1';
+	wait for 62.5 ns;
+end process p_clk;
+
+
+p_cpu_clock : process(clk)
+begin
+	if falling_edge(clk) then
+		cpu_clk <= not cpu_clk;
+		if cpu_clk = '0' then
+			cpu_clk_no <= cpu_clk_no + 1;
+			if cpu_clk_no = 2 then
+				cpu_clk_no <= 0;
+			end if;
 		end if;
 	end if;
-end process cpu_clock_count;
+end process p_cpu_clock;
 
-ale <= 	'1' when cpu_clk = '0' and cpu_clk_no = 0 else
-		'0';	
-
-cycle_all_addresses_inputs : process(cpu_clk)
+p_addr : process(clk)
 begin
-	if(reset = '1') then
-		a <= x"00";
-	elsif(falling_edge(cpu_clk)) then
-		if(cpu_clk_no = 2) then
+	if falling_edge(clk) then
+		if cpu_clk_no = 2 and cpu_clk = '0' then
 			a <= std_logic_vector(unsigned(a) + 1);
 		end if;
 	end if;
-end process cycle_all_addresses_inputs;
+end process p_addr;
 
-memr_n <= 	'0' when a(17 downto 16) = "00" else
-			'1';
-memw_n <= 	'0' when a(17 downto 16) = "01" else
-			'1';
+ale <= 	'1' when cpu_clk_no = 0 and cpu_clk = '0' else
+				'0';
 
-tb : process
-begin
-	reset <= '1';
-	umbd_n <= '1';
-	umbe_n <= '1';
-	xms_only_n <= '1';
-	refresh_n <= '1';
-	sa0 <= '0';
-	sbhe_n <= '0';
-	wait for  1 us;
-	reset <= '0';
+----ale <= 	'1' when cpu_clk = '0' and cpu_clk_no = 0 else
+----		'0';	
 
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '1';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '0';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '0';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '1';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '1';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '0';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '0';
-	xms_only_n <= '0';
-	wait until a = x"00";
+----cycle_all_addresses_inputs : process(cpu_clk)
+----begin
+----	if(reset = '1') then
+----		a <= x"00";
+----	elsif(falling_edge(cpu_clk)) then
+----		if(cpu_clk_no = 2) then
+----			a <= std_logic_vector(unsigned(a) + 1);
+----		end if;
+----	end if;
+----end process cycle_all_addresses_inputs;
 
-	sa0 <= '0';
-	sbhe_n <= '1';
-	umbd_n <= '1';
-	umbe_n <= '1';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '1';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '0';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '0';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '1';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '1';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '0';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '0';
-	xms_only_n <= '0';
-	wait until a = x"00";
+--memr_n <= 	'0' when a(17 downto 16) = "00" else
+--			'1';
+--memw_n <= 	'0' when a(17 downto 16) = "01" else
+--			'1';
 
-	sa0 <= '1';
-	sbhe_n <= '0';
-	umbd_n <= '1';
-	umbe_n <= '1';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '1';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '0';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '0';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '1';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '1';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '0';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '0';
-	xms_only_n <= '0';
-	wait until a = x"00";
+--tb : process
+--begin
+--	reset <= '1';
+--	umbd_n <= '1';
+--	umbe_n <= '1';
+--	xms_only_n <= '1';
+--	refresh_n <= '1';
+--	sa0 <= '0';
+--	sbhe_n <= '0';
+--	wait for  1 us;
+--	reset <= '0';
 
-	sa0 <= '0';
-	sbhe_n <= '1';
-	umbd_n <= '1';
-	umbe_n <= '1';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '1';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '0';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '0';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '1';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '1';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '0';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '0';
-	xms_only_n <= '0';
-	wait until a = x"00";
 
-	sa0 <= '1';
-	sbhe_n <= '1';
-	refresh_n <= '0';
-	umbd_n <= '1';
-	umbe_n <= '1';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '1';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '0';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '0';
-	xms_only_n <= '1';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '1';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '1';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '1';
-	umbe_n <= '0';
-	xms_only_n <= '0';
-	wait until a = x"00";
-	umbd_n <= '0';
-	umbe_n <= '0';
-	xms_only_n <= '0';
-	wait until a = x"00";
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+
+--	--sa0 <= '0';
+--	--sbhe_n <= '1';
+--	--umbd_n <= '1';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+
+--	--sa0 <= '1';
+--	--sbhe_n <= '0';
+--	--umbd_n <= '1';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+
+--	--sa0 <= '0';
+--	--sbhe_n <= '1';
+--	--umbd_n <= '1';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+
+--	--sa0 <= '1';
+--	--sbhe_n <= '1';
+--	--refresh_n <= '0';
+--	--umbd_n <= '1';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '1';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '1';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '1';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
+--	--umbd_n <= '0';
+--	--umbe_n <= '0';
+--	--xms_only_n <= '0';
+--	--wait until a = x"00";
 	
-	wait for  1 us;
-	umbd_n <= '0';
-	umbe_n <= '0';
-	wait for  1 us;
+--	--wait for  1 us;
+--	--umbd_n <= '0';
+--	--umbe_n <= '0';
+--	--wait for  1 us;
 
 
-	-- End testing by crashing out, wheee!
-	assert false report "End of testing, phew!" severity failure;
+--	-- End testing by crashing out, wheee!
+--	-- assert false report "End of testing, phew!" severity failure;
 
-end process;
+--end process;
 
 end behavioral;
