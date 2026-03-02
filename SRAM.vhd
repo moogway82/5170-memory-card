@@ -65,8 +65,8 @@ end SRAM;
 
 architecture behaviour of SRAM is
 
-	type Memory_Image is array (natural range <>) of std_logic_vector(DataWidth - 1 downto 0);
-	signal RAM : Memory_Image(0 to 2 ** AddrWidth - 1) := (others => (others => '0'));
+	--type Memory_Image is array (natural range <>) of std_logic_vector(DataWidth - 1 downto 0);
+	--signal RAM : Memory_Image(0 to 2 ** AddrWidth - 1) := (others => (others => '0'));
 
 	signal Write : std_logic;
 	signal D_del : std_logic_vector(7 downto 0);
@@ -76,14 +76,14 @@ begin
 	Write <= '1' when CE_n = '0' and WE_n = '0' else '0';
 	D_del <= D after 1 ns;
 
-	process (Write)
-	begin
-		if Write'event and Write = '0' then
-			RAM(to_integer(unsigned(A))) <= D_del;
-		end if;
-	end process;
+	--process (Write)
+	--begin
+	--	if Write'event and Write = '0' then
+	--		RAM(to_integer(unsigned(A))) <= D_del;
+	--	end if;
+	--end process;
 
-	D <= RAM(to_integer(unsigned(A)))
+	D <= A(18 downto 11) --RAM(to_integer(unsigned(A)))
 -- pragma translate_off
 			when OE_n = '0' and CE_n = '0' and WE_n = '1' and not is_x(A) else (others => 'Z')
 -- pragma translate_on
