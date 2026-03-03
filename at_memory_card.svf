@@ -1,5 +1,5 @@
 // JEDEC file for: ATF1508AS
-// Created on: Tue Mar 03 17:54:32 2026
+// Created on: Tue Mar 03 18:06:03 2026
 TRST ABSENT;
 ENDIR IDLE;
 ENDDR IDLE;
