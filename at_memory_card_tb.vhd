@@ -9,8 +9,8 @@ architecture behavioral of at_memory_card_tb is
 		-- in
 		signal sa 			: std_logic_vector(19 downto 1) := (others => '0');
 		signal sa0			: std_logic;
-		signal la 			: std_logic_vector(23 downto 20) := (others => '0');
-		signal a_cnt		: std_logic_vector(23 downto 1) := (others => '0');
+		signal la 			: std_logic_vector(23 downto 17) := (others => '0');
+		signal a_cnt		: std_logic_vector(23 downto 0) := (others => '0');
 		signal a_inc 		: std_logic;
 		signal data_cnt : std_logic_vector(15 downto 0) := (others => '0');
 		signal data 		: std_logic_vector(15 downto 0);
@@ -45,8 +45,8 @@ begin
 
 at_memory_card_sim : entity work.at_memory_card
 port map( 
-	a(23 downto 20) => la,
-	a(19 downto 16) => sa(19 downto 16),
+	la => la,
+	sa16 => sa(16),
 	ale => ale, 
 	memr_n => memr_n,
 	memw_n => memw_n,
@@ -64,25 +64,25 @@ port map(
 	led_rom_cs_n => led_rom_cs_n
 );
 
---ram1h : entity work.SRAM
---  port map (
---    A(18 downto 1) => a(18 downto 1),
---    A(0) => sa0,
---    D => data(15 downto 8),
---    OE_n => memr_n,
---    WE_n => memw_n,
---    CE_n => ram_cs_h_n(15)
---  );
+ram1h : entity work.SRAM
+  port map (
+    A(18 downto 0) => sa(19 downto 1),
+    --A(0) => sa0,
+    D => data(15 downto 8),
+    OE_n => memr_n,
+    WE_n => memw_n,
+    CE_n => ram_cs_h_n(15)
+  );
 
---ram1l : entity work.SRAM
---  port map (
---    A(18 downto 1) => a(18 downto 1),
---    A(0) => sa0,
---    D => data(7 downto 0),
---    OE_n => memr_n,
---    WE_n => memw_n,
---    CE_n => ram_cs_l_n(15)
---  );
+ram1l : entity work.SRAM
+  port map (
+    A(18 downto 0) => sa(19 downto 1),
+    --A(0) => sa0,
+    D => data(7 downto 0),
+    OE_n => memr_n,
+    WE_n => memw_n,
+    CE_n => ram_cs_l_n(15)
+  );
 
 p_clk : process
 begin
@@ -265,7 +265,7 @@ begin
 	end if;
 end process p_addr_data;
 
-la <= a_cnt(23 downto 20);
+la <= a_cnt(23 downto 17);
 
 p_saddr : process(ale)
 begin
@@ -294,36 +294,39 @@ end process p_saddr;
 --	end if;
 --end process p_data;
 
-xms_only_n <= '0';
-sbhe_n <= '0';
-sa0 <= '0';
+-- xms_only_n <= '0';
+-- sbhe_n <= '0';
+-- sa0 <= '0';
+refresh_n <= '1';
 
---tb : process
---begin
---	xms_only_n <= '0';
---	sbhe_n <= '0';
---	sa0 <= '0';
---	wait until a = "00000000000000000000000";
---	wait until a = "00000000000000000000000";
---	sa0 <= '1';
---	wait until a = "00000000000000000000000";
---	sbhe_n <= '1';
---	sa0 <= '0';
---	wait until a = "00000000000000000000000";
---	xms_only_n <= '1';
---	sbhe_n <= '0';
---	sa0 <= '0';
---	wait until a = "00000000000000000000000";
---	wait until a = "00000000000000000000000";
---	sa0 <= '1';
---	wait until a = "00000000000000000000000";
---	sbhe_n <= '1';
---	sa0 <= '0';
---	wait until a = "00000000000000000000000";
+tb : process
+begin
+	xms_only_n <= '0';
+	sbhe_n <= '0';
+	sa0 <= '0';
+	wait until la = "1111111";
+	xms_only_n <= '1';
+	wait until la = "1111111";	
+	--wait until a = "00000000000000000000000";
+	--sa0 <= '1';
+	--wait until a = "00000000000000000000000";
+	--sbhe_n <= '1';
+	--sa0 <= '0';
+	--wait until a = "00000000000000000000000";
+	--xms_only_n <= '1';
+	--sbhe_n <= '0';
+	--sa0 <= '0';
+	--wait until a = "00000000000000000000000";
+	--wait until a = "00000000000000000000000";
+	--sa0 <= '1';
+	--wait until a = "00000000000000000000000";
+	--sbhe_n <= '1';
+	--sa0 <= '0';
+	--wait until a = "00000000000000000000000";
 	
---	-- End testing by crashing out, wheee!
---	assert false report "End of testing, phew!" severity failure;
+	-- End testing by crashing out, wheee!
+	assert false report "End of testing, phew!" severity failure;
 
---end process;
+end process;
 
 end behavioral;

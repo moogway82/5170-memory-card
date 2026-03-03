@@ -5,7 +5,8 @@ use ieee.numeric_std.all;
 entity at_memory_card is
 	port (
 		-- inputs from ISA bus
-		a 			: in 	std_logic_vector(23 downto 16);
+		la 			: in 	std_logic_vector(23 downto 17);
+		sa16		: in 	std_logic;
 		ale 		: in 	std_logic;
 		memr_n 		: in 	std_logic;
 		memw_n 		: in 	std_logic;
@@ -32,139 +33,150 @@ architecture behavioral of at_memory_card is
 	signal  card_cs 			: std_logic;
 
 begin
-	chip_select_decoding : process(ale)
+
+	chip_select_decoding : process(refresh_n, la, xms_only_n)
 	begin
-		if falling_edge(ale) then
-			-- set defaults, prevents latches
-			ram_cs <= (others => '0');
-			card_cs <= '0';
-			led_rom_cs_n <= '1';
-			
-			-- Select only on memory operations and but not during DRAM refresh cycles
-			if refresh_n = '1' then
 
-				case a(23 downto 20) is
+		ram_cs <= (others => '0');
+		card_cs <= '0';
+		led_rom_cs_n <= '1';
+		
+		-- Select only on memory operations and but not during DRAM refresh cycles
+		if refresh_n = '1' then
 
-					when x"0" => 
-						-- Lower 1MB RAM space
-						case a(19 downto 16) is
-							-- Select the card to fill missing 128KB in Conventional RAM (0x08000-0x09FFF) on a 5170 if not XMS only
-							when x"8" | x"9" =>
-								if(xms_only_n = '1') then 
-									ram_cs <= (0 => '1', others => '0');
-									card_cs <= '1';
-								end if;
-							-- Select the 
-							when x"D" =>
-								if(umbd_n = '0') then 
-									ram_cs <= (0 => '1', others => '0');
-									card_cs <= '1';
-								end if;
+			case la(23 downto 20) is
 
-							when x"E" =>
-								if(umbe_n = '0') then 
-									ram_cs <= (0 => '1', others => '0');
-									card_cs <= '1';
-								end if;
-
-							when x"F" =>
-								-- Light the ROM LED when in system ROM space
-								led_rom_cs_n <= '0';
-
-							when others =>
-								ram_cs <= (others => '0');
-								card_cs <= '0';
-
-						end case;
-
-					when x"1" => 
-						ram_cs <= (1 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"2" =>
-						ram_cs <= (2 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"3" =>
-						ram_cs <= (3 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"4" =>
-						ram_cs <= (4 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"5" =>
-						ram_cs <= (5 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"6" =>
-						ram_cs <= (6 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"7" =>
-						ram_cs <= (7 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"8" =>
-						ram_cs <= (8 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"9" =>
-						ram_cs <= (9 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"A" =>
-						ram_cs <= (10 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"B" =>
-						ram_cs <= (11 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"C" =>
-						ram_cs <= (12 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"D" =>
-						ram_cs <= (13 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"E" =>
-						ram_cs <= (14 => '1', others => '0');
-						card_cs <= '1';
-
-					when x"F" =>
-						if(unsigned(a(19 downto 16)) >= x"0" and unsigned(a(19 downto 16)) < x"E") then
-							if(xms_only_n = '0') then 
-								ram_cs <= (15 => '1', others => '0');
+				when x"0" => 
+					-- Lower 1MB RAM space
+					case la(19 downto 17) is
+						-- Select the card to fill missing 128KB in Conventional RAM (0x08000-0x09FFF) on a 5170 if not XMS only
+						when "100" =>
+							if(xms_only_n = '1') then 
+								ram_cs <= (0 => '1', others => '0');
 								card_cs <= '1';
 							end if;
-						else
-							-- Light the ROM LED when in system ROM space (0xFE and 0xFF is repeat of 0x0E and 0x0F)
+						-- Select the 
+						--when x"D" =>
+						--	if(umbd_n = '0') then 
+						--		ram_cs <= (0 => '1', others => '0');
+						--		card_cs <= '1';
+						--	end if;
+
+						--when x"E" =>
+						--	if(umbe_n = '0') then 
+						--		ram_cs <= (0 => '1', others => '0');
+						--		card_cs <= '1';
+						--	end if;
+
+						when "111" =>
+							-- Light the ROM LED when in system ROM space
 							led_rom_cs_n <= '0';
-						end if;
 
-					when others =>
-						ram_cs <= (others => '0');
-						card_cs <= '0';
+						when others =>
+							ram_cs <= (others => '0');
+							card_cs <= '0';
 
-				end case;
+					end case;
 
-			end if;
+				--when x"1" => 
+				--	ram_cs <= (1 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"2" =>
+				--	ram_cs <= (2 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"3" =>
+				--	ram_cs <= (3 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"4" =>
+				--	ram_cs <= (4 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"5" =>
+				--	ram_cs <= (5 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"6" =>
+				--	ram_cs <= (6 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"7" =>
+				--	ram_cs <= (7 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"8" =>
+				--	ram_cs <= (8 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"9" =>
+				--	ram_cs <= (9 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"A" =>
+				--	ram_cs <= (10 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"B" =>
+				--	ram_cs <= (11 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"C" =>
+				--	ram_cs <= (12 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"D" =>
+				--	ram_cs <= (13 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"E" =>
+				--	ram_cs <= (14 => '1', others => '0');
+				--	card_cs <= '1';
+
+				--when x"F" =>
+				--	if(unsigned(a(19 downto 16)) >= x"0" and unsigned(a(19 downto 16)) < x"E") then
+				--		if(xms_only_n = '0') then 
+				--			ram_cs <= (15 => '1', others => '0');
+				--			card_cs <= '1';
+				--		end if;
+				--	else
+				--		-- Light the ROM LED when in system ROM space (0xFE and 0xFF is repeat of 0x0E and 0x0F)
+				--		led_rom_cs_n <= '0';
+				--	end if;
+
+				when others =>
+					ram_cs <= (others => '0');
+					card_cs <= '0';
+
+			end case;
 
 		end if;
 
 	end process chip_select_decoding;
 
-	-- Shift the Chip selection if only XMS is selected to use all the available RAM
-	-- And split the Chip Selection between Hight and Low bytes
-	ram_cs_l_n 	<= 	not ram_cs(15 downto 1) when sa0 = '0' and xms_only_n = '0' else
-					not ram_cs(14 downto 0) when sa0 = '0' and xms_only_n = '1' else
-				 	(others => '1');
+	p_ram_cs_lh : process(ale)
+	begin
+		if rising_edge(ale) then
+			-- Shift the Chip selection if only XMS is selected to use all the available RAM
+			-- And split the Chip Selection between Hight and Low bytes
+			if sa0 = '0' and xms_only_n = '0' then
+				ram_cs_l_n 	<= 	not ram_cs(15 downto 1);
+			elsif sa0 = '0' and xms_only_n = '1' then
+				ram_cs_l_n 	<= not ram_cs(14 downto 0);
+			else
+				ram_cs_l_n 	<= (others => '1');
+			end if;
 
-	ram_cs_h_n 	<= 	not ram_cs(15 downto 1) when sbhe_n = '0' and xms_only_n = '0' else
-					not ram_cs(14 downto 0) when sbhe_n = '0' and xms_only_n = '1' else
-					(others => '1');
+			if 	sbhe_n = '0' and xms_only_n = '0' then
+				ram_cs_h_n 	<= 	not ram_cs(15 downto 1);
+			elsif sbhe_n = '0' and xms_only_n = '1' then
+				ram_cs_h_n 	<= not ram_cs(14 downto 0);
+			else 
+				ram_cs_h_n 	<= (others => '1');
+			end if;							
+		end if;
+	end process p_ram_cs_lh;
 
 	-- Activate the 16-bit transfer signal (1-wait state) if card selected
     mem_cs_16_n <= 	'0' when card_cs = '1' else
@@ -188,14 +200,14 @@ end behavioral;
 
 
 --PIN: CHIP "at_memory_card" ASSIGNED TO AN PLCC84
---PIN: a_0      : 9
---PIN: a_1  	: 37
---PIN: a_2 		: 35
---PIN: a_3 		: 33
---PIN: a_4 		: 36
---PIN: a_5 		: 34
---PIN: a_6 		: 31
---PIN: a_7 		: 30
+--PIN: sa16      : 9
+--PIN: la_1  	: 37
+--PIN: la_2 		: 35
+--PIN: la_3 		: 33
+--PIN: la_4 		: 36
+--PIN: la_5 		: 34
+--PIN: la_6 		: 31
+--PIN: la_7 		: 30
 --PIN: ale 		: 46
 --PIN: sa0 		: 83
 --PIN: sbhe_n 	: 2
