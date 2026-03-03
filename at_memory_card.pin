@@ -1,5 +1,4 @@
 CHIP "at_memory_card" ASSIGNED TO AN PLCC84
-la_0					: 12
 led_ram_cs_n					: 11
 refresh_n					: 10
 mem_cs_16_n					: 22
@@ -10,18 +9,19 @@ ram_cs_h_n_13					: 17
 ram_cs_h_n_7					: 16
 led_rom_cs_n					: 15
 TDI					: 14
-la_6					: 31
+la_5					: 31
+la_6					: 30
 memr_n					: 29
 md_dir					: 28
 ram_cs_l_n_11					: 27
 ram_cs_l_n_9					: 25
 ram_cs_l_n_1					: 24
 TMS					: 23
-la_1					: 37
-la_4					: 36
-la_2					: 35
-la_5					: 34
-la_3					: 33
+la_0					: 37
+la_3					: 36
+la_1					: 35
+la_4					: 34
+la_2					: 33
 ram_cs_h_n_10					: 44
 ale					: 46
 ram_cs_l_n_10					: 48

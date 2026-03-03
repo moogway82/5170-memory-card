@@ -201,13 +201,13 @@ end behavioral;
 
 --PIN: CHIP "at_memory_card" ASSIGNED TO AN PLCC84
 --PIN: sa16      : 9
---PIN: la_1  	: 37
---PIN: la_2 		: 35
---PIN: la_3 		: 33
---PIN: la_4 		: 36
---PIN: la_5 		: 34
---PIN: la_6 		: 31
---PIN: la_7 		: 30
+--PIN: la_0  	: 37
+--PIN: la_1 		: 35
+--PIN: la_2 		: 33
+--PIN: la_3 		: 36
+--PIN: la_4 		: 34
+--PIN: la_5 		: 31
+--PIN: la_6 		: 30
 --PIN: ale 		: 46
 --PIN: sa0 		: 83
 --PIN: sbhe_n 	: 2
