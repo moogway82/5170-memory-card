@@ -55,7 +55,9 @@ begin
 								ram_cs <= (0 => '1', others => '0');
 								card_cs <= '1';
 							end if;
-						-- Select the 
+
+						-- Need to think about UMB - I'm not sure if I can decode in 16 bit, might need to use an 8 bit transfer
+						-- but not quite sure how at present. Just ignoring for now.
 						--when x"D" =>
 						--	if(umbd_n = '0') then 
 						--		ram_cs <= (0 => '1', others => '0');
@@ -78,61 +80,61 @@ begin
 
 					end case;
 
-				--when x"1" => 
-				--	ram_cs <= (1 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"1" => 
+					ram_cs <= (1 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"2" =>
-				--	ram_cs <= (2 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"2" =>
+					ram_cs <= (2 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"3" =>
-				--	ram_cs <= (3 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"3" =>
+					ram_cs <= (3 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"4" =>
-				--	ram_cs <= (4 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"4" =>
+					ram_cs <= (4 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"5" =>
-				--	ram_cs <= (5 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"5" =>
+					ram_cs <= (5 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"6" =>
-				--	ram_cs <= (6 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"6" =>
+					ram_cs <= (6 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"7" =>
-				--	ram_cs <= (7 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"7" =>
+					ram_cs <= (7 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"8" =>
-				--	ram_cs <= (8 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"8" =>
+					ram_cs <= (8 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"9" =>
-				--	ram_cs <= (9 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"9" =>
+					ram_cs <= (9 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"A" =>
-				--	ram_cs <= (10 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"A" =>
+					ram_cs <= (10 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"B" =>
-				--	ram_cs <= (11 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"B" =>
+					ram_cs <= (11 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"C" =>
-				--	ram_cs <= (12 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"C" =>
+					ram_cs <= (12 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"D" =>
-				--	ram_cs <= (13 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"D" =>
+					ram_cs <= (13 => '1', others => '0');
+					card_cs <= '1';
 
-				--when x"E" =>
-				--	ram_cs <= (14 => '1', others => '0');
-				--	card_cs <= '1';
+				when x"E" =>
+					ram_cs <= (14 => '1', others => '0');
+					card_cs <= '1';
 
 				--when x"F" =>
 				--	if(unsigned(a(19 downto 16)) >= x"0" and unsigned(a(19 downto 16)) < x"E") then

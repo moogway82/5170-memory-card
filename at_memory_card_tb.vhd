@@ -12,6 +12,7 @@ architecture behavioral of at_memory_card_tb is
 		signal la 			: std_logic_vector(23 downto 17) := (others => '0');
 		signal a_cnt		: std_logic_vector(23 downto 0) := (others => '0');
 		signal a_inc 		: std_logic;
+		signal d_inc 		: std_logic;
 		signal data_cnt : std_logic_vector(15 downto 0) := (others => '0');
 		signal data 		: std_logic_vector(15 downto 0);
 		signal ale 			: std_logic := '0';
@@ -38,8 +39,8 @@ architecture behavioral of at_memory_card_tb is
 		signal rw_cycle : std_logic := '0'; -- 0 for Read Cycle, 1 for Write Cycle, jut go between the two
 		signal reset 		: std_logic := '1';
 
-		type isa_fsm_type is (RW_TS_P1, R_TS_P2, R_TC_P1, R_TC_P2, R_TW_P1, R_TW_P2, W_TS_P2, W_TC_P1, W_TC_P2, W_TW_P1, W_TW_P2);
-		signal ISA_PS : isa_fsm_type := RW_TS_P1;
+		type isa_fsm_type is (R_TS_P1, R_TS_P2, R_TC_P1, R_TC_P2, R_TW_P1, R_TW_P2, W_TS_P1, W_TS_P2, W_TC_P1, W_TC_P2, W_TW_P1, W_TW_P2);
+		signal ISA_PS : isa_fsm_type := R_TS_P1;
 		signal ISA_NS : isa_fsm_type;
 begin
 
@@ -65,24 +66,22 @@ port map(
 );
 
 ram1h : entity work.SRAM
-  port map (
-    A(18 downto 0) => sa(19 downto 1),
-    --A(0) => sa0,
-    D => data(15 downto 8),
-    OE_n => memr_n,
-    WE_n => memw_n,
-    CE_n => ram_cs_h_n(15)
-  );
+port map (
+  A(18 downto 0) => sa(19 downto 1),
+  D => data(15 downto 8),
+  OE_n => memr_n,
+  WE_n => memw_n,
+  CE_n => ram_cs_h_n(1)
+);
 
 ram1l : entity work.SRAM
-  port map (
-    A(18 downto 0) => sa(19 downto 1),
-    --A(0) => sa0,
-    D => data(7 downto 0),
-    OE_n => memr_n,
-    WE_n => memw_n,
-    CE_n => ram_cs_l_n(15)
-  );
+port map (
+  A(18 downto 0) => sa(19 downto 1),
+  D => data(7 downto 0),
+  OE_n => memr_n,
+  WE_n => memw_n,
+  CE_n => ram_cs_l_n(1)
+);
 
 p_clk : process
 begin
@@ -106,6 +105,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
       -- Preassign the combinational outputs regardless of state - good practise and avoids creating latches
       cpu_clk <= '1';
       a_inc <= '0';
+      d_inc <= '0';
       data <= (others => 'Z');
       ale <= '0';
 			memr_n <= '1';
@@ -113,11 +113,12 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 
       case ISA_PS is
 
-      	-- TS Phase 1 is shared between Read and Write cycles - this is whill check and do a Read or Write for the rest of the cycle
+        -- READ CYCLE
 
-        when RW_TS_P1 => 
+        when R_TS_P1 => 
 					cpu_clk <= '1';
 					a_inc <= '0';
+					d_inc <= '1';
 					data <= (others => 'Z');
 					ale <= '0';
 					memr_n <= '1';
@@ -129,11 +130,10 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
         		ISA_NS <= W_TS_P2;
         	end if;
 
-        -- READ CYCLE
-
         when R_TS_P2 =>
         	cpu_clk <= '0';
 					a_inc <= '0';
+					d_inc <= '0';
 					data <= (others => 'Z');
 					ale <= '1';
 					memr_n <= '1';
@@ -144,6 +144,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 				when R_TC_P1 =>
         	cpu_clk <= '1';
 					a_inc <= '0';
+					d_inc <= '0';
 					data <= (others => 'Z');
 					ale <= '0';
 					memr_n <= '0';
@@ -154,6 +155,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 				when R_TC_P2 =>
         	cpu_clk <= '0';
 					a_inc <= '0';
+					d_inc <= '0';
 					data <= (others => 'Z');
 					ale <= '0';
 					memr_n <= '0';
@@ -164,9 +166,10 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 				when R_TW_P1 =>
         	cpu_clk <= '1';
 					a_inc <= '0';
+					d_inc <= '0';
 					data <= (others => 'Z');
 					ale <= '0';
-					memr_n <= '1';
+					memr_n <= '0';
 					memw_n <= '1';
 
 					ISA_NS <= R_TW_P2;
@@ -174,96 +177,110 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 				when R_TW_P2 =>
         	cpu_clk <= '0';
 					a_inc <= '1';
+					d_inc <= '0';
+					data <= (others => 'Z');
+					ale <= '0';
+					memr_n <= '0';
+					memw_n <= '1';
+
+					ISA_NS <= R_TS_P1;
+
+				-- WRITE CYCLE
+
+				when W_TS_P1 => 
+					cpu_clk <= '1';
+					a_inc <= '0';
+					d_inc <= '1';
 					data <= (others => 'Z');
 					ale <= '0';
 					memr_n <= '1';
 					memw_n <= '1';
 
-					ISA_NS <= RW_TS_P1;
-
-				-- WRITE CYCLE
+					if rw_cycle = '0' then 
+        		ISA_NS <= R_TS_P2;
+        	else 
+        		ISA_NS <= W_TS_P2;
+        	end if;
 
        	when W_TS_P2 =>
         	cpu_clk <= '0';
 					a_inc <= '0';
-					data <= (others => 'Z');
+					d_inc <= '0';
+					data <= data_cnt;
 					ale <= '1';
 					memr_n <= '1';
-					memw_n <= '1';
+					memw_n <= '0';
 
 					ISA_NS <= W_TC_P1;
 
 				when W_TC_P1 =>
         	cpu_clk <= '1';
 					a_inc <= '0';
-					data <= (others => 'Z');
+					d_inc <= '0';
+					data <= data_cnt;
 					ale <= '0';
 					memr_n <= '1';
-					memw_n <= '1';
+					memw_n <= '0';
 
 					ISA_NS <= W_TC_P2;
 
 				when W_TC_P2 =>
         	cpu_clk <= '0';
 					a_inc <= '0';
-					data <= (others => 'Z');
+					d_inc <= '0';
+					data <= data_cnt;
 					ale <= '0';
 					memr_n <= '1';
-					memw_n <= '1';
+					memw_n <= '0';
 
 					ISA_NS <= W_TW_P1;
 
 				when W_TW_P1 =>
         	cpu_clk <= '1';
 					a_inc <= '0';
-					data <= (others => 'Z');
+					d_inc <= '0';
+					data <= data_cnt;
 					ale <= '0';
 					memr_n <= '1';
-					memw_n <= '1';
+					memw_n <= '0';
 
 					ISA_NS <= W_TW_P2;
 
 				when W_TW_P2 =>
         	cpu_clk <= '0';
-					a_inc <= '0';
-					data <= (others => 'Z');
+					a_inc <= '1';
+					d_inc <= '0';
+					data <= data_cnt;
 					ale <= '0';
 					memr_n <= '1';
-					memw_n <= '1';
+					memw_n <= '0';
 
-					ISA_NS <= RW_TS_P1;
+					ISA_NS <= W_TS_P1;
 
 
         when others =>
 
-        	ISA_NS <= RW_TS_P1;
+        	ISA_NS <= R_TS_P1;
 
        end case;
 
 end process p_isa_fsm_conc;
 
---p_cpu_clock : process(clk)
---begin
---	if falling_edge(clk) then
---		cpu_clk <= not cpu_clk;
---		if cpu_clk = '0' then
---			cpu_clk_no <= cpu_clk_no + 1;
---			if cpu_clk_no = 2 then
---				cpu_clk_no <= 0;
---				rw_cycle <= not rw_cycle;
---			end if;
---		end if;
---	end if;
---end process p_cpu_clock;
-
-p_addr_data : process(a_inc)
+p_addr_data_rwc : process(a_inc)
 begin
 	if rising_edge(a_inc) then
 			a_cnt(23 downto 13) <= std_logic_vector(unsigned(a_cnt(23 downto 13)) + 1);
-			data_cnt(15 downto 8) <=  std_logic_vector(unsigned(data_cnt(15 downto 8)) + 1);
-			data_cnt(7 downto 0) <=  std_logic_vector(unsigned(data_cnt(7 downto 0)) + 1);
+			rw_cycle <= not rw_cycle;
 	end if;
-end process p_addr_data;
+end process p_addr_data_rwc;
+
+p_data_inc : process(d_inc)
+begin
+	if rising_edge(d_inc) then
+		data_cnt(15 downto 8) <=  std_logic_vector(unsigned(data_cnt(15 downto 8)) + 1);
+		data_cnt(7 downto 0) <=  std_logic_vector(unsigned(data_cnt(7 downto 0)) + 1);
+	end if;
+end process p_data_inc;
 
 la <= a_cnt(23 downto 17);
 
@@ -274,29 +291,7 @@ begin
 	end if;
 end process p_saddr;
 
---refresh_n <= '1';
 
---a <= a_cnt when ale = '1';
-
---ale <= 	'1' when cpu_clk_no = 0 and cpu_clk = '0' else
---				'0';
-
---memr_n <= '0' when rw_cycle = '0' and (cpu_clk_no = 1 or cpu_clk_no = 2) else
---					'1';
-
---memw_n <= '0' when rw_cycle = '1' and (cpu_clk_no = 1 or cpu_clk_no = 2) else
---					'1';
-
---p_data : process(ale)
---begin
---	if falling_edge(ale) then
-
---	end if;
---end process p_data;
-
--- xms_only_n <= '0';
--- sbhe_n <= '0';
--- sa0 <= '0';
 refresh_n <= '1';
 
 tb : process
@@ -307,6 +302,9 @@ begin
 	wait until la = "1111111";
 	xms_only_n <= '1';
 	wait until la = "1111111";	
+	xms_only_n <= '0';
+	wait until la = "1111111";
+
 	--wait until a = "00000000000000000000000";
 	--sa0 <= '1';
 	--wait until a = "00000000000000000000000";

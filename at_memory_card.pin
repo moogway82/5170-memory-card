@@ -1,6 +1,7 @@
 CHIP "at_memory_card" ASSIGNED TO AN PLCC84
 led_ram_cs_n					: 11
 refresh_n					: 10
+mem_cs_16_n_combENA					: 615
 mem_cs_16_n					: 22
 ram_cs_h_n_3					: 21
 ram_cs_h_n_11					: 20
