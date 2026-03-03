@@ -17,7 +17,7 @@ test: GHDL
 	~/opt/oss-cad-suite/bin/ghdl -e SRAM
 	~/opt/oss-cad-suite/bin/ghdl -a at_memory_card_tb.vhd 
 	~/opt/oss-cad-suite/bin/ghdl -e at_memory_card_tb
-	~/opt/oss-cad-suite/bin/ghdl -r at_memory_card_tb --wave=at_memory_card_tb.ghw --ieee-asserts=disable #--stop-time=1ms
+	~/opt/oss-cad-suite/bin/ghdl -r at_memory_card_tb --wave=at_memory_card_tb.ghw --ieee-asserts=disable --stop-time=1ms
 
 clean:
 	rm -f $(IMAGES) at_memory_card at_memory_card.edif at_memory_card.fit at_memory_card.io at_memory_card.jed at_memory_card.pin at_memory_card.tt3 work-obj*.cf at_memory_card_tb.o at_memory_card.o e~at_memory_card.o e~at_memory_card_tb.o at_memory_card_tb.vcd
