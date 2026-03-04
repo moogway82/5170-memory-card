@@ -18,19 +18,20 @@ entity at_memory_card is
 		umbe_n 		: in 	std_logic;
 		xms_only_n 	: in 	std_logic;
 		-- outputs
-		md_dir 		: out 	std_logic;
-		ram_cs_l_n	: out 	std_logic_vector(15 downto 1);
-		ram_cs_h_n	: out 	std_logic_vector(15 downto 1);
+		md_dir 		: out 	std_logic := '1';
+		ram_cs_l_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
+		ram_cs_h_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
 		mem_cs_16_n : out 	std_logic;
 		-- zero_ws  : out 	std_logic;
-		led_ram_cs_n 	: out 	std_logic;
-		led_rom_cs_n 	: out 	std_logic
+		led_ram_cs_n 	: out 	std_logic := '1';
+		led_rom_cs_n 	: out 	std_logic := '1'
 	);
 end;
 
 architecture behavioral of at_memory_card is
 	signal 	ram_cs 				: std_logic_vector(15 downto 0); -- Active High, One more CS than output so that full possible RAM is decoded internally
-	signal  card_cs 			: std_logic;
+	signal  addr_cs 			: std_logic;  -- This is combinational, early decoding of the address, to assert MEM_CS_16
+	signal  card_cs 			: std_logic;  -- This is the commitment to serve the bus on ALE
 
 begin
 
@@ -38,9 +39,8 @@ begin
 	begin
 
 		ram_cs <= (others => '0');
-		card_cs <= '0';
-		led_rom_cs_n <= '1';
-		
+		addr_cs <= '0';
+
 		-- Select only on memory operations and but not during DRAM refresh cycles
 		if refresh_n = '1' then
 
@@ -53,7 +53,7 @@ begin
 						when "100" =>
 							if(xms_only_n = '1') then 
 								ram_cs <= (0 => '1', others => '0');
-								card_cs <= '1';
+								addr_cs <= '1';
 							end if;
 
 						-- Need to think about UMB - I'm not sure if I can decode in 16 bit, might need to use an 8 bit transfer
@@ -70,71 +70,71 @@ begin
 						--		card_cs <= '1';
 						--	end if;
 
-						when "111" =>
-							-- Light the ROM LED when in system ROM space
-							led_rom_cs_n <= '0';
+						--when "111" =>
+						--	-- Light the ROM LED when in system ROM space
+						--	led_rom_cs_n <= '0';
 
 						when others =>
 							ram_cs <= (others => '0');
-							card_cs <= '0';
+							addr_cs <= '0';
 
 					end case;
 
 				when x"1" => 
 					ram_cs <= (1 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"2" =>
 					ram_cs <= (2 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"3" =>
 					ram_cs <= (3 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"4" =>
 					ram_cs <= (4 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"5" =>
 					ram_cs <= (5 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"6" =>
 					ram_cs <= (6 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"7" =>
 					ram_cs <= (7 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"8" =>
 					ram_cs <= (8 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"9" =>
 					ram_cs <= (9 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"A" =>
 					ram_cs <= (10 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"B" =>
 					ram_cs <= (11 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"C" =>
 					ram_cs <= (12 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"D" =>
 					ram_cs <= (13 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				when x"E" =>
 					ram_cs <= (14 => '1', others => '0');
-					card_cs <= '1';
+					addr_cs <= '1';
 
 				--when x"F" =>
 				--	if(unsigned(a(19 downto 16)) >= x"0" and unsigned(a(19 downto 16)) < x"E") then
@@ -149,7 +149,7 @@ begin
 
 				when others =>
 					ram_cs <= (others => '0');
-					card_cs <= '0';
+					addr_cs <= '0';
 
 			end case;
 
@@ -157,28 +157,59 @@ begin
 
 	end process chip_select_decoding;
 
-	p_ram_cs_lh : process(ale)
-	begin
-		if rising_edge(ale) then
-			-- Shift the Chip selection if only XMS is selected to use all the available RAM
-			-- And split the Chip Selection between Hight and Low bytes
-			if sa0 = '0' and xms_only_n = '0' then
-				ram_cs_l_n 	<= 	not ram_cs(15 downto 1);
-			elsif sa0 = '0' and xms_only_n = '1' then
-				ram_cs_l_n 	<= not ram_cs(14 downto 0);
-			else
-				ram_cs_l_n 	<= (others => '1');
-			end if;
+	-- Activate the 16-bit transfer signal (1-wait state) if card selected
+    mem_cs_16_n <= 	'0' when addr_cs = '1' else
+    				'Z';
 
-			if 	sbhe_n = '0' and xms_only_n = '0' then
-				ram_cs_h_n 	<= 	not ram_cs(15 downto 1);
-			elsif sbhe_n = '0' and xms_only_n = '1' then
-				ram_cs_h_n 	<= not ram_cs(14 downto 0);
-			else 
-				ram_cs_h_n 	<= (others => '1');
-			end if;							
-		end if;
-	end process p_ram_cs_lh;
+    p_latch_selection : process(ale)
+    begin
+    	if rising_edge(ale) then
+
+    		card_cs <= addr_cs;
+
+    		if xms_only_n = '0' then 	-- XMS ONLY ON, > 1MB
+
+    			if sa0 = '0' then
+    				ram_cs_l_n <= not ram_cs(15 downto 1);
+    			else
+    				ram_cs_l_n <= (others => '1');
+    			end if;
+    			if sbhe_n = '0' then
+    				ram_cs_h_n <= not ram_cs(15 downto 1);
+    			else
+    				ram_cs_h_n <= (others => '1');
+    			end if;
+
+    		else 						-- XMS ONLY OFF
+
+    		  	if sa0 = '0' then
+    				ram_cs_l_n <= not ram_cs(14 downto 0);
+    			else
+    				ram_cs_l_n <= (others => '1');
+    			end if;
+    			if sbhe_n = '0' then
+    				ram_cs_h_n <= not ram_cs(14 downto 0);
+    			else
+    				ram_cs_h_n <= (others => '1');
+    			end if;
+
+    		end if;
+    	end if;
+    end process p_latch_selection;
+
+
+    --card_cs <= addr_cs when ale = '1';
+
+
+    ---- Shift the Chip selection if only XMS is selected to use all the available RAM
+	---- And split the Chip Selection between Hight and Low bytes
+	--ram_cs_l_n 	<= 	not ram_cs(15 downto 1) when sa0 = '0' and xms_only_n = '0' else
+	--				not ram_cs(14 downto 0) when sa0 = '0' and xms_only_n = '1' else
+	--			 	(others => '1');
+
+	--ram_cs_h_n 	<= 	not ram_cs(15 downto 1) when sbhe_n = '0' and xms_only_n = '0' else
+	--				not ram_cs(14 downto 0) when sbhe_n = '0' and xms_only_n = '1' else
+	--				(others => '1');
 
 	-- Activate the 16-bit transfer signal (1-wait state) if card selected
     mem_cs_16_n <= 	'0' when card_cs = '1' else
@@ -197,6 +228,57 @@ begin
     -- Light the RAM LED when the card is being accessed
     led_ram_cs_n <= '0' when card_cs = '1' and (memr_n = '0' or memw_n = '0') else
     				'1';
+
+	--p_ram_cs_lh : process(ale)
+	--begin
+	--	--ram_cs_l_n 	<= (others => '1');
+	--	--ram_cs_h_n 	<= (others => '1');
+	--	--md_dir <= '1';
+	--	--led_ram_cs_n <= '1';
+
+	--	if rising_edge(ale) then
+	--		if card_cs = '1' then
+	--			-- Shift the Chip selection if only XMS is selected to use all the available RAM
+	--			-- And split the Chip Selection between Hight and Low bytes
+	--			if sa0 = '0' and xms_only_n = '0' then
+	--				ram_cs_l_n 	<= 	not ram_cs(15 downto 1);
+	--			elsif sa0 = '0' and xms_only_n = '1' then
+	--				ram_cs_l_n 	<= not ram_cs(14 downto 0);
+	--			else
+	--				ram_cs_l_n 	<= (others => '1');
+	--			end if;
+
+	--			if 	sbhe_n = '0' and xms_only_n = '0' then
+	--				ram_cs_h_n 	<= 	not ram_cs(15 downto 1);
+	--			elsif sbhe_n = '0' and xms_only_n = '1' then
+	--				ram_cs_h_n 	<= not ram_cs(14 downto 0);
+	--			else 
+	--				ram_cs_h_n 	<= (others => '1');
+	--			end if;		
+
+	--			-- md_dir = 1, as input on the ISA bus. md_dir = 0, an output to the ISA bus
+	--			if memr_n = '0' then
+	--				md_dir <= '0';
+	--			else 
+	--				md_dir <= '1';
+	--			end if;
+
+	--			led_ram_cs_n <= '0';
+	--		else
+	--			ram_cs_l_n 	<= (others => '1');
+	--			ram_cs_h_n 	<= (others => '1');
+	--			md_dir <= '1';
+	--			led_ram_cs_n <= '1';
+	--		end if;
+	--	end if;
+	--end process p_ram_cs_lh;
+
+    -- TODO: Look at enabling 0WS also if testing well, oooh the power
+    --zero_ws_n 	<=	'0' when card_cs = '1' else
+    --				'Z';
+
+
+
 
 end behavioral;
 

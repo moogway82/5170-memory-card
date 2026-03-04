@@ -270,7 +270,7 @@ p_addr_data_rwc : process(a_inc)
 begin
 	if rising_edge(a_inc) then
 			a_cnt(23 downto 13) <= std_logic_vector(unsigned(a_cnt(23 downto 13)) + 1);
-			rw_cycle <= not rw_cycle;
+			rw_cycle <= not a_cnt(14);
 	end if;
 end process p_addr_data_rwc;
 
