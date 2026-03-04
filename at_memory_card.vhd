@@ -38,6 +38,7 @@ begin
 	chip_select_decoding : process(refresh_n, la, xms_only_n)
 	begin
 
+		led_rom_cs_n <= '1';
 		ram_cs <= (others => '0');
 		addr_cs <= '0';
 
@@ -70,9 +71,11 @@ begin
 						--		card_cs <= '1';
 						--	end if;
 
-						--when "111" =>
-						--	-- Light the ROM LED when in system ROM space
-						--	led_rom_cs_n <= '0';
+						when "111" =>
+							if sa16 = '1' then
+								-- Light the ROM LED when in system ROM space
+								led_rom_cs_n <= '0';
+							end if;
 
 						when others =>
 							ram_cs <= (others => '0');
@@ -80,61 +83,61 @@ begin
 
 					end case;
 
-				when x"1" => 
-					ram_cs <= (1 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"1" => 
+				--	ram_cs <= (1 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"2" =>
-					ram_cs <= (2 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"2" =>
+				--	ram_cs <= (2 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"3" =>
-					ram_cs <= (3 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"3" =>
+				--	ram_cs <= (3 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"4" =>
-					ram_cs <= (4 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"4" =>
+				--	ram_cs <= (4 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"5" =>
-					ram_cs <= (5 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"5" =>
+				--	ram_cs <= (5 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"6" =>
-					ram_cs <= (6 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"6" =>
+				--	ram_cs <= (6 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"7" =>
-					ram_cs <= (7 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"7" =>
+				--	ram_cs <= (7 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"8" =>
-					ram_cs <= (8 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"8" =>
+				--	ram_cs <= (8 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"9" =>
-					ram_cs <= (9 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"9" =>
+				--	ram_cs <= (9 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"A" =>
-					ram_cs <= (10 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"A" =>
+				--	ram_cs <= (10 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"B" =>
-					ram_cs <= (11 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"B" =>
+				--	ram_cs <= (11 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"C" =>
-					ram_cs <= (12 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"C" =>
+				--	ram_cs <= (12 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"D" =>
-					ram_cs <= (13 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"D" =>
+				--	ram_cs <= (13 => '1', others => '0');
+				--	addr_cs <= '1';
 
-				when x"E" =>
-					ram_cs <= (14 => '1', others => '0');
-					addr_cs <= '1';
+				--when x"E" =>
+				--	ram_cs <= (14 => '1', others => '0');
+				--	addr_cs <= '1';
 
 				--when x"F" =>
 				--	if(unsigned(a(19 downto 16)) >= x"0" and unsigned(a(19 downto 16)) < x"E") then
@@ -158,49 +161,48 @@ begin
 	end process chip_select_decoding;
 
 	-- Activate the 16-bit transfer signal (1-wait state) if card selected
+	-- If you don't assert this quickly, then the AT will switch to doing a
+	-- slow 2x 8-bit transfer.
     mem_cs_16_n <= 	'0' when addr_cs = '1' else
     				'Z';
 
+    -- Latch the RAM chip selection lines for the whole cycle
+    -- These are shifted to allow for (almost) the full 15MB possible
+    -- on the card depending on the selection of the XMS_ONLY_N switch
+    -- Ie, RAM chip 1 will do upper 128K conventional + UMBs if XMS_ONLY_N is OFF
+    -- Or RAM chip 1 will do the first 1MB of XMS and conventional space ignored
+    -- if XMS_ONLY_N is ON.
     p_latch_selection : process(ale)
     begin
     	if rising_edge(ale) then
 
     		card_cs <= addr_cs;
+    		ram_cs_l_n <= (others => '1');
+    		ram_cs_h_n <= (others => '1');
 
     		if xms_only_n = '0' then 	-- XMS ONLY ON, > 1MB
 
     			if sa0 = '0' then
     				ram_cs_l_n <= not ram_cs(15 downto 1);
-    			else
-    				ram_cs_l_n <= (others => '1');
     			end if;
     			if sbhe_n = '0' then
     				ram_cs_h_n <= not ram_cs(15 downto 1);
-    			else
-    				ram_cs_h_n <= (others => '1');
     			end if;
 
     		else 						-- XMS ONLY OFF
 
     		  	if sa0 = '0' then
     				ram_cs_l_n <= not ram_cs(14 downto 0);
-    			else
-    				ram_cs_l_n <= (others => '1');
     			end if;
     			if sbhe_n = '0' then
     				ram_cs_h_n <= not ram_cs(14 downto 0);
-    			else
-    				ram_cs_h_n <= (others => '1');
     			end if;
 
     		end if;
     	end if;
     end process p_latch_selection;
 
-
-    --card_cs <= addr_cs when ale = '1';
-
-
+    -- TODO: Leaving this here for now, as liked how this showed the shifting even if it didn't latch properly
     ---- Shift the Chip selection if only XMS is selected to use all the available RAM
 	---- And split the Chip Selection between Hight and Low bytes
 	--ram_cs_l_n 	<= 	not ram_cs(15 downto 1) when sa0 = '0' and xms_only_n = '0' else
@@ -211,9 +213,6 @@ begin
 	--				not ram_cs(14 downto 0) when sbhe_n = '0' and xms_only_n = '1' else
 	--				(others => '1');
 
-	-- Activate the 16-bit transfer signal (1-wait state) if card selected
-    mem_cs_16_n <= 	'0' when card_cs = '1' else
-    				'Z';
     -- TODO: Look at enabling 0WS also if testing well, oooh the power
     --zero_ws_n 	<=	'0' when card_cs = '1' else
     --				'Z';
