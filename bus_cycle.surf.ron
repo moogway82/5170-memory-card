@@ -27,12 +27,35 @@
         active_scope: Some(WaveScope((
             strs: [
                 "at_memory_card_tb",
-                "at_memory_card_sim",
             ],
-            id: Wellen((5)),
+            id: Wellen((4)),
         ))),
         items_tree: (
             items: [
+                (
+                    item_ref: (63),
+                    level: 0,
+                    unfolded: true,
+                    selected: false,
+                ),
+                (
+                    item_ref: (64),
+                    level: 0,
+                    unfolded: true,
+                    selected: false,
+                ),
+                (
+                    item_ref: (65),
+                    level: 0,
+                    unfolded: true,
+                    selected: false,
+                ),
+                (
+                    item_ref: (66),
+                    level: 0,
+                    unfolded: true,
+                    selected: false,
+                ),
                 (
                     item_ref: (25),
                     level: 0,
@@ -47,6 +70,12 @@
                 ),
                 (
                     item_ref: (4),
+                    level: 0,
+                    unfolded: true,
+                    selected: false,
+                ),
+                (
+                    item_ref: (67),
                     level: 0,
                     unfolded: true,
                     selected: false,
@@ -77,18 +106,6 @@
                 ),
                 (
                     item_ref: (18),
-                    level: 0,
-                    unfolded: true,
-                    selected: false,
-                ),
-                (
-                    item_ref: (63),
-                    level: 0,
-                    unfolded: true,
-                    selected: false,
-                ),
-                (
-                    item_ref: (64),
                     level: 0,
                     unfolded: true,
                     selected: false,
@@ -156,6 +173,73 @@
             ],
         ),
         displayed_items: {
+            (37): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "at_memory_card_tb",
+                        ],
+                        id: Wellen((4)),
+                    ),
+                    name: "memw_n",
+                    id: Wellen((11)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "memw_n",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (64): Marker((
+                color: None,
+                background_color: None,
+                name: None,
+                idx: 1,
+            )),
+            (8): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "at_memory_card_tb",
+                        ],
+                        id: Wellen((4)),
+                    ),
+                    name: "memr_n",
+                    id: Wellen((10)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "memr_n",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (21): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "at_memory_card_tb",
+                            "at_memory_card_sim",
+                        ],
+                        id: Wellen((5)),
+                    ),
+                    name: "ram_cs",
+                    id: Wellen((47)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "ram_cs [15:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: Some("Binary"),
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
             (4): Variable((
                 variable_ref: (
                     path: (
@@ -170,6 +254,108 @@
                 color: None,
                 background_color: None,
                 display_name: "isa_ps",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (25): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "at_memory_card_tb",
+                        ],
+                        id: Wellen((4)),
+                    ),
+                    name: "xms_only_n",
+                    id: Wellen((16)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "xms_only_n",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (62): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "at_memory_card_tb",
+                            "at_memory_card_sim",
+                        ],
+                        id: Wellen((5)),
+                    ),
+                    name: "mem_cs_16_n",
+                    id: Wellen((44)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "mem_cs_16_n",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (36): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "at_memory_card_tb",
+                        ],
+                        id: Wellen((4)),
+                    ),
+                    name: "rw_cycle",
+                    id: Wellen((26)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "rw_cycle",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (56): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "at_memory_card_tb",
+                        ],
+                        id: Wellen((4)),
+                    ),
+                    name: "data",
+                    id: Wellen((8)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "data [15:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (33): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "at_memory_card_tb",
+                            "at_memory_card_sim",
+                        ],
+                        id: Wellen((5)),
+                    ),
+                    name: "md_dir",
+                    id: Wellen((41)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "md_dir",
                 display_name_type: Unique,
                 manual_name: None,
                 format: None,
@@ -237,6 +423,32 @@
                 field_formats: [],
                 height_scaling_factor: None,
             )),
+            (67): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "at_memory_card_tb",
+                        ],
+                        id: Wellen((4)),
+                    ),
+                    name: "d_inc",
+                    id: Wellen((6)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "d_inc",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (63): Marker((
+                color: None,
+                background_color: None,
+                name: None,
+                idx: 0,
+            )),
             (3): Variable((
                 variable_ref: (
                     path: (
@@ -257,26 +469,6 @@
                 field_formats: [],
                 height_scaling_factor: None,
             )),
-            (2): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "at_memory_card_tb",
-                        ],
-                        id: Wellen((4)),
-                    ),
-                    name: "cpu_clk",
-                    id: Wellen((24)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "cpu_clk",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
             (10): Variable((
                 variable_ref: (
                     path: (
@@ -287,52 +479,11 @@
                         id: Wellen((5)),
                     ),
                     name: "card_cs",
-                    id: Wellen((48)),
+                    id: Wellen((49)),
                 ),
                 color: None,
                 background_color: None,
                 display_name: "card_cs",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (33): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "at_memory_card_tb",
-                            "at_memory_card_sim",
-                        ],
-                        id: Wellen((5)),
-                    ),
-                    name: "md_dir",
-                    id: Wellen((41)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "md_dir",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (8): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "at_memory_card_tb",
-                        ],
-                        id: Wellen((4)),
-                    ),
-                    name: "memr_n",
-                    id: Wellen((10)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "memr_n",
                 display_name_type: Unique,
                 manual_name: None,
                 format: None,
@@ -359,13 +510,39 @@
                 field_formats: [],
                 height_scaling_factor: None,
             )),
-            (64): Marker((
+            (2): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "at_memory_card_tb",
+                        ],
+                        id: Wellen((4)),
+                    ),
+                    name: "cpu_clk",
+                    id: Wellen((24)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "cpu_clk",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (66): Marker((
                 color: None,
                 background_color: None,
                 name: None,
-                idx: 1,
+                idx: 3,
             )),
-            (36): Variable((
+            (65): Marker((
+                color: None,
+                background_color: None,
+                name: None,
+                idx: 2,
+            )),
+            (1): Variable((
                 variable_ref: (
                     path: (
                         strs: [
@@ -373,56 +550,15 @@
                         ],
                         id: Wellen((4)),
                     ),
-                    name: "rw_cycle",
-                    id: Wellen((26)),
+                    name: "clk",
+                    id: Wellen((23)),
                 ),
                 color: None,
                 background_color: None,
-                display_name: "rw_cycle",
+                display_name: "clk",
                 display_name_type: Unique,
                 manual_name: None,
                 format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (37): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "at_memory_card_tb",
-                        ],
-                        id: Wellen((4)),
-                    ),
-                    name: "memw_n",
-                    id: Wellen((11)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "memw_n",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (21): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "at_memory_card_tb",
-                            "at_memory_card_sim",
-                        ],
-                        id: Wellen((5)),
-                    ),
-                    name: "ram_cs",
-                    id: Wellen((47)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "ram_cs [15:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: Some("Binary"),
                 field_formats: [],
                 height_scaling_factor: None,
             )),
@@ -447,110 +583,23 @@
                 field_formats: [],
                 height_scaling_factor: None,
             )),
-            (1): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "at_memory_card_tb",
-                        ],
-                        id: Wellen((4)),
-                    ),
-                    name: "clk",
-                    id: Wellen((23)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "clk",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (25): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "at_memory_card_tb",
-                        ],
-                        id: Wellen((4)),
-                    ),
-                    name: "xms_only_n",
-                    id: Wellen((16)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "xms_only_n",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (62): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "at_memory_card_tb",
-                            "at_memory_card_sim",
-                        ],
-                        id: Wellen((5)),
-                    ),
-                    name: "mem_cs_16_n",
-                    id: Wellen((44)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "mem_cs_16_n",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (63): Marker((
-                color: None,
-                background_color: None,
-                name: None,
-                idx: 0,
-            )),
-            (56): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "at_memory_card_tb",
-                        ],
-                        id: Wellen((4)),
-                    ),
-                    name: "data",
-                    id: Wellen((8)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "data [15:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
         },
-        display_item_ref_counter: 64,
+        display_item_ref_counter: 67,
         viewports: [
             (
-                curr_left: (0.34702256403284104),
-                curr_right: (0.34743621664033086),
-                target_left: (0.3057474755638969),
-                target_right: (0.6671499431798166),
-                move_start_left: (0.3057474755638969),
-                move_start_right: (0.6671499431798166),
+                curr_left: (0.34343803440247317),
+                curr_right: (0.34822505224407585),
+                target_left: (0.9978854977199704),
+                target_right: (0.33198874606157747),
+                move_start_left: (0.9978854977199704),
+                move_start_right: (0.33198874606157747),
                 move_duration: None,
                 move_strategy: Instant,
             ),
         ],
         cursor: Some((1, [
-            1942133184,
-            371,
+            3581577216,
+            354,
         ])),
         markers: {
             1: (1, [
@@ -561,8 +610,16 @@
                 1817133184,
                 371,
             ]),
+            2: (1, [
+                3452035072,
+                368,
+            ]),
+            3: (1, [
+                4202035072,
+                368,
+            ]),
         },
-        focused_item: Some((19)),
+        focused_item: Some((7)),
         focused_transaction: (None, None),
         default_variable_name_type: Unique,
         scroll_offset: 0.0,
@@ -571,10 +628,7 @@
     )),
     drag_started: false,
     drag_source_idx: None,
-    drag_target_idx: Some((
-        before: (26),
-        level: 0,
-    )),
+    drag_target_idx: None,
     previous_waves: None,
     count: None,
     blacklisted_translators: [],
@@ -601,6 +655,6 @@
         group_by_direction: false,
     ),
     rename_target: None,
-    sidepanel_width: Some(191.21875),
+    sidepanel_width: Some(300.0),
     ui_zoom_factor: None,
 )

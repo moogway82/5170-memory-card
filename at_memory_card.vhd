@@ -30,8 +30,9 @@ end;
 
 architecture behavioral of at_memory_card is
 	signal 	ram_cs 				: std_logic_vector(15 downto 0); -- Active High, One more CS than output so that full possible RAM is decoded internally
-	signal  addr_cs 			: std_logic;  -- This is combinational, early decoding of the address, to assert MEM_CS_16
+	signal  la_addr_decode 			: std_logic;  -- This is combinational, early decoding of the address, to assert MEM_CS_16
 	signal  card_cs 			: std_logic;  -- This is the commitment to serve the bus on ALE
+	signal 	umbd_cs 			: std_logic;
 
 begin
 
@@ -40,7 +41,7 @@ begin
 
 		led_rom_cs_n <= '1';
 		ram_cs <= (others => '0');
-		addr_cs <= '0';
+		la_addr_decode <= '0';
 
 		-- Select only on memory operations and but not during DRAM refresh cycles
 		if refresh_n = '1' then
@@ -54,90 +55,90 @@ begin
 						when "100" =>
 							if(xms_only_n = '1') then 
 								ram_cs <= (0 => '1', others => '0');
-								addr_cs <= '1';
+								la_addr_decode <= '1';
 							end if;
 
-						-- Need to think about UMB - I'm not sure if I can decode in 16 bit, might need to use an 8 bit transfer
-						-- but not quite sure how at present. Just ignoring for now.
-						--when x"D" =>
-						--	if(umbd_n = '0') then 
-						--		ram_cs <= (0 => '1', others => '0');
-						--		card_cs <= '1';
-						--	end if;
+						---- We need to also check that sa16 is high at ALE before driving RAM and bus
+						when "110" =>
+							if(umbd_n = '0') then 
+								umbd_cs <= '1';
+								la_addr_decode <= '1';
+							end if;
 
 						--when x"E" =>
 						--	if(umbe_n = '0') then 
 						--		ram_cs <= (0 => '1', others => '0');
-						--		card_cs <= '1';
+						--		la_addr_decode <= '1';
 						--	end if;
 
 						when "111" =>
-							if sa16 = '1' then
-								-- Light the ROM LED when in system ROM space
-								led_rom_cs_n <= '0';
-							end if;
+							-- Light the ROM LED when in system ROM space
+							led_rom_cs_n <= '0';
+							ram_cs <= (others => '0');
+							la_addr_decode <= '0';
 
 						when others =>
+							led_rom_cs_n <= '1';
 							ram_cs <= (others => '0');
-							addr_cs <= '0';
+							la_addr_decode <= '0';
 
 					end case;
 
 				--when x"1" => 
 				--	ram_cs <= (1 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"2" =>
 				--	ram_cs <= (2 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"3" =>
 				--	ram_cs <= (3 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"4" =>
 				--	ram_cs <= (4 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"5" =>
 				--	ram_cs <= (5 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"6" =>
 				--	ram_cs <= (6 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"7" =>
 				--	ram_cs <= (7 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"8" =>
 				--	ram_cs <= (8 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"9" =>
 				--	ram_cs <= (9 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"A" =>
 				--	ram_cs <= (10 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"B" =>
 				--	ram_cs <= (11 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"C" =>
 				--	ram_cs <= (12 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"D" =>
 				--	ram_cs <= (13 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"E" =>
 				--	ram_cs <= (14 => '1', others => '0');
-				--	addr_cs <= '1';
+				--	la_addr_decode <= '1';
 
 				--when x"F" =>
 				--	if(unsigned(a(19 downto 16)) >= x"0" and unsigned(a(19 downto 16)) < x"E") then
@@ -152,7 +153,7 @@ begin
 
 				when others =>
 					ram_cs <= (others => '0');
-					addr_cs <= '0';
+					la_addr_decode <= '0';
 
 			end case;
 
@@ -163,7 +164,7 @@ begin
 	-- Activate the 16-bit transfer signal (1-wait state) if card selected
 	-- If you don't assert this quickly, then the AT will switch to doing a
 	-- slow 2x 8-bit transfer.
-    mem_cs_16_n <= 	'0' when addr_cs = '1' else
+    mem_cs_16_n <= 	'0' when la_addr_decode = '1' else
     				'Z';
 
     -- Latch the RAM chip selection lines for the whole cycle
@@ -172,24 +173,38 @@ begin
     -- Ie, RAM chip 1 will do upper 128K conventional + UMBs if XMS_ONLY_N is OFF
     -- Or RAM chip 1 will do the first 1MB of XMS and conventional space ignored
     -- if XMS_ONLY_N is ON.
-    p_latch_selection : process(ale)
+    p_latch_selection : process(ale, la_addr_decode, sa0, sbhe_n, ram_cs)
     begin
-    	if rising_edge(ale) then
+    	-- Trying to implement a transparent latch - GHDL/Yosys often doesn't like this, overridden with "ghdl --latches"
+    	if ale = '1' then
 
-    		card_cs <= addr_cs;
+    		card_cs <= la_addr_decode;
     		ram_cs_l_n <= (others => '1');
     		ram_cs_h_n <= (others => '1');
 
-    		if xms_only_n = '0' then 	-- XMS ONLY ON, > 1MB
+    		if xms_only_n = '0' then 	-- XMS ONLY ON, 1MB (0x010000) to 15MB (0xFEFFFF)
 
     			if sa0 = '0' then
     				ram_cs_l_n <= not ram_cs(15 downto 1);
+    				-- Enable RAM1_L if LA,SA16 = "0000110,1"  
+    				if umbd_n = '0' and umbd_cs = '1' and sa16 = '1' then
+    					ram_cs_l_n(1) <= '0';
+    				end if;
     			end if;
     			if sbhe_n = '0' then
     				ram_cs_h_n <= not ram_cs(15 downto 1);
-    			end if;
+    				-- Enable RAM1_L if LA,SA16 = "0000110,1"  
+    				if umbd_n = '0' and umbd_cs = '1' then
+    					if sa16 = '1' then
+    						ram_cs_h_n(1) <= '0';
+    					else
+    						-- If SA16 is not '1' then RAM is not active
+    						card_cs <= '0';
+    					end if;
+    				end if;
+    			end if; 
 
-    		else 						-- XMS ONLY OFF
+    		else 						-- XMS ONLY OFF, 512kb (0x008000) to 14MB (0xEFFFFF)
 
     		  	if sa0 = '0' then
     				ram_cs_l_n <= not ram_cs(14 downto 0);

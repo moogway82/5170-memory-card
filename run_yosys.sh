@@ -20,7 +20,7 @@ fi
 
 yosys -m ghdl <<EOF
 read_liberty -lib ${ROOT}/cells.lib
-ghdl ${NAME}
+ghdl --latches ${NAME}
 stat
 tribuf
 stat

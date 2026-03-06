@@ -110,6 +110,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
       ale <= '0';
 			memr_n <= '1';
 			memw_n <= '1';
+			la <= (others => '0');
 
       case ISA_PS is
 
@@ -123,6 +124,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 					ale <= '0';
 					memr_n <= '1';
 					memw_n <= '1';
+					la <= a_cnt(23 downto 17);
 
 					if rw_cycle = '0' then 
         		ISA_NS <= R_TS_P2;
@@ -138,6 +140,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 					ale <= '1';
 					memr_n <= '1';
 					memw_n <= '1';
+					la <= a_cnt(23 downto 17);
 
 					ISA_NS <= R_TC_P1;
 
@@ -149,6 +152,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 					ale <= '0';
 					memr_n <= '0';
 					memw_n <= '1';
+					la <= a_cnt(23 downto 17);
 
 					ISA_NS <= R_TC_P2;
 
@@ -160,6 +164,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 					ale <= '0';
 					memr_n <= '0';
 					memw_n <= '1';
+					la <= (others => '0');
 
 					ISA_NS <= R_TW_P1;
 
@@ -171,6 +176,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 					ale <= '0';
 					memr_n <= '0';
 					memw_n <= '1';
+					la <= (others => '0');
 
 					ISA_NS <= R_TW_P2;
 
@@ -182,6 +188,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 					ale <= '0';
 					memr_n <= '0';
 					memw_n <= '1';
+					la <= a_cnt(23 downto 17);
 
 					ISA_NS <= R_TS_P1;
 
@@ -195,6 +202,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 					ale <= '0';
 					memr_n <= '1';
 					memw_n <= '1';
+					la <= a_cnt(23 downto 17);
 
 					if rw_cycle = '0' then 
         		ISA_NS <= R_TS_P2;
@@ -210,6 +218,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 					ale <= '1';
 					memr_n <= '1';
 					memw_n <= '0';
+					la <= a_cnt(23 downto 17);
 
 					ISA_NS <= W_TC_P1;
 
@@ -221,6 +230,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 					ale <= '0';
 					memr_n <= '1';
 					memw_n <= '0';
+					la <= a_cnt(23 downto 17);
 
 					ISA_NS <= W_TC_P2;
 
@@ -232,6 +242,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 					ale <= '0';
 					memr_n <= '1';
 					memw_n <= '0';
+					la <= (others => '0');
 
 					ISA_NS <= W_TW_P1;
 
@@ -243,6 +254,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 					ale <= '0';
 					memr_n <= '1';
 					memw_n <= '0';
+					la <= (others => '0');
 
 					ISA_NS <= W_TW_P2;
 
@@ -254,6 +266,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
 					ale <= '0';
 					memr_n <= '1';
 					memw_n <= '0';
+					la <= a_cnt(23 downto 17);
 
 					ISA_NS <= W_TS_P1;
 
@@ -282,7 +295,7 @@ begin
 	end if;
 end process p_data_inc;
 
-la <= a_cnt(23 downto 17);
+
 
 p_saddr : process(ale)
 begin
@@ -299,11 +312,11 @@ begin
 	xms_only_n <= '0';
 	sbhe_n <= '0';
 	sa0 <= '0';
-	wait until la = "1111111";
+	wait until a_cnt(23 downto 17) = "1111111";
 	xms_only_n <= '1';
-	wait until la = "1111111";	
+	wait until a_cnt(23 downto 17) = "1111111";	
 	xms_only_n <= '0';
-	wait until la = "1111111";
+	wait until a_cnt(23 downto 17) = "1111111";
 
 	--wait until a = "00000000000000000000000";
 	--sa0 <= '1';
