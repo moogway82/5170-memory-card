@@ -64,7 +64,7 @@ architecture behaviour of SRAM is
 begin
 	-- Stupid fake SRAM, just spits some data out when read and does nothing when
 	-- written. Fast, shows if outputting and mapps control signals.
-	D <= 	not A(18 downto 11) when OE_n = '0' and CE_n = '0' and WE_n = '1' else 
+	D <= 	x"AA" when OE_n = '0' and CE_n = '0' and WE_n = '1' else 
 			(others => 'Z');
 	ce_n_int <= CE_n;
 end;

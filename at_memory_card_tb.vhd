@@ -44,7 +44,7 @@ architecture behavioral of at_memory_card_tb is
 		signal ISA_NS : isa_fsm_type;
 begin
 
-at_memory_card_sim : entity work.at_memory_card
+at_memory_card_sim : entity work.at_memory_card_128k_only
 port map( 
 	la => la,
 	sa16 => sa(16),
@@ -214,7 +214,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
         	cpu_clk <= '0';
 					a_inc <= '0';
 					d_inc <= '0';
-					data <= data_cnt;
+					data <= x"5555";
 					ale <= '1';
 					memr_n <= '1';
 					memw_n <= '0';
@@ -226,7 +226,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
         	cpu_clk <= '1';
 					a_inc <= '0';
 					d_inc <= '0';
-					data <= data_cnt;
+					data <= x"5555";
 					ale <= '0';
 					memr_n <= '1';
 					memw_n <= '0';
@@ -238,7 +238,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
         	cpu_clk <= '0';
 					a_inc <= '0';
 					d_inc <= '0';
-					data <= data_cnt;
+					data <= x"5555";
 					ale <= '0';
 					memr_n <= '1';
 					memw_n <= '0';
@@ -250,7 +250,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
         	cpu_clk <= '1';
 					a_inc <= '0';
 					d_inc <= '0';
-					data <= data_cnt;
+					data <= x"5555";
 					ale <= '0';
 					memr_n <= '1';
 					memw_n <= '0';
@@ -262,7 +262,7 @@ p_isa_fsm_conc : process(ISA_PS, rw_cycle)
         	cpu_clk <= '0';
 					a_inc <= '1';
 					d_inc <= '0';
-					data <= data_cnt;
+					data <= x"5555";
 					ale <= '0';
 					memr_n <= '1';
 					memw_n <= '0';
@@ -287,6 +287,7 @@ begin
 	end if;
 end process p_addr_data_rwc;
 
+-- Not using this at the moment, keeping it simple and just asserting "5555" for a write cycle
 p_data_inc : process(d_inc)
 begin
 	if rising_edge(d_inc) then
