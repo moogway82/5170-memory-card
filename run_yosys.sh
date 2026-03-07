@@ -4,7 +4,7 @@
 export ROOT="~/code/atf15xx_yosys"
 
 #NAME=$1; shift
-NAME=at_memory_card
+NAME=at_memory_card_128k_only
 
 VERSION=`yosys --version | cut -d' ' -f2`
 

@@ -85,9 +85,9 @@ port map (
 
 p_clk : process
 begin
-	wait for 62.5 ns;
+	wait for 41.666666667 ns;
 	clk <= '0';
-	wait for 62.5 ns;
+	wait for 41.666666667 ns;
 	clk <= '1';
 end process p_clk;
 
@@ -314,9 +314,11 @@ begin
 	sbhe_n <= '0';
 	sa0 <= '0';
 	wait until a_cnt(23 downto 17) = "1111111";
-	xms_only_n <= '1';
+	sbhe_n <= '1';
+	sa0 <= '0';
 	wait until a_cnt(23 downto 17) = "1111111";	
-	xms_only_n <= '0';
+	sbhe_n <= '0';
+	sa0 <= '1';
 	wait until a_cnt(23 downto 17) = "1111111";
 
 	--wait until a = "00000000000000000000000";

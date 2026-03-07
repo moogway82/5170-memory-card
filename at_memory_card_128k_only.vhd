@@ -21,7 +21,7 @@ entity at_memory_card_128k_only is
 		md_dir 		: out 	std_logic := '1';
 		ram_cs_l_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
 		ram_cs_h_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
-		mem_cs_16_n : out 	std_logic;
+		mem_cs_16_n : out 	std_logic := 'Z';
 		-- zero_ws  : out 	std_logic;
 		led_ram_cs_n 	: out 	std_logic := '1';
 		led_rom_cs_n 	: out 	std_logic := '1'
@@ -31,13 +31,15 @@ end;
 architecture behavioral of at_memory_card_128k_only is
 	signal	la_decoded 	: std_logic;
 	signal 	ram_cs 	: std_logic;
+	signal 	rom_led_n_int : std_logic := '0';
 begin
 
 	-- Decode LA
 	la_decoded <= 	'1' when la(23 downto 17) = "0000100" and refresh_n = '1' else
 					'0';
 
-	mem_cs_16_n <= 	'0' when la_decoded = '1' else
+	mem_cs_16_n <= 	
+					--'0' when la_decoded = '1' else
 					'Z';
 
 	-- Latch on falling edge of LA - transparent
@@ -53,16 +55,35 @@ begin
 	end process p_latch_ram_cs;
 
 	-- Enable RAM High and Low chips depending on SA0 and SHBE
-	ram_cs_l_n(1) <=	'0' when ram_cs = '1' and sa0 = '0';
-	ram_cs_h_n(1) <= 	'0' when ram_cs = '1' and sbhe_n = '0';
+	ram_cs_l_n(1) <=	
+						--'0' when ram_cs = '1' and sa0 = '0' else
+						'1';
+	ram_cs_h_n(1) <= 	
+						--'0' when ram_cs = '1' and sbhe_n = '0' else
+						'1';
 
 	-- Set the transciever direction: 0 = driving data bus, 1 = input from data bus (and closest we get to disconnected)
-	md_dir <= 	'0'	when ram_cs = '1' and memr_n = '0' else
+	md_dir <= 	
+				--'0'	when ram_cs = '1' and memr_n = '0' else
 				'1';
 
 	-- LEDs
 	led_ram_cs_n <= not ram_cs;
-	led_rom_cs_n <= '1';
+
+	 --Blinky ROM LED test (2MHz / 2, 20 times to get ~1/2sec interval)
+	p_blinky_lef : process(ale)
+		variable ale_count : unsigned(20 downto 0) := (others => '0');
+	begin
+		if rising_edge(ale) then
+			ale_count := ale_count + 1;
+		end if;
+		if ale_count(20) = '1' then
+			rom_led_n_int <= not rom_led_n_int; 
+		end if;
+
+	end process;
+
+	led_rom_cs_n <= rom_led_n_int;
 
 
 end behavioral;
