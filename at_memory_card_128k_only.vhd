@@ -31,14 +31,13 @@ end;
 architecture behavioral of at_memory_card_128k_only is
 	signal	la_decoded 	: std_logic;
 	signal 	ram_cs 	: std_logic;
-	signal 	rom_led_n_int : std_logic := '0';
 begin
 
 	-- Decode LA
 	la_decoded <= 	'1' when la(23 downto 17) = "0000100" and refresh_n = '1' else
 					'0';
 
-	mem_cs_16_n <= 	
+	mem_cs_16_n <= 	'0' when xms_only_n = '0' else
 					--'0' when la_decoded = '1' else
 					'Z';
 
@@ -77,13 +76,8 @@ begin
 		if rising_edge(ale) then
 			ale_count := ale_count + 1;
 		end if;
-		if ale_count(20) = '1' then
-			rom_led_n_int <= not rom_led_n_int; 
-		end if;
-
+		led_rom_cs_n <= ale_count(20);
 	end process;
-
-	led_rom_cs_n <= rom_led_n_int;
 
 
 end behavioral;

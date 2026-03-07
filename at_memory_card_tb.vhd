@@ -310,7 +310,7 @@ refresh_n <= '1';
 
 tb : process
 begin
-	xms_only_n <= '0';
+	xms_only_n <= '1';
 	sbhe_n <= '0';
 	sa0 <= '0';
 	wait until a_cnt(23 downto 17) = "1111111";
@@ -339,7 +339,7 @@ begin
 	--wait until a = "00000000000000000000000";
 	
 	-- End testing by crashing out, wheee!
-	assert false report "End of testing, phew!" severity failure;
+	 assert false report "End of testing, phew!" severity failure;
 
 end process;
 
