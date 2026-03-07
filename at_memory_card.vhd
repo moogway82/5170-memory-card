@@ -42,6 +42,7 @@ begin
 		led_rom_cs_n <= '1';
 		ram_cs <= (others => '0');
 		la_addr_decode <= '0';
+		umbd_cs <= '0';
 
 		-- Select only on memory operations and but not during DRAM refresh cycles
 		if refresh_n = '1' then
@@ -50,39 +51,40 @@ begin
 
 				when x"0" => 
 					-- Lower 1MB RAM space
-					case la(19 downto 17) is
-						-- Select the card to fill missing 128KB in Conventional RAM (0x08000-0x09FFF) on a 5170 if not XMS only
-						when "100" =>
-							if(xms_only_n = '1') then 
+					-- Region is only decoded if XMS ONLY is OFF
+					if xms_only_n = '1' then 
+
+						case la(19 downto 17) is
+							-- Select the card to fill missing 128KB in Conventional RAM (0x08000-0x09FFF) on a 5170 if not XMS only
+							when "100" =>
 								ram_cs <= (0 => '1', others => '0');
 								la_addr_decode <= '1';
-							end if;
 
-						---- We need to also check that sa16 is high at ALE before driving RAM and bus
-						when "110" =>
-							if(umbd_n = '0') then 
+							-- We need to also check that sa16 is high at ALE before driving RAM and bus
+							when "110" =>
 								umbd_cs <= '1';
 								la_addr_decode <= '1';
-							end if;
 
-						--when x"E" =>
-						--	if(umbe_n = '0') then 
-						--		ram_cs <= (0 => '1', others => '0');
-						--		la_addr_decode <= '1';
-						--	end if;
+							--when x"E" =>
+							--	if(umbe_n = '0') then 
+							--		ram_cs <= (0 => '1', others => '0');
+							--		la_addr_decode <= '1';
+							--	end if;
 
-						when "111" =>
-							-- Light the ROM LED when in system ROM space
-							led_rom_cs_n <= '0';
-							ram_cs <= (others => '0');
-							la_addr_decode <= '0';
+							when "111" =>
+								-- Light the ROM LED when in system ROM space
+								led_rom_cs_n <= '0';
+								ram_cs <= (others => '0');
+								la_addr_decode <= '0';
 
-						when others =>
-							led_rom_cs_n <= '1';
-							ram_cs <= (others => '0');
-							la_addr_decode <= '0';
+							when others =>
+								led_rom_cs_n <= '1';
+								ram_cs <= (others => '0');
+								la_addr_decode <= '0';
 
-					end case;
+						end case;
+
+					end if;
 
 				--when x"1" => 
 				--	ram_cs <= (1 => '1', others => '0');
@@ -178,9 +180,19 @@ begin
     	-- Trying to implement a transparent latch - GHDL/Yosys often doesn't like this, overridden with "ghdl --latches"
     	if ale = '1' then
 
-    		card_cs <= la_addr_decode;
+    		-- Default to not selected
+    		card_cs <= '0';
     		ram_cs_l_n <= (others => '1');
     		ram_cs_h_n <= (others => '1');
+
+    		if la_addr_decode <= '1' then
+
+    			if umbd_n = '0' and umbd_cs = '1' and sa16 = '1' then
+    				card_cs <= '1';
+    			end if;
+
+
+
 
     		if xms_only_n = '0' then 	-- XMS ONLY ON, 1MB (0x010000) to 15MB (0xFEFFFF)
 
