@@ -13,3 +13,4 @@ at_memory_card_tb
 *.vcd
 *.cf
 sram
+*.ghw

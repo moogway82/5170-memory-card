@@ -339,7 +339,7 @@ begin
 	--wait until a = "00000000000000000000000";
 	
 	-- End testing by crashing out, wheee!
-	 --assert false report "End of testing, phew!" severity failure;
+	 assert false report "End of testing, phew!" severity failure;
 
 end process;
 
