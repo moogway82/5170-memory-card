@@ -1,4 +1,4 @@
-Atmel ATF1508 Fitter Version 1918 ,running Sat Mar 07 16:10:52 2026
+Atmel ATF1508 Fitter Version 1918 ,running Sun Mar 08 22:11:26 2026
 
 
 
@@ -78,7 +78,7 @@ Performing input pin pre-assignments ...
 
 Attempt to place floating signals ...
 ------------------------------------
-id00056 is placed at feedback node 601 (MC 1)
+id00057 is placed at feedback node 601 (MC 1)
 id00058 is placed at feedback node 602 (MC 2)
 id00054 is placed at feedback node 603 (MC 3)
 id00059 is placed at feedback node 604 (MC 4)
@@ -92,7 +92,7 @@ id00065 is placed at feedback node 610 (MC 10)
 id00064 is placed at feedback node 611 (MC 11)
 id00066 is placed at feedback node 612 (MC 12)
 id00068 is placed at feedback node 613 (MC 13)
-id00057 is placed at feedback node 614 (MC 14)
+id00056 is placed at feedback node 614 (MC 14)
 id00067 is placed at feedback node 615 (MC 15)
 id00055 is placed at feedback node 616 (MC 16)
 mem_cs_16_n is placed at pin 22 (MC 17)
@@ -215,7 +215,7 @@ Universal-Interconnect-Multiplexer assignments
 FanIn assignment for block A [22]
 {
 ale,
-id00054,id00055,id00059,id00064,id00056,id00066,id00065,id00062,id00058,id00003,id00068,id00061,id00063,id00051,id00067,id00053,id00060,id00057,id00050,id00052,
+id00054,id00055,id00059,id00064,id00057,id00066,id00065,id00062,id00058,id00003,id00068,id00061,id00063,id00051,id00067,id00053,id00060,id00056,id00050,id00052,
 ram_cs_comb,
 }
 Multiplexer assignment for block A
@@ -223,7 +223,7 @@ id00054			(MC3	FB)  : MUX 0		Ref (A3fb)
 id00055			(MC15	FB)  : MUX 1		Ref (A16fb)
 id00059			(MC4	FB)  : MUX 2		Ref (A4fb)
 id00064			(MC10	FB)  : MUX 3		Ref (A11fb)
-id00056			(MC1	FB)  : MUX 4		Ref (A1fb)
+id00057			(MC1	FB)  : MUX 4		Ref (A1fb)
 id00066			(MC11	FB)  : MUX 5		Ref (A12fb)
 id00065			(MC9	FB)  : MUX 7		Ref (A10fb)
 id00062			(MC6	FB)  : MUX 8		Ref (A7fb)
@@ -238,20 +238,20 @@ ram_cs_comb		(MC21	FB)  : MUX 21		Ref (C48fb)
 id00067			(MC14	FB)  : MUX 23		Ref (A15fb)
 id00053			(MC19	FB)  : MUX 25		Ref (B31fb)
 id00060			(MC5	FB)  : MUX 26		Ref (A6fb)
-id00057			(MC13	FB)  : MUX 27		Ref (A14fb)
+id00056			(MC13	FB)  : MUX 27		Ref (A14fb)
 id00050			(MC17	FB)  : MUX 31		Ref (B28fb)
 id00052			(MC20	FB)  : MUX 33		Ref (B32fb)
 
 FanIn assignment for block B [22]
 {
 ale,
-id00054,id00055,id00056,id00064,id00061,id00066,id00065,id00062,id00058,id00057,id00051,id00068,id00063,id00003,id00067,id00053,id00060,id00050,id00052,id00059,
+id00054,id00055,id00057,id00064,id00061,id00066,id00065,id00062,id00058,id00056,id00051,id00068,id00063,id00003,id00067,id00053,id00060,id00050,id00052,id00059,
 led_rom_cs_n,
 }
 Multiplexer assignment for block B
 id00054			(MC3	FB)  : MUX 0		Ref (A3fb)
 id00055			(MC15	FB)  : MUX 1		Ref (A16fb)
-id00056			(MC1	FB)  : MUX 2		Ref (A1fb)
+id00057			(MC1	FB)  : MUX 2		Ref (A1fb)
 id00064			(MC10	FB)  : MUX 3		Ref (A11fb)
 id00061			(MC7	FB)  : MUX 4		Ref (A8fb)
 id00066			(MC11	FB)  : MUX 5		Ref (A12fb)
@@ -259,7 +259,7 @@ id00065			(MC9	FB)  : MUX 7		Ref (A10fb)
 id00062			(MC6	FB)  : MUX 8		Ref (A7fb)
 ale			(MC22	P)   : MUX 9		Ref (E69p)
 id00058			(MC2	FB)  : MUX 10		Ref (A2fb)
-id00057			(MC13	FB)  : MUX 11		Ref (A14fb)
+id00056			(MC13	FB)  : MUX 11		Ref (A14fb)
 id00051			(MC19	FB)  : MUX 13		Ref (B30fb)
 id00068			(MC12	FB)  : MUX 15		Ref (A13fb)
 led_rom_cs_n		(MC18	P)   : MUX 16		Ref (B29p)
@@ -353,11 +353,11 @@ ram_cs_l_n_6 = 1;
 
 ram_cs_l_n_7 = 1;
 
+ram_cs_comb.L = (refresh_n & !la_6 & !la_5 & !la_4 & la_2 & !la_0 & !la_1 & !la_3);
+
 ram_cs_l_n_8 = 1;
 
 ram_cs_l_n_9 = 1;
-
-ram_cs_comb.L = (refresh_n & !la_6 & !la_5 & !la_4 & la_2 & !la_0 & !la_1 & !la_3);
 
 mem_cs_16_n = 0;
 
@@ -537,7 +537,7 @@ Pin 74 = ram_cs_l_n_0; /* MC 117 */
 Pin 75 = ram_cs_l_n_6; /* MC 118 */ 
 Pin 76 = ram_cs_h_n_0; /* MC 120 */ 
 Pin 77 = ram_cs_h_n_14; /* MC 123 */ 
-PINNODE 601 = id00056; /* MC 1 Feedback */
+PINNODE 601 = id00057; /* MC 1 Feedback */
 PINNODE 602 = id00058; /* MC 2 Feedback */
 PINNODE 603 = id00054; /* MC 3 Feedback */
 PINNODE 604 = id00059; /* MC 4 Feedback */
@@ -549,7 +549,7 @@ PINNODE 610 = id00065; /* MC 10 Feedback */
 PINNODE 611 = id00064; /* MC 11 Feedback */
 PINNODE 612 = id00066; /* MC 12 Feedback */
 PINNODE 613 = id00068; /* MC 13 Feedback */
-PINNODE 614 = id00057; /* MC 14 Feedback */
+PINNODE 614 = id00056; /* MC 14 Feedback */
 PINNODE 615 = id00067; /* MC 15 Feedback */
 PINNODE 616 = id00055; /* MC 16 Feedback */
 PINNODE 626 = id00003; /* MC 26 Feedback */
@@ -585,7 +585,7 @@ SO Pin Options Field = Summary of Allocations.
 
 
 MCell Pin# Oe   PinDrive      DCERP  FBDrive     DCERP  Foldback  CascadeOut     TotPT SO
-MC1   0         --                   id00056     Dc---  --        --             3     s- 
+MC1   0         --                   id00057     Dc---  --        --             3     s- 
 MC2   0         --                   id00058     Dc---  --        --             3     s- 
 MC3   12        --                   id00054     Dc---  --        --             3     s- 
 MC4   0         --                   id00059     Dc---  --        --             3     s- 
@@ -598,7 +598,7 @@ MC10  0         --                   id00065     Dc---  --        --            
 MC11  8         --                   id00064     Dc---  --        --             3     s- 
 MC12  0         --                   id00066     Dc---  --        --             3     s- 
 MC13  6         --                   id00068     Dc---  --        --             3     s- 
-MC14  5         --                   id00057     Dc---  --        --             3     s- 
+MC14  5         --                   id00056     Dc---  --        --             3     s- 
 MC15  0         --                   id00067     Dc---  --        --             3     s- 
 MC16  4         --                   id00055     Dc---  --        --             3     s- 
 MC17  22   --   mem_cs_16_n   C----  --                 --        --             0     s- 

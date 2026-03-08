@@ -31,13 +31,14 @@ end;
 architecture behavioral of at_memory_card_128k_only is
 	signal	la_decoded 	: std_logic;
 	signal 	ram_cs 	: std_logic;
+	signal 	ale_count : std_logic_vector(20 downto 0) := (others => '0');
 begin
 
 	-- Decode LA
 	la_decoded <= 	'1' when la(23 downto 17) = "0000100" and refresh_n = '1' else
 					'0';
 
-	mem_cs_16_n <= 	'0' when xms_only_n = '0' else
+	mem_cs_16_n <= 	'0' when xms_only_n = '0' else -- Cludge - fitter doesn't like it when OE=off and there is no OE=on signal value
 					--'0' when la_decoded = '1' else
 					'Z';
 
@@ -70,15 +71,14 @@ begin
 	led_ram_cs_n <= not ram_cs;
 
 	 --Blinky ROM LED test (2MHz / 2, 20 times to get ~1/2sec interval)
-	p_blinky_lef : process(ale)
-		variable ale_count : unsigned(20 downto 0) := (others => '0');
+	p_blinky_led : process(ale)
 	begin
 		if rising_edge(ale) then
-			ale_count := ale_count + 1;
+			ale_count <= std_logic_vector(unsigned(ale_count) + 1);
 		end if;
-		led_rom_cs_n <= ale_count(20);
-	end process;
+	end process p_blinky_led;
 
+	led_rom_cs_n <= ale_count(20);
 
 end behavioral;
 

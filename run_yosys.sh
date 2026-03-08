@@ -48,6 +48,7 @@ rename -wire -suffix _comb
 #write_edif -attrprop ${NAME}.edif
 delete t:\$scopeinfo
 write_edif ${LSBIDX} ${NAME}.edif
+#show
 EOF
 
 # The Atmel tools need the bit order of the array ports reversed, so bit 0 is the LSB.
