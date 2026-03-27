@@ -21,16 +21,16 @@ entity at_memory_card_128k_only is
 		md_dir 		: out 	std_logic := '1';
 		ram_cs_l_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
 		ram_cs_h_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
-		mem_cs_16_n : out 	std_logic := 'Z';
+		mem_cs_16_n : out 	std_logic;
 		-- zero_ws  : out 	std_logic;
-		led_ram_cs_n 	: out 	std_logic := '1';
-		led_rom_cs_n 	: out 	std_logic := '1'
+		led_ram_cs_n 	: out 	std_logic;
+		led_rom_cs_n 	: out 	std_logic
 	);
 end;
 
 architecture behavioral of at_memory_card_128k_only is
 	signal	la_decoded 	: std_logic;
-	signal 	ram_cs 	: std_logic;
+	signal 	ram_cs 	: std_logic := '0';
 	signal 	ale_count : std_logic_vector(20 downto 0) := (others => '0');
 begin
 
@@ -38,8 +38,7 @@ begin
 	la_decoded <= 	'1' when la(23 downto 17) = "0000100" and refresh_n = '1' else
 					'0';
 
-	mem_cs_16_n <= 	'0' when xms_only_n = '0' else -- Cludge - fitter doesn't like it when OE=off and there is no OE=on signal value
-					--'0' when la_decoded = '1' else
+	mem_cs_16_n <= 	'0' when la_decoded = '1' else
 					'Z';
 
 	-- Latch on falling edge of LA - transparent
@@ -73,12 +72,13 @@ begin
 	 --Blinky ROM LED test (2MHz / 2, 20 times to get ~1/2sec interval)
 	p_blinky_led : process(ale)
 	begin
-		if rising_edge(ale) then
+		if falling_edge(ale) then
 			ale_count <= std_logic_vector(unsigned(ale_count) + 1);
 		end if;
 	end process p_blinky_led;
 
-	led_rom_cs_n <= ale_count(20);
+	led_rom_cs_n <= '0' when ale_count(18) = '0' else
+					'1';
 
 end behavioral;
 

@@ -24,3 +24,6 @@ clean:
 
 view:
 	surfer at_memory_card_tb.ghw -s bus_cycle.surf.ron > /dev/null &
+
+prog:
+	openocd -f ~/opt/oss-cad-suite/share/openocd/scripts/interface/ftdi/um232h.cfg -c "adapter speed 400" -c "transport select jtag" -c "jtag newtap ATF1508AS tap -irlen 3 -expected-id 0x0150803f" -c init -c "svf $(IMAGES)" -c "sleep 200" -c shutdown

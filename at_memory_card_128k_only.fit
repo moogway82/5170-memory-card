@@ -1,4 +1,4 @@
-Atmel ATF1508 Fitter Version 1918 ,running Sun Mar 08 22:11:26 2026
+Atmel ATF1508 Fitter Version 1918 ,running Thu Mar 26 18:03:06 2026
 
 
 
@@ -78,36 +78,34 @@ Performing input pin pre-assignments ...
 
 Attempt to place floating signals ...
 ------------------------------------
-id00057 is placed at feedback node 601 (MC 1)
-id00058 is placed at feedback node 602 (MC 2)
-id00054 is placed at feedback node 603 (MC 3)
-id00059 is placed at feedback node 604 (MC 4)
+id00070 is placed at feedback node 601 (MC 1)
+id00071 is placed at feedback node 602 (MC 2)
+id00067 is placed at feedback node 603 (MC 3)
+id00072 is placed at feedback node 604 (MC 4)
 led_ram_cs_n is placed at pin 11 (MC 5)
 refresh_n is placed at pin 10 (MC 6)
-id00060 is placed at feedback node 606 (MC 6)
-id00062 is placed at feedback node 607 (MC 7)
-id00061 is placed at feedback node 608 (MC 8)
-id00063 is placed at feedback node 609 (MC 9)
-id00065 is placed at feedback node 610 (MC 10)
-id00064 is placed at feedback node 611 (MC 11)
-id00066 is placed at feedback node 612 (MC 12)
-id00068 is placed at feedback node 613 (MC 13)
-id00056 is placed at feedback node 614 (MC 14)
-id00067 is placed at feedback node 615 (MC 15)
-id00055 is placed at feedback node 616 (MC 16)
+id00073 is placed at feedback node 606 (MC 6)
+id00074 is placed at feedback node 607 (MC 7)
+id00076 is placed at feedback node 608 (MC 8)
+id00075 is placed at feedback node 609 (MC 9)
+id00077 is placed at feedback node 610 (MC 10)
+id00078 is placed at feedback node 611 (MC 11)
+id00079 is placed at feedback node 612 (MC 12)
+id00081 is placed at feedback node 613 (MC 13)
+id00069 is placed at feedback node 614 (MC 14)
+id00080 is placed at feedback node 615 (MC 15)
+id00068 is placed at feedback node 616 (MC 16)
 mem_cs_16_n is placed at pin 22 (MC 17)
 ram_cs_h_n_3 is placed at pin 21 (MC 19)
 ram_cs_h_n_11 is placed at pin 20 (MC 21)
 ram_cs_h_n_5 is placed at pin 18 (MC 24)
 ram_cs_h_n_13 is placed at pin 17 (MC 25)
-id00003 is placed at feedback node 626 (MC 26)
 ram_cs_h_n_7 is placed at pin 16 (MC 27)
-id00050 is placed at feedback node 628 (MC 28)
 led_rom_cs_n is placed at pin 15 (MC 29)
-id00051 is placed at feedback node 630 (MC 30)
-id00053 is placed at feedback node 631 (MC 31)
+id00003 is placed at feedback node 630 (MC 30)
+id00066 is placed at feedback node 631 (MC 31)
 TDI is placed at pin 14 (MC 32)
-id00052 is placed at feedback node 632 (MC 32)
+id00065 is placed at feedback node 632 (MC 32)
 la_5 is placed at pin 31 (MC 35)
 la_6 is placed at pin 30 (MC 37)
 md_dir is placed at pin 28 (MC 40)
@@ -212,65 +210,61 @@ NC = Unused I/O pins which must be unconnected on the board
 
 Universal-Interconnect-Multiplexer assignments
 ------------------------------------------------
-FanIn assignment for block A [22]
+FanIn assignment for block A [20]
 {
 ale,
-id00054,id00055,id00059,id00064,id00057,id00066,id00065,id00062,id00058,id00003,id00068,id00061,id00063,id00051,id00067,id00053,id00060,id00056,id00050,id00052,
+id00067,id00079,id00072,id00078,id00070,id00077,id00074,id00071,id00068,id00003,id00081,id00076,id00075,id00080,id00066,id00073,id00069,id00065,
 ram_cs_comb,
 }
 Multiplexer assignment for block A
-id00054			(MC3	FB)  : MUX 0		Ref (A3fb)
-id00055			(MC15	FB)  : MUX 1		Ref (A16fb)
-id00059			(MC4	FB)  : MUX 2		Ref (A4fb)
-id00064			(MC10	FB)  : MUX 3		Ref (A11fb)
-id00057			(MC1	FB)  : MUX 4		Ref (A1fb)
-id00066			(MC11	FB)  : MUX 5		Ref (A12fb)
-id00065			(MC9	FB)  : MUX 7		Ref (A10fb)
-id00062			(MC6	FB)  : MUX 8		Ref (A7fb)
-ale			(MC22	P)   : MUX 9		Ref (E69p)
-id00058			(MC2	FB)  : MUX 10		Ref (A2fb)
-id00003			(MC16	FB)  : MUX 11		Ref (B26fb)
-id00068			(MC12	FB)  : MUX 15		Ref (A13fb)
-id00061			(MC7	FB)  : MUX 16		Ref (A8fb)
-id00063			(MC8	FB)  : MUX 17		Ref (A9fb)
-id00051			(MC18	FB)  : MUX 19		Ref (B30fb)
-ram_cs_comb		(MC21	FB)  : MUX 21		Ref (C48fb)
-id00067			(MC14	FB)  : MUX 23		Ref (A15fb)
-id00053			(MC19	FB)  : MUX 25		Ref (B31fb)
-id00060			(MC5	FB)  : MUX 26		Ref (A6fb)
-id00056			(MC13	FB)  : MUX 27		Ref (A14fb)
-id00050			(MC17	FB)  : MUX 31		Ref (B28fb)
-id00052			(MC20	FB)  : MUX 33		Ref (B32fb)
+id00067			(MC3	FB)  : MUX 0		Ref (A3fb)
+id00079			(MC11	FB)  : MUX 1		Ref (A12fb)
+id00072			(MC4	FB)  : MUX 2		Ref (A4fb)
+id00078			(MC10	FB)  : MUX 3		Ref (A11fb)
+id00070			(MC1	FB)  : MUX 4		Ref (A1fb)
+id00077			(MC9	FB)  : MUX 7		Ref (A10fb)
+id00074			(MC6	FB)  : MUX 8		Ref (A7fb)
+ale			(MC20	P)   : MUX 9		Ref (E69p)
+id00071			(MC2	FB)  : MUX 10		Ref (A2fb)
+id00068			(MC15	FB)  : MUX 11		Ref (A16fb)
+id00003			(MC16	FB)  : MUX 13		Ref (B30fb)
+id00081			(MC12	FB)  : MUX 15		Ref (A13fb)
+id00076			(MC7	FB)  : MUX 16		Ref (A8fb)
+id00075			(MC8	FB)  : MUX 17		Ref (A9fb)
+id00080			(MC14	FB)  : MUX 23		Ref (A15fb)
+id00066			(MC17	FB)  : MUX 25		Ref (B31fb)
+id00073			(MC5	FB)  : MUX 26		Ref (A6fb)
+ram_cs_comb		(MC19	FB)  : MUX 27		Ref (C48fb)
+id00069			(MC13	FB)  : MUX 29		Ref (A14fb)
+id00065			(MC18	FB)  : MUX 33		Ref (B32fb)
 
-FanIn assignment for block B [22]
+FanIn assignment for block B [20]
 {
 ale,
-id00054,id00055,id00057,id00064,id00061,id00066,id00065,id00062,id00058,id00056,id00051,id00068,id00063,id00003,id00067,id00053,id00060,id00050,id00052,id00059,
+id00067,id00079,id00070,id00078,id00076,id00077,id00074,id00071,id00068,id00003,id00081,id00075,id00080,id00066,id00073,id00069,id00065,id00072,
 led_rom_cs_n,
 }
 Multiplexer assignment for block B
-id00054			(MC3	FB)  : MUX 0		Ref (A3fb)
-id00055			(MC15	FB)  : MUX 1		Ref (A16fb)
-id00057			(MC1	FB)  : MUX 2		Ref (A1fb)
-id00064			(MC10	FB)  : MUX 3		Ref (A11fb)
-id00061			(MC7	FB)  : MUX 4		Ref (A8fb)
-id00066			(MC11	FB)  : MUX 5		Ref (A12fb)
-id00065			(MC9	FB)  : MUX 7		Ref (A10fb)
-id00062			(MC6	FB)  : MUX 8		Ref (A7fb)
-ale			(MC22	P)   : MUX 9		Ref (E69p)
-id00058			(MC2	FB)  : MUX 10		Ref (A2fb)
-id00056			(MC13	FB)  : MUX 11		Ref (A14fb)
-id00051			(MC19	FB)  : MUX 13		Ref (B30fb)
-id00068			(MC12	FB)  : MUX 15		Ref (A13fb)
-led_rom_cs_n		(MC18	P)   : MUX 16		Ref (B29p)
-id00063			(MC8	FB)  : MUX 17		Ref (A9fb)
-id00003			(MC16	FB)  : MUX 21		Ref (B26fb)
-id00067			(MC14	FB)  : MUX 23		Ref (A15fb)
-id00053			(MC20	FB)  : MUX 25		Ref (B31fb)
-id00060			(MC5	FB)  : MUX 26		Ref (A6fb)
-id00050			(MC17	FB)  : MUX 31		Ref (B28fb)
-id00052			(MC21	FB)  : MUX 33		Ref (B32fb)
-id00059			(MC4	FB)  : MUX 38		Ref (A4fb)
+id00067			(MC3	FB)  : MUX 0		Ref (A3fb)
+id00079			(MC11	FB)  : MUX 1		Ref (A12fb)
+id00070			(MC1	FB)  : MUX 2		Ref (A1fb)
+id00078			(MC10	FB)  : MUX 3		Ref (A11fb)
+id00076			(MC7	FB)  : MUX 4		Ref (A8fb)
+id00077			(MC9	FB)  : MUX 7		Ref (A10fb)
+id00074			(MC6	FB)  : MUX 8		Ref (A7fb)
+ale			(MC20	P)   : MUX 9		Ref (E69p)
+id00071			(MC2	FB)  : MUX 10		Ref (A2fb)
+id00068			(MC15	FB)  : MUX 11		Ref (A16fb)
+id00003			(MC17	FB)  : MUX 13		Ref (B30fb)
+id00081			(MC12	FB)  : MUX 15		Ref (A13fb)
+led_rom_cs_n		(MC16	P)   : MUX 16		Ref (B29p)
+id00075			(MC8	FB)  : MUX 17		Ref (A9fb)
+id00080			(MC14	FB)  : MUX 23		Ref (A15fb)
+id00066			(MC18	FB)  : MUX 25		Ref (B31fb)
+id00073			(MC5	FB)  : MUX 26		Ref (A6fb)
+id00069			(MC13	FB)  : MUX 27		Ref (A14fb)
+id00065			(MC19	FB)  : MUX 33		Ref (B32fb)
+id00072			(MC4	FB)  : MUX 38		Ref (A4fb)
 
 FanIn assignment for block C [9]
 {
@@ -295,197 +289,185 @@ PLCC84 programmed logic:
 -----------------------------------
 md_dir = 1;
 
+ram_cs_h_n_10 = 1;
+
 led_ram_cs_n = !ram_cs_comb.Q;
 
-ram_cs_h_n_1 = 1;
-
-ram_cs_h_n_10 = 1;
+ram_cs_h_n_13 = 1;
 
 ram_cs_h_n_0 = 1;
 
-ram_cs_h_n_12 = 1;
+ram_cs_h_n_1 = 1;
 
 ram_cs_h_n_14 = 1;
 
 ram_cs_h_n_11 = 1;
 
-ram_cs_h_n_13 = 1;
+ram_cs_h_n_12 = 1;
 
 ram_cs_h_n_3 = 1;
 
-ram_cs_h_n_4 = 1;
-
 ram_cs_h_n_2 = 1;
 
-ram_cs_h_n_6 = 1;
-
-ram_cs_h_n_7 = 1;
+ram_cs_h_n_4 = 1;
 
 ram_cs_h_n_5 = 1;
 
-ram_cs_h_n_9 = 1;
-
-ram_cs_l_n_0 = 1;
+ram_cs_h_n_6 = 1;
 
 ram_cs_h_n_8 = 1;
+
+ram_cs_h_n_9 = 1;
+
+ram_cs_h_n_7 = 1;
+
+ram_cs_l_n_1 = 1;
+
+ram_cs_l_n_12 = 1;
+
+ram_cs_l_n_0 = 1;
 
 ram_cs_l_n_10 = 1;
 
 ram_cs_l_n_11 = 1;
 
-ram_cs_l_n_1 = 1;
-
-ram_cs_l_n_13 = 1;
-
 ram_cs_l_n_14 = 1;
-
-ram_cs_l_n_12 = 1;
 
 ram_cs_l_n_3 = 1;
 
-ram_cs_l_n_4 = 1;
+ram_cs_l_n_13 = 1;
+
+ram_cs_l_n_6 = 1;
 
 ram_cs_l_n_2 = 1;
 
 ram_cs_l_n_5 = 1;
 
-ram_cs_l_n_6 = 1;
+ram_cs_l_n_4 = 1;
 
 ram_cs_l_n_7 = 1;
-
-ram_cs_comb.L = (refresh_n & !la_6 & !la_5 & !la_4 & la_2 & !la_0 & !la_1 & !la_3);
 
 ram_cs_l_n_8 = 1;
 
 ram_cs_l_n_9 = 1;
 
+ram_cs_comb.L = (refresh_n & !la_6 & !la_5 & !la_4 & la_2 & !la_0 & !la_1 & !la_3);
+
 mem_cs_16_n = 0;
 
 id00003.D = !id00003.Q;
 
-ATM_219 = (id00050.Q & id00003.Q);
+ATM_229 = (id00066.Q & id00067.Q & id00068.Q & id00069.Q & id00065.Q & id00003.Q);
 
-ATM_222 = (id00051.Q & id00052.Q & id00053.Q & id00054.Q & id00050.Q & id00003.Q);
+ATM_232 = (id00065.Q & id00003.Q);
 
-ATM_228 = (id00003.Q & id00050.Q & id00051.Q);
+ATM_238 = (id00003.Q & id00065.Q & id00066.Q);
 
-ATM_237 = (id00051.Q & id00052.Q & id00003.Q & id00050.Q);
+ATM_247 = (id00066.Q & id00067.Q & id00003.Q & id00065.Q);
 
-ATM_243 = (id00052.Q & id00051.Q & id00003.Q & id00050.Q & id00053.Q);
+ATM_250 = (id00067.Q & id00066.Q & id00003.Q & id00065.Q & id00068.Q);
 
-id00050.D = id00003.Q $ id00050.Q;
+id00065.D = id00003.Q $ id00065.Q;
 
-id00051.D = ATM_219 $ id00051.Q;
+id00070.D = ATM_229 $ id00070.Q;
 
-id00055.D = ATM_222 $ id00055.Q;
+id00066.D = ATM_232 $ id00066.Q;
 
-id00052.D = ATM_228 $ id00052.Q;
+ATM_235 = (id00071.Q & id00070.Q & id00003.Q & id00065.Q & id00066.Q & id00067.Q & id00068.Q & id00069.Q);
 
-ATM_231 = (id00056.Q & id00055.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
+id00067.D = ATM_238 $ id00067.Q;
 
-id00053.D = ATM_237 $ id00053.Q;
+id00068.D = ATM_247 $ id00068.Q;
 
-ATM_240 = (id00056.Q & id00057.Q & id00058.Q & id00055.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
+id00069.D = ATM_250 $ id00069.Q;
 
-id00054.D = ATM_243 $ id00054.Q;
+ATM_253 = (id00071.Q & id00072.Q & id00070.Q & id00003.Q & id00065.Q & id00066.Q & id00067.Q & id00068.Q & id00069.Q);
 
-ATM_246 = (id00056.Q & id00057.Q & id00055.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
+ATM_256 = (id00075.Q & id00076.Q & id00070.Q & id00071.Q & id00072.Q & id00073.Q & id00074.Q & id00003.Q & id00065.Q & id00066.Q & id00067.Q & id00068.Q & id00069.Q);
 
-ATM_249 = (id00060.Q & id00062.Q & id00061.Q & id00055.Q & id00056.Q & id00057.Q & id00058.Q & id00059.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
+ATM_259 = (id00071.Q & id00072.Q & id00073.Q & id00070.Q & id00003.Q & id00065.Q & id00066.Q & id00067.Q & id00068.Q & id00069.Q);
 
-ATM_252 = (id00060.Q & id00055.Q & id00056.Q & id00057.Q & id00058.Q & id00059.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
+ATM_262 = (id00075.Q & id00070.Q & id00071.Q & id00072.Q & id00073.Q & id00074.Q & id00003.Q & id00065.Q & id00066.Q & id00067.Q & id00068.Q & id00069.Q);
 
-ATM_255 = (id00060.Q & id00061.Q & id00055.Q & id00056.Q & id00057.Q & id00058.Q & id00059.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
+ATM_268 = (id00075.Q & id00077.Q & id00076.Q & id00070.Q & id00071.Q & id00072.Q & id00073.Q & id00074.Q & id00003.Q & id00065.Q & id00066.Q & id00067.Q & id00068.Q & id00069.Q);
 
-ATM_261 = (id00060.Q & id00062.Q & id00061.Q & id00063.Q & id00055.Q & id00056.Q & id00057.Q & id00058.Q & id00059.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
+ATM_271 = (id00075.Q & id00077.Q & id00076.Q & id00078.Q & id00070.Q & id00071.Q & id00072.Q & id00073.Q & id00074.Q & id00003.Q & id00065.Q & id00066.Q & id00067.Q & id00068.Q & id00069.Q);
 
-id00056.D = id00056.Q $ XXL_274;
+id00072.D = ATM_235 $ id00072.Q;
 
-id00057.D = ATM_231 $ id00057.Q;
+id00071.D = id00071.Q $ XXL_278;
 
-id00060.D = id00060.Q $ XXL_275;
+id00075.D = id00075.Q $ XXL_279;
 
-id00059.D = ATM_240 $ id00059.Q;
+id00073.D = ATM_253 $ id00073.Q;
 
-id00058.D = ATM_246 $ id00058.Q;
+id00077.D = ATM_256 $ id00077.Q;
 
-id00063.D = ATM_249 $ id00063.Q;
+id00074.D = ATM_259 $ id00074.Q;
 
-id00061.D = ATM_252 $ id00061.Q;
+id00076.D = ATM_262 $ id00076.Q;
 
-id00062.D = ATM_255 $ id00062.Q;
+id00078.D = ATM_268 $ id00078.Q;
 
-ATM_258 = (id00065.Q & id00060.Q & id00061.Q & id00062.Q & id00063.Q & id00064.Q & id00055.Q & id00056.Q & id00057.Q & id00058.Q & id00059.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
+id00079.D = ATM_271 $ id00079.Q;
 
-id00064.D = ATM_261 $ id00064.Q;
+ATM_274 = (id00080.Q & id00075.Q & id00076.Q & id00077.Q & id00078.Q & id00079.Q & id00070.Q & id00071.Q & id00072.Q & id00073.Q & id00074.Q & id00003.Q & id00065.Q & id00066.Q & id00067.Q & id00068.Q & id00069.Q);
 
-ATM_267 = (id00065.Q & id00068.Q & id00067.Q & id00066.Q & id00060.Q & id00061.Q & id00062.Q & id00063.Q & id00064.Q & id00055.Q & id00056.Q & id00057.Q & id00058.Q & id00059.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
+ATM_277 = (id00080.Q & id00081.Q & id00075.Q & id00076.Q & id00077.Q & id00078.Q & id00079.Q & id00070.Q & id00071.Q & id00072.Q & id00073.Q & id00074.Q & id00003.Q & id00065.Q & id00066.Q & id00067.Q & id00068.Q & id00069.Q);
 
-ATM_270 = (id00065.Q & id00066.Q & id00060.Q & id00061.Q & id00062.Q & id00063.Q & id00064.Q & id00055.Q & id00056.Q & id00057.Q & id00058.Q & id00059.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
+id00080.D = id00080.Q $ XXL_280;
 
-ATM_273 = (id00065.Q & id00067.Q & id00066.Q & id00060.Q & id00061.Q & id00062.Q & id00063.Q & id00064.Q & id00055.Q & id00056.Q & id00057.Q & id00058.Q & id00059.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
+id00081.D = ATM_274 $ id00081.Q;
 
-id00066.D = ATM_258 $ id00066.Q;
+led_rom_cs_n.D = ATM_277 $ led_rom_cs_n.Q;
 
-id00065.D = id00065.Q $ XXL_276;
+XXL_278 = (id00070.Q & id00003.Q & id00065.Q & id00066.Q & id00067.Q & id00068.Q & id00069.Q);
 
-led_rom_cs_n.D = ATM_267 $ led_rom_cs_n.Q;
+XXL_279 = (id00070.Q & id00071.Q & id00072.Q & id00073.Q & id00074.Q & id00003.Q & id00065.Q & id00066.Q & id00067.Q & id00068.Q & id00069.Q);
 
-id00067.D = ATM_270 $ id00067.Q;
-
-id00068.D = ATM_273 $ id00068.Q;
-
-XXL_274 = (id00055.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
-
-XXL_275 = (id00055.Q & id00056.Q & id00057.Q & id00058.Q & id00059.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
-
-XXL_276 = (id00060.Q & id00061.Q & id00062.Q & id00063.Q & id00064.Q & id00055.Q & id00056.Q & id00057.Q & id00058.Q & id00059.Q & id00003.Q & id00050.Q & id00051.Q & id00052.Q & id00053.Q & id00054.Q);
+XXL_280 = (id00075.Q & id00076.Q & id00077.Q & id00078.Q & id00079.Q & id00070.Q & id00071.Q & id00072.Q & id00073.Q & id00074.Q & id00003.Q & id00065.Q & id00066.Q & id00067.Q & id00068.Q & id00069.Q);
 
 ram_cs_comb.LH = ale;
 
 mem_cs_16_n.OE = 0;
 
-id00003.C = ale;
+id00003.C = !ale;
 
-id00050.C = ale;
+id00065.C = !ale;
 
-id00051.C = ale;
+id00070.C = !ale;
 
-id00055.C = ale;
+id00066.C = !ale;
 
-id00052.C = ale;
+id00067.C = !ale;
 
-id00053.C = ale;
+id00068.C = !ale;
 
-id00054.C = ale;
+id00069.C = !ale;
 
-id00056.C = ale;
+id00072.C = !ale;
 
-id00057.C = ale;
+id00071.C = !ale;
 
-id00060.C = ale;
+id00075.C = !ale;
 
-id00059.C = ale;
+id00073.C = !ale;
 
-id00058.C = ale;
+id00077.C = !ale;
 
-id00063.C = ale;
+id00074.C = !ale;
 
-id00061.C = ale;
+id00076.C = !ale;
 
-id00062.C = ale;
+id00078.C = !ale;
 
-id00064.C = ale;
+id00079.C = !ale;
 
-id00066.C = ale;
+id00080.C = !ale;
 
-id00065.C = ale;
+id00081.C = !ale;
 
-led_rom_cs_n.C = ale;
-
-id00067.C = ale;
-
-id00068.C = ale;
+led_rom_cs_n.C = !ale;
 
 
 PLCC84 Pin/Node Placement:
@@ -537,26 +519,24 @@ Pin 74 = ram_cs_l_n_0; /* MC 117 */
 Pin 75 = ram_cs_l_n_6; /* MC 118 */ 
 Pin 76 = ram_cs_h_n_0; /* MC 120 */ 
 Pin 77 = ram_cs_h_n_14; /* MC 123 */ 
-PINNODE 601 = id00057; /* MC 1 Feedback */
-PINNODE 602 = id00058; /* MC 2 Feedback */
-PINNODE 603 = id00054; /* MC 3 Feedback */
-PINNODE 604 = id00059; /* MC 4 Feedback */
-PINNODE 606 = id00060; /* MC 6 Feedback */
-PINNODE 607 = id00062; /* MC 7 Feedback */
-PINNODE 608 = id00061; /* MC 8 Feedback */
-PINNODE 609 = id00063; /* MC 9 Feedback */
-PINNODE 610 = id00065; /* MC 10 Feedback */
-PINNODE 611 = id00064; /* MC 11 Feedback */
-PINNODE 612 = id00066; /* MC 12 Feedback */
-PINNODE 613 = id00068; /* MC 13 Feedback */
-PINNODE 614 = id00056; /* MC 14 Feedback */
-PINNODE 615 = id00067; /* MC 15 Feedback */
-PINNODE 616 = id00055; /* MC 16 Feedback */
-PINNODE 626 = id00003; /* MC 26 Feedback */
-PINNODE 628 = id00050; /* MC 28 Feedback */
-PINNODE 630 = id00051; /* MC 30 Feedback */
-PINNODE 631 = id00053; /* MC 31 Feedback */
-PINNODE 632 = id00052; /* MC 32 Feedback */
+PINNODE 601 = id00070; /* MC 1 Feedback */
+PINNODE 602 = id00071; /* MC 2 Feedback */
+PINNODE 603 = id00067; /* MC 3 Feedback */
+PINNODE 604 = id00072; /* MC 4 Feedback */
+PINNODE 606 = id00073; /* MC 6 Feedback */
+PINNODE 607 = id00074; /* MC 7 Feedback */
+PINNODE 608 = id00076; /* MC 8 Feedback */
+PINNODE 609 = id00075; /* MC 9 Feedback */
+PINNODE 610 = id00077; /* MC 10 Feedback */
+PINNODE 611 = id00078; /* MC 11 Feedback */
+PINNODE 612 = id00079; /* MC 12 Feedback */
+PINNODE 613 = id00081; /* MC 13 Feedback */
+PINNODE 614 = id00069; /* MC 14 Feedback */
+PINNODE 615 = id00080; /* MC 15 Feedback */
+PINNODE 616 = id00068; /* MC 16 Feedback */
+PINNODE 630 = id00003; /* MC 30 Feedback */
+PINNODE 631 = id00066; /* MC 31 Feedback */
+PINNODE 632 = id00065; /* MC 32 Feedback */
 PINNODE 648 = ram_cs_comb; /* MC 48 Feedback */
 
 ** Resource Usage **
@@ -585,22 +565,22 @@ SO Pin Options Field = Summary of Allocations.
 
 
 MCell Pin# Oe   PinDrive      DCERP  FBDrive     DCERP  Foldback  CascadeOut     TotPT SO
-MC1   0         --                   id00057     Dc---  --        --             3     s- 
-MC2   0         --                   id00058     Dc---  --        --             3     s- 
-MC3   12        --                   id00054     Dc---  --        --             3     s- 
-MC4   0         --                   id00059     Dc---  --        --             3     s- 
+MC1   0         --                   id00070     Dc---  --        --             3     s- 
+MC2   0         --                   id00071     Dc---  --        --             3     s- 
+MC3   12        --                   id00067     Dc---  --        --             3     s- 
+MC4   0         --                   id00072     Dc---  --        --             3     s- 
 MC5   11   on   led_ram_cs_n  C----  --                 --        --             1     s- 
-MC6   10   --   refresh_n     INPUT  id00060     Dc---  --        --             3     s- 
-MC7   0         --                   id00062     Dc---  --        --             3     s- 
-MC8   9         --                   id00061     Dc---  --        --             3     s- 
-MC9   0         --                   id00063     Dc---  --        --             3     s- 
-MC10  0         --                   id00065     Dc---  --        --             3     s- 
-MC11  8         --                   id00064     Dc---  --        --             3     s- 
-MC12  0         --                   id00066     Dc---  --        --             3     s- 
-MC13  6         --                   id00068     Dc---  --        --             3     s- 
-MC14  5         --                   id00056     Dc---  --        --             3     s- 
-MC15  0         --                   id00067     Dc---  --        --             3     s- 
-MC16  4         --                   id00055     Dc---  --        --             3     s- 
+MC6   10   --   refresh_n     INPUT  id00073     Dc---  --        --             3     s- 
+MC7   0         --                   id00074     Dc---  --        --             3     s- 
+MC8   9         --                   id00076     Dc---  --        --             3     s- 
+MC9   0         --                   id00075     Dc---  --        --             3     s- 
+MC10  0         --                   id00077     Dc---  --        --             3     s- 
+MC11  8         --                   id00078     Dc---  --        --             3     s- 
+MC12  0         --                   id00079     Dc---  --        --             3     s- 
+MC13  6         --                   id00081     Dc---  --        --             3     s- 
+MC14  5         --                   id00069     Dc---  --        --             3     s- 
+MC15  0         --                   id00080     Dc---  --        --             3     s- 
+MC16  4         --                   id00068     Dc---  --        --             3     s- 
 MC17  22   --   mem_cs_16_n   C----  --                 --        --             0     s- 
 MC18  0         --                   --                 --        --             0     s- 
 MC19  21   on   ram_cs_h_n_3  C----  --                 --        --             0     s- 
@@ -610,13 +590,13 @@ MC22  0         --                   --                 --        --            
 MC23  0         --                   --                 --        --             0     s- 
 MC24  18   on   ram_cs_h_n_5  C----  --                 --        --             0     s- 
 MC25  17   on   ram_cs_h_n_13 C----  --                 --        --             0     s- 
-MC26  0         --                   id00003     Dc---  --        --             2     s- 
+MC26  0         --                   --                 --        --             0     s- 
 MC27  16   on   ram_cs_h_n_7  C----  --                 --        --             0     s- 
-MC28  0         --                   id00050     Dc---  --        --             3     s- 
+MC28  0         --                   --                 --        --             0     s- 
 MC29  15   on   led_rom_cs_n  Dc---  --                 --        --             3     s- 
-MC30  0         --                   id00051     Dc---  --        --             3     s- 
-MC31  0         --                   id00053     Dc---  --        --             3     s- 
-MC32  14   --   TDI           INPUT  id00052     Dc---  --        --             3     s- 
+MC30  0         --                   id00003     Dc---  --        --             2     s- 
+MC31  0         --                   id00066     Dc---  --        --             3     s- 
+MC32  14   --   TDI           INPUT  id00065     Dc---  --        --             3     s- 
 MC33  0         --                   --                 --        --             0     s- 
 MC34  0         --                   --                 --        --             0     s- 
 MC35  31   --   la_5          INPUT  --                 --        --             0     s- 
@@ -719,8 +699,8 @@ MC0   84        --                   --                 --        --            
 MC0   83        --                   --                 --        --             0     s- 
 
 Logic Array Block			Macro Cells	I/O Pins	Foldbacks	TotalPT	FanIN		Cascades
-A: MC1	- MC16		16/16(100%)	2/16(12%)	0/16(0%)	46/80(57%)	22/40(55%)	0
-B: MC17	- MC32		12/16(75%)	8/16(50%)	0/16(0%)	17/80(21%)	22/40(55%)	0
+A: MC1	- MC16		16/16(100%)	2/16(12%)	0/16(0%)	46/80(57%)	20/40(50%)	0
+B: MC17	- MC32		10/16(62%)	8/16(50%)	0/16(0%)	11/80(13%)	20/40(50%)	0
 C: MC33	- MC48		5/16(31%)	7/16(43%)	0/16(0%)	2/80(2%)	9/40(22%)	0
 D: MC49	- MC64		0/16(0%)	5/16(31%)	0/16(0%)	0/80(0%)	0/40(0%)	0
 E: MC65	- MC80		5/16(31%)	6/16(37%)	0/16(0%)	0/80(0%)	0/40(0%)	0
@@ -730,14 +710,14 @@ H: MC113- MC128		5/16(31%)	5/16(31%)	0/16(0%)	0/80(0%)	0/40(0%)	0
 
 Total dedicated input used:	0/4 	(0%)
 Total I/O pins used		47/64 	(73%)
-Total Macro cells used 		56/128 	(43%)
-Total Flip-Flop used 		22/128 	(17%)
+Total Macro cells used 		54/128 	(42%)
+Total Flip-Flop used 		20/128 	(15%)
 Total Foldback logic used 	0/128 	(0%)
-Total Nodes+FB/MCells 		56/128 	(43%)
+Total Nodes+FB/MCells 		54/128 	(42%)
 Total cascade used 		0
 Total input pins 			12
 Total output pins 		35
-Total Pts 				65
+Total Pts 				59
 Creating pla file at_memory_card_128k_only.tt3 with 0 inputs 0 outputs, 0 pins 0 nodes and 0 pterms...
 
 ----------------  End fitter, Design FITS
