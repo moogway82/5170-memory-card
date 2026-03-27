@@ -21,27 +21,33 @@ entity at_memory_card_128k_only is
 		md_dir 		: out 	std_logic := '1';
 		ram_cs_l_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
 		ram_cs_h_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
-		mem_cs_16_n : out 	std_logic;
+		mem_cs_16_n : out 	std_logic := 'Z';
 		-- zero_ws  : out 	std_logic;
-		led_ram_cs_n 	: out 	std_logic;
-		led_rom_cs_n 	: out 	std_logic
+		led_ram_cs_n 	: out 	std_logic := '1';
+		led_rom_cs_n 	: out 	std_logic := '1'
 	);
 end;
 
 architecture behavioral of at_memory_card_128k_only is
-	signal	la_decoded 	: std_logic;
+	signal	la_decoded 	: std_logic := '0';
+	signal 	rom_decoded : std_logic := '0';
 	signal 	ram_cs 	: std_logic := '0';
-	signal 	ale_count : std_logic_vector(20 downto 0) := (others => '0');
 begin
 
 	-- Decode LA
-	la_decoded <= 	'1' when la(23 downto 17) = "0000100" and refresh_n = '1' else
+	la_decoded <= 	'1' when la = "0000100" and refresh_n = '1' else
+					'0';
+
+	-- Decode ROM
+	rom_decoded <=  '1' when la = "1111111" and refresh_n = '1' else
+					'1' when la = "0000111" and refresh_n = '1' else
 					'0';
 
 	mem_cs_16_n <= 	'0' when la_decoded = '1' else
 					'Z';
 
-	-- Latch on falling edge of LA - transparent
+	-- Pass through CS status on ALE high, and Latch on falling edge (transparent latch).
+	-- Note: GHDL requires "--latches" option to allow this
 	p_latch_ram_cs : process(ale, la_decoded)
 	begin
 		if ale = '1' then
@@ -50,35 +56,23 @@ begin
 			else
 				ram_cs <= '0';
 			end if;
+			-- ROM LED
+			if rom_decoded = '1' then led_rom_cs_n <= '0'; else led_rom_cs_n <= '1'; end if;
 		end if;
 	end process p_latch_ram_cs;
 
 	-- Enable RAM High and Low chips depending on SA0 and SHBE
-	ram_cs_l_n(1) <=	
-						--'0' when ram_cs = '1' and sa0 = '0' else
+	ram_cs_l_n(1) <=	'0' when ram_cs = '1' and sa0 = '0' else
 						'1';
-	ram_cs_h_n(1) <= 	
-						--'0' when ram_cs = '1' and sbhe_n = '0' else
+	ram_cs_h_n(1) <= 	'0' when ram_cs = '1' and sbhe_n = '0' else
 						'1';
 
 	-- Set the transciever direction: 0 = driving data bus, 1 = input from data bus (and closest we get to disconnected)
-	md_dir <= 	
-				--'0'	when ram_cs = '1' and memr_n = '0' else
+	md_dir <= 	'0'	when ram_cs = '1' and memr_n = '0' else
 				'1';
 
-	-- LEDs
+	-- RAM LED
 	led_ram_cs_n <= not ram_cs;
-
-	 --Blinky ROM LED test (2MHz / 2, 20 times to get ~1/2sec interval)
-	p_blinky_led : process(ale)
-	begin
-		if falling_edge(ale) then
-			ale_count <= std_logic_vector(unsigned(ale_count) + 1);
-		end if;
-	end process p_blinky_led;
-
-	led_rom_cs_n <= '0' when ale_count(18) = '0' else
-					'1';
 
 end behavioral;
 
