@@ -44,7 +44,7 @@ architecture behavioral of at_memory_card_tb is
 		signal ISA_NS : isa_fsm_type;
 begin
 
-at_memory_card_sim : entity work.at_memory_card_128k_only
+at_memory_card_sim : entity work.at_memory_card
 port map( 
 	la => la,
 	sa16 => sa(16),
@@ -58,8 +58,8 @@ port map(
 	umbe_n => umbe_n,
 	xms_only_n => xms_only_n,
 	md_dir => md_dir,
-	ram_cs_l_n => ram_cs_l_n,
-	ram_cs_h_n => ram_cs_h_n,
+	ram_bank_cs_l_n => ram_cs_l_n,
+	ram_bank_cs_h_n => ram_cs_h_n,
 	mem_cs_16_n => mem_cs_16_n,
 	led_ram_cs_n => led_ram_cs_n,
 	led_rom_cs_n => led_rom_cs_n

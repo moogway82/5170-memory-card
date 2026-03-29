@@ -1,4 +1,4 @@
-Atmel ATF1508 Fitter Version 1918 ,running Fri Mar 27 09:11:04 2026
+Atmel ATF1508 Fitter Version 1918 ,running Sun Mar 29 12:46:43 2026
 
 
 
@@ -198,15 +198,15 @@ Universal-Interconnect-Multiplexer assignments
 FanIn assignment for block A [10]
 {
 ale,
-la_6,la_3,la_2,la_4,la_0,la_5,la_1,
+la_6,la_3,la_4,la_2,la_0,la_5,la_1,
 ram_cs_comb,refresh_n,
 }
 Multiplexer assignment for block A
 la_6			(MC5	P)   : MUX 1		Ref (C37p)
-la_3			(MC4	P)   : MUX 4		Ref (D57p)
 ram_cs_comb		(MC1	FB)  : MUX 5		Ref (A15fb)
-la_2			(MC7	P)   : MUX 6		Ref (D64p)
-la_4			(MC6	P)   : MUX 8		Ref (D61p)
+la_3			(MC7	P)   : MUX 6		Ref (D57p)
+la_4			(MC4	P)   : MUX 8		Ref (D61p)
+la_2			(MC6	P)   : MUX 12		Ref (D64p)
 la_0			(MC8	P)   : MUX 15		Ref (D56p)
 la_5			(MC3	P)   : MUX 23		Ref (C35p)
 la_1			(MC9	P)   : MUX 26		Ref (D59p)
@@ -216,15 +216,15 @@ ale			(MC10	P)   : MUX 33		Ref (E69p)
 FanIn assignment for block B [9]
 {
 ale,
-la_6,la_3,la_2,la_4,la_5,la_0,la_1,
+la_6,la_3,la_4,la_5,la_2,la_0,la_1,
 refresh_n,
 }
 Multiplexer assignment for block B
 la_6			(MC4	P)   : MUX 1		Ref (C37p)
-la_3			(MC3	P)   : MUX 4		Ref (D57p)
-la_2			(MC6	P)   : MUX 6		Ref (D64p)
-la_4			(MC5	P)   : MUX 8		Ref (D61p)
+la_3			(MC6	P)   : MUX 6		Ref (D57p)
+la_4			(MC3	P)   : MUX 8		Ref (D61p)
 la_5			(MC2	P)   : MUX 9		Ref (C35p)
+la_2			(MC5	P)   : MUX 12		Ref (D64p)
 la_0			(MC7	P)   : MUX 15		Ref (D56p)
 la_1			(MC8	P)   : MUX 26		Ref (D59p)
 refresh_n		(MC1	P)   : MUX 27		Ref (A6p)
@@ -253,53 +253,53 @@ Creating JEDEC file at_memory_card_128k_only.jed ...
 
 PLCC84 programmed logic:
 -----------------------------------
-!ram_cs_h_n_0 = (!sbhe_n & ram_cs_comb.Q);
+ram_cs_h_n_1 = 1;
 
 led_ram_cs_n = !ram_cs_comb.Q;
 
-ram_cs_h_n_11 = 1;
-
 !md_dir = (!memr_n & ram_cs_comb.Q);
 
-ram_cs_h_n_12 = 1;
+!ram_cs_h_n_0 = (!sbhe_n & ram_cs_comb.Q);
 
-ram_cs_h_n_1 = 1;
+ram_cs_h_n_11 = 1;
+
+ram_cs_h_n_12 = 1;
 
 ram_cs_h_n_10 = 1;
 
 ram_cs_h_n_13 = 1;
 
+ram_cs_h_n_14 = 1;
+
 ram_cs_h_n_3 = 1;
 
 ram_cs_h_n_4 = 1;
-
-ram_cs_h_n_14 = 1;
 
 ram_cs_h_n_2 = 1;
 
 ram_cs_h_n_5 = 1;
 
+ram_cs_h_n_6 = 1;
+
 ram_cs_h_n_8 = 1;
 
 ram_cs_h_n_9 = 1;
-
-ram_cs_h_n_6 = 1;
 
 ram_cs_h_n_7 = 1;
 
 !ram_cs_l_n_0 = (!sa0 & ram_cs_comb.Q);
 
-ram_cs_l_n_11 = 1;
-
-ram_cs_l_n_14 = 1;
-
 ram_cs_l_n_1 = 1;
 
-ram_cs_l_n_10 = 1;
+ram_cs_l_n_11 = 1;
 
 ram_cs_l_n_12 = 1;
 
+ram_cs_l_n_10 = 1;
+
 ram_cs_l_n_13 = 1;
+
+ram_cs_l_n_14 = 1;
 
 ram_cs_l_n_3 = 1;
 
@@ -319,12 +319,11 @@ ram_cs_l_n_7 = 1;
 
 mem_cs_16_n = 0;
 
-!led_rom_cs_n.L = ((la_6 & la_5 & la_4 & la_3 & la_2 & la_1 & la_0 & refresh_n)
-	# (!la_6 & !la_5 & !la_4 & !la_3 & la_2 & la_1 & la_0 & refresh_n));
+!led_rom_cs_n.L = (la_6 & la_5 & la_4 & la_3 & la_2 & la_1 & la_0 & refresh_n);
 
-ram_cs_comb.L = (refresh_n & !la_5 & !la_3 & !la_6 & !la_4 & la_2 & !la_0 & !la_1);
+ram_cs_comb.L = (refresh_n & !la_5 & !la_4 & !la_6 & la_2 & !la_3 & !la_0 & !la_1);
 
-mem_cs_16_n.OE = (refresh_n & !la_5 & !la_3 & !la_6 & !la_4 & la_2 & !la_0 & !la_1);
+mem_cs_16_n.OE = (refresh_n & !la_5 & !la_4 & !la_6 & la_2 & !la_3 & !la_0 & !la_1);
 
 led_rom_cs_n.LH = ale;
 
@@ -439,7 +438,7 @@ MC25  17   on   ram_cs_h_n_13 C----  --                 --        --            
 MC26  0         --                   --                 --        --             0     s- 
 MC27  16   on   ram_cs_h_n_7  C----  --                 --        --             0     s- 
 MC28  0         --                   --                 --        --             0     s- 
-MC29  15   on   led_rom_cs_n  Lc---  --                 --        --             3     s- 
+MC29  15   on   led_rom_cs_n  Lc---  --                 --        --             2     s- 
 MC30  0         --                   --                 --        --             0     s- 
 MC31  0         --                   --                 --        --             0     s- 
 MC32  14   --   TDI           INPUT  --                 --        --             0     s- 
@@ -546,7 +545,7 @@ MC0   83        sa0           INPUT  --                 --        --            
 
 Logic Array Block			Macro Cells	I/O Pins	Foldbacks	TotalPT	FanIN		Cascades
 A: MC1	- MC16		2/16(12%)	2/16(12%)	0/16(0%)	3/80(3%)	10/40(25%)	0
-B: MC17	- MC32		7/16(43%)	8/16(50%)	0/16(0%)	4/80(5%)	9/40(22%)	0
+B: MC17	- MC32		7/16(43%)	8/16(50%)	0/16(0%)	3/80(3%)	9/40(22%)	0
 C: MC33	- MC48		4/16(25%)	8/16(50%)	0/16(0%)	1/80(1%)	2/40(5%)	0
 D: MC49	- MC64		0/16(0%)	5/16(31%)	0/16(0%)	0/80(0%)	3/40(7%)	0
 E: MC65	- MC80		5/16(31%)	6/16(37%)	0/16(0%)	0/80(0%)	3/40(7%)	0
@@ -563,7 +562,7 @@ Total Nodes+FB/MCells 		36/128 	(28%)
 Total cascade used 		0
 Total input pins 			15
 Total output pins 		35
-Total Pts 				10
+Total Pts 				9
 Creating pla file at_memory_card_128k_only.tt3 with 0 inputs 0 outputs, 0 pins 0 nodes and 0 pterms...
 
 ----------------  End fitter, Design FITS

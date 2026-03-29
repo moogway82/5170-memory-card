@@ -19,9 +19,9 @@ entity at_memory_card is
 		xms_only_n 	: in 	std_logic;
 		-- outputs
 		md_dir 		: out 	std_logic := '1';
-		ram_cs_l_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
-		ram_cs_h_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
-		mem_cs_16_n : out 	std_logic;
+		ram_bank_cs_l_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
+		ram_bank_cs_h_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
+		mem_cs_16_n : out 	std_logic := 'Z';
 		-- zero_ws  : out 	std_logic;
 		led_ram_cs_n 	: out 	std_logic := '1';
 		led_rom_cs_n 	: out 	std_logic := '1'
@@ -29,20 +29,24 @@ entity at_memory_card is
 end;
 
 architecture behavioral of at_memory_card is
-	signal 	ram_cs 				: std_logic_vector(15 downto 0); -- Active High, One more CS than output so that full possible RAM is decoded internally
-	signal  la_addr_decode 			: std_logic;  -- This is combinational, early decoding of the address, to assert MEM_CS_16
-	signal  card_cs 			: std_logic;  -- This is the commitment to serve the bus on ALE
-	signal 	umbd_cs 			: std_logic;
+	signal 	ram_bank_cs 		: std_logic_vector(15 downto 0) := (others => '0'); -- Active High, One more CS than output so that full possible RAM is decoded internally
+	signal  ram_la_decode 		: std_logic := '0';  -- This is combinational, early decoding of the address, to assert MEM_CS_16 & indicate latching
+	signal  rom_decode 			: std_logic := '0';
+	signal  card_cs 			: std_logic := '0';  -- This is the commitment to serve the bus on ALE
 
 begin
 
-	chip_select_decoding : process(refresh_n, la, xms_only_n)
+	-- PROCESS: Early Chip Select Decoding as soon as it can
+	-- SETS: ram_bank_cs, ram_la_decode
+	-- 
+	-- Provide selection signals for ALE latching later and quick asserting of MEM_CS_16
+	-- Need to be aware of jumper settings for XMS ONLY and UMB
+	--
+	chip_select_decoding : process(refresh_n, la, xms_only_n, sa16)
 	begin
 
-		led_rom_cs_n <= '1';
-		ram_cs <= (others => '0');
-		la_addr_decode <= '0';
-		umbd_cs <= '0';
+		ram_bank_cs <= (others => '0');
+		ram_la_decode <= '0';
 
 		-- Select only on memory operations and but not during DRAM refresh cycles
 		if refresh_n = '1' then
@@ -57,95 +61,98 @@ begin
 						case la(19 downto 17) is
 							-- Select the card to fill missing 128KB in Conventional RAM (0x08000-0x09FFF) on a 5170 if not XMS only
 							when "100" =>
-								ram_cs <= (0 => '1', others => '0');
-								la_addr_decode <= '1';
+								ram_bank_cs <= (0 => '1', others => '0');
+								ram_la_decode <= '1';
 
 							-- We need to also check that sa16 is high at ALE before driving RAM and bus
 							when "110" =>
-								umbd_cs <= '1';
-								la_addr_decode <= '1';
-
-							--when x"E" =>
-							--	if(umbe_n = '0') then 
-							--		ram_cs <= (0 => '1', others => '0');
-							--		la_addr_decode <= '1';
-							--	end if;
+								if sa16 = '1' then
+									ram_bank_cs <= (0 => '1', others => '0');									
+									ram_la_decode <= '1';
+								else 
+									ram_bank_cs <= (others => '0');									
+									ram_la_decode <= '0';
+								end if;
 
 							when "111" =>
-								-- Light the ROM LED when in system ROM space
-								led_rom_cs_n <= '0';
-								ram_cs <= (others => '0');
-								la_addr_decode <= '0';
+								if sa16 = '0' then
+									ram_bank_cs <= (0 => '1', others => '0');									
+									ram_la_decode <= '1';	
+								else
+									ram_bank_cs <= (others => '0');									
+									ram_la_decode <= '0';	
+								end if;
 
 							when others =>
-								led_rom_cs_n <= '1';
-								ram_cs <= (others => '0');
-								la_addr_decode <= '0';
+								ram_bank_cs <= (others => '0');
+								ram_la_decode <= '0';
 
 						end case;
 
 					end if;
 
-				--when x"1" => 
-				--	ram_cs <= (1 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				when x"1" => 
+					ram_bank_cs <= (1 => '1', others => '0');
+					ram_la_decode <= '1';
 
 				--when x"2" =>
-				--	ram_cs <= (2 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (2 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"3" =>
-				--	ram_cs <= (3 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (3 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"4" =>
-				--	ram_cs <= (4 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (4 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"5" =>
-				--	ram_cs <= (5 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (5 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"6" =>
-				--	ram_cs <= (6 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (6 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"7" =>
-				--	ram_cs <= (7 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (7 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"8" =>
-				--	ram_cs <= (8 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (8 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"9" =>
-				--	ram_cs <= (9 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (9 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"A" =>
-				--	ram_cs <= (10 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (10 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"B" =>
-				--	ram_cs <= (11 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (11 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"C" =>
-				--	ram_cs <= (12 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (12 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"D" =>
-				--	ram_cs <= (13 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (13 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"E" =>
-				--	ram_cs <= (14 => '1', others => '0');
-				--	la_addr_decode <= '1';
+				--	ram_bank_cs <= (14 => '1', others => '0');
+				--	ram_la_decode <= '1';
 
 				--when x"F" =>
+				-- Region is only decoded if XMS ONLY is ON
+
 				--	if(unsigned(a(19 downto 16)) >= x"0" and unsigned(a(19 downto 16)) < x"E") then
 				--		if(xms_only_n = '0') then 
-				--			ram_cs <= (15 => '1', others => '0');
+				--			ram_bank_cs <= (15 => '1', others => '0');
 				--			card_cs <= '1';
 				--		end if;
 				--	else
@@ -154,8 +161,8 @@ begin
 				--	end if;
 
 				when others =>
-					ram_cs <= (others => '0');
-					la_addr_decode <= '0';
+					ram_bank_cs <= (others => '0');
+					ram_la_decode <= '0';
 
 			end case;
 
@@ -165,79 +172,77 @@ begin
 
 	-- Activate the 16-bit transfer signal (1-wait state) if card selected
 	-- If you don't assert this quickly, then the AT will switch to doing a
-	-- slow 2x 8-bit transfer.
-    mem_cs_16_n <= 	'0' when la_addr_decode = '1' else
+	-- slow 2x 8-bit transfer, which this doesn't support
+    mem_cs_16_n <= 	'0' when ram_la_decode = '1' else
     				'Z';
 
-    -- Latch the RAM chip selection lines for the whole cycle
+    -- Decode ROM
+	rom_decode  <=  '1' when la = "1111111" and refresh_n = '1' else
+					'1' when la = "0000111" and sa16 = '1' and refresh_n = '1' else
+					'0';
+
+    -- PROCESS: Latch the SRAM Chip Selection lines for the whole cycle
+    -- SETS: card_cs, ram_bank_cs_l_n, ram_bank_cs_h_n, led_rom_cs_n
+    -- 
     -- These are shifted to allow for (almost) the full 15MB possible
     -- on the card depending on the selection of the XMS_ONLY_N switch
     -- Ie, RAM chip 1 will do upper 128K conventional + UMBs if XMS_ONLY_N is OFF
     -- Or RAM chip 1 will do the first 1MB of XMS and conventional space ignored
     -- if XMS_ONLY_N is ON.
-    p_latch_selection : process(ale, la_addr_decode, sa0, sbhe_n, ram_cs)
+    --
+    p_latch_selection : process(ale, ram_la_decode, sa0, sbhe_n, ram_bank_cs)
     begin
-    	-- Trying to implement a transparent latch - GHDL/Yosys often doesn't like this, overridden with "ghdl --latches"
+
+    	-- Trying to implement a transparent latch - GHDL/Yosys requires "--latches" switch for this to work
     	if ale = '1' then
 
-    		-- Default to not selected
-    		card_cs <= '0';
-    		ram_cs_l_n <= (others => '1');
-    		ram_cs_h_n <= (others => '1');
+	    	-- Default to not selected
+			card_cs <= '0';
+			ram_bank_cs_l_n <= (others => '1');
+			ram_bank_cs_h_n <= (others => '1');
+			led_rom_cs_n <= '1';
 
-    		if la_addr_decode <= '1' then
+    		if ram_la_decode <= '1' then
 
-    			if umbd_n = '0' and umbd_cs = '1' and sa16 = '1' then
-    				card_cs <= '1';
-    			end if;
+	    		-- XMS ONLY ON, 1MB (0x010000) to 15MB (0xFEFFFF)
+	    		if xms_only_n = '0' then 	
+	    			if sa0 = '0' then
+	    				ram_bank_cs_l_n <= not ram_bank_cs(15 downto 1);
+	    			end if;
 
+	    			if sbhe_n = '0' then
+	    				ram_bank_cs_h_n <= not ram_bank_cs(15 downto 1);
+	    			end if; 
 
+	    		-- XMS ONLY OFF, 512kb (0x008000) to 14MB (0xEFFFFF)
+	    		else 						
 
+	    		  	if sa0 = '0' then
+	    				ram_bank_cs_l_n <= not ram_bank_cs(14 downto 0);
+	    			end if;
+	    			if sbhe_n = '0' then
+	    				ram_bank_cs_h_n <= not ram_bank_cs(14 downto 0);
+	    			end if;
 
-    		if xms_only_n = '0' then 	-- XMS ONLY ON, 1MB (0x010000) to 15MB (0xFEFFFF)
-
-    			if sa0 = '0' then
-    				ram_cs_l_n <= not ram_cs(15 downto 1);
-    				-- Enable RAM1_L if LA,SA16 = "0000110,1"  
-    				if umbd_n = '0' and umbd_cs = '1' and sa16 = '1' then
-    					ram_cs_l_n(1) <= '0';
-    				end if;
-    			end if;
-    			if sbhe_n = '0' then
-    				ram_cs_h_n <= not ram_cs(15 downto 1);
-    				-- Enable RAM1_L if LA,SA16 = "0000110,1"  
-    				if umbd_n = '0' and umbd_cs = '1' then
-    					if sa16 = '1' then
-    						ram_cs_h_n(1) <= '0';
-    					else
-    						-- If SA16 is not '1' then RAM is not active
-    						card_cs <= '0';
-    					end if;
-    				end if;
-    			end if; 
-
-    		else 						-- XMS ONLY OFF, 512kb (0x008000) to 14MB (0xEFFFFF)
-
-    		  	if sa0 = '0' then
-    				ram_cs_l_n <= not ram_cs(14 downto 0);
-    			end if;
-    			if sbhe_n = '0' then
-    				ram_cs_h_n <= not ram_cs(14 downto 0);
-    			end if;
-
+	    		end if;
     		end if;
+
+    		if rom_decode <= '1' then
+    			led_rom_cs_n <= '0';
+    		end if;
+
     	end if;
     end process p_latch_selection;
 
     -- TODO: Leaving this here for now, as liked how this showed the shifting even if it didn't latch properly
     ---- Shift the Chip selection if only XMS is selected to use all the available RAM
 	---- And split the Chip Selection between Hight and Low bytes
-	--ram_cs_l_n 	<= 	not ram_cs(15 downto 1) when sa0 = '0' and xms_only_n = '0' else
-	--				not ram_cs(14 downto 0) when sa0 = '0' and xms_only_n = '1' else
+	--ram_bank_cs_l_n 	<= 	not ram_bank_cs(15 downto 1) when sa0 = '0' and xms_only_n = '0' else
+	--				not ram_bank_cs(14 downto 0) when sa0 = '0' and xms_only_n = '1' else
 	--			 	(others => '1');
 
-	--ram_cs_h_n 	<= 	not ram_cs(15 downto 1) when sbhe_n = '0' and xms_only_n = '0' else
-	--				not ram_cs(14 downto 0) when sbhe_n = '0' and xms_only_n = '1' else
+	--ram_bank_cs_h_n 	<= 	not ram_bank_cs(15 downto 1) when sbhe_n = '0' and xms_only_n = '0' else
+	--				not ram_bank_cs(14 downto 0) when sbhe_n = '0' and xms_only_n = '1' else
 	--				(others => '1');
 
     -- TODO: Look at enabling 0WS also if testing well, oooh the power
@@ -252,34 +257,37 @@ begin
     			'1';
 
     -- Light the RAM LED when the card is being accessed
-    led_ram_cs_n <= '0' when card_cs = '1' and (memr_n = '0' or memw_n = '0') else
+    led_ram_cs_n <= '0' when card_cs = '1' else
     				'1';
 
-	--p_ram_cs_lh : process(ale)
+
+
+
+	--p_ram_bank_cs_lh : process(ale)
 	--begin
-	--	--ram_cs_l_n 	<= (others => '1');
-	--	--ram_cs_h_n 	<= (others => '1');
+	--	--ram_bank_cs_l_n 	<= (others => '1');
+	--	--ram_bank_cs_h_n 	<= (others => '1');
 	--	--md_dir <= '1';
-	--	--led_ram_cs_n <= '1';
+	--	--led_ram_bank_cs_n <= '1';
 
 	--	if rising_edge(ale) then
 	--		if card_cs = '1' then
 	--			-- Shift the Chip selection if only XMS is selected to use all the available RAM
 	--			-- And split the Chip Selection between Hight and Low bytes
 	--			if sa0 = '0' and xms_only_n = '0' then
-	--				ram_cs_l_n 	<= 	not ram_cs(15 downto 1);
+	--				ram_bank_cs_l_n 	<= 	not ram_bank_cs(15 downto 1);
 	--			elsif sa0 = '0' and xms_only_n = '1' then
-	--				ram_cs_l_n 	<= not ram_cs(14 downto 0);
+	--				ram_bank_cs_l_n 	<= not ram_bank_cs(14 downto 0);
 	--			else
-	--				ram_cs_l_n 	<= (others => '1');
+	--				ram_bank_cs_l_n 	<= (others => '1');
 	--			end if;
 
 	--			if 	sbhe_n = '0' and xms_only_n = '0' then
-	--				ram_cs_h_n 	<= 	not ram_cs(15 downto 1);
+	--				ram_bank_cs_h_n 	<= 	not ram_bank_cs(15 downto 1);
 	--			elsif sbhe_n = '0' and xms_only_n = '1' then
-	--				ram_cs_h_n 	<= not ram_cs(14 downto 0);
+	--				ram_bank_cs_h_n 	<= not ram_bank_cs(14 downto 0);
 	--			else 
-	--				ram_cs_h_n 	<= (others => '1');
+	--				ram_bank_cs_h_n 	<= (others => '1');
 	--			end if;		
 
 	--			-- md_dir = 1, as input on the ISA bus. md_dir = 0, an output to the ISA bus
@@ -289,15 +297,15 @@ begin
 	--				md_dir <= '1';
 	--			end if;
 
-	--			led_ram_cs_n <= '0';
+	--			led_ram_bank_cs_n <= '0';
 	--		else
-	--			ram_cs_l_n 	<= (others => '1');
-	--			ram_cs_h_n 	<= (others => '1');
+	--			ram_bank_cs_l_n 	<= (others => '1');
+	--			ram_bank_cs_h_n 	<= (others => '1');
 	--			md_dir <= '1';
-	--			led_ram_cs_n <= '1';
+	--			led_ram_bank_cs_n <= '1';
 	--		end if;
 	--	end if;
-	--end process p_ram_cs_lh;
+	--end process p_ram_bank_cs_lh;
 
     -- TODO: Look at enabling 0WS also if testing well, oooh the power
     --zero_ws_n 	<=	'0' when card_cs = '1' else
@@ -326,36 +334,36 @@ end behavioral;
 --PIN: md_dir 	: 28
 --PIN: led_ram_cs_n 	: 11
 --PIN: led_rom_cs_n 	: 15
---PIN: ram_cs_l_n_0 	: 74
---PIN: ram_cs_l_n_1 	: 24
---PIN: ram_cs_l_n_2 	: 70
---PIN: ram_cs_l_n_3 	: 58
---PIN: ram_cs_l_n_4 	: 68
---PIN: ram_cs_l_n_5 	: 61
---PIN: ram_cs_l_n_6 	: 75
---PIN: ram_cs_l_n_7 	: 63
---PIN: ram_cs_l_n_8 	: 56
---PIN: ram_cs_l_n_9 	: 25
---PIN: ram_cs_l_n_10 	: 48
---PIN: ram_cs_l_n_11 	: 27
---PIN: ram_cs_l_n_12 	: 51
---PIN: ram_cs_l_n_13 	: 60
---PIN: ram_cs_l_n_14 	: 50
---PIN: ram_cs_h_n_0 	: 76
---PIN: ram_cs_h_n_1 	: 64
---PIN: ram_cs_h_n_2 	: 69
---PIN: ram_cs_h_n_3 	: 21
---PIN: ram_cs_h_n_4 	: 73
---PIN: ram_cs_h_n_5 	: 18
---PIN: ram_cs_h_n_6 	: 67
---PIN: ram_cs_h_n_7 	: 16
---PIN: ram_cs_h_n_8 	: 49
---PIN: ram_cs_h_n_9 	: 65
---PIN: ram_cs_h_n_10 	: 44
---PIN: ram_cs_h_n_11 	: 20
---PIN: ram_cs_h_n_12 	: 54
---PIN: ram_cs_h_n_13 	: 17
---PIN: ram_cs_h_n_14 	: 77
+--PIN: ram_bank_cs_l_n_0 	: 74
+--PIN: ram_bank_cs_l_n_1 	: 24
+--PIN: ram_bank_cs_l_n_2 	: 70
+--PIN: ram_bank_cs_l_n_3 	: 58
+--PIN: ram_bank_cs_l_n_4 	: 68
+--PIN: ram_bank_cs_l_n_5 	: 61
+--PIN: ram_bank_cs_l_n_6 	: 75
+--PIN: ram_bank_cs_l_n_7 	: 63
+--PIN: ram_bank_cs_l_n_8 	: 56
+--PIN: ram_bank_cs_l_n_9 	: 25
+--PIN: ram_bank_cs_l_n_10 	: 48
+--PIN: ram_bank_cs_l_n_11 	: 27
+--PIN: ram_bank_cs_l_n_12 	: 51
+--PIN: ram_bank_cs_l_n_13 	: 60
+--PIN: ram_bank_cs_l_n_14 	: 50
+--PIN: ram_bank_cs_h_n_0 	: 76
+--PIN: ram_bank_cs_h_n_1 	: 64
+--PIN: ram_bank_cs_h_n_2 	: 69
+--PIN: ram_bank_cs_h_n_3 	: 21
+--PIN: ram_bank_cs_h_n_4 	: 73
+--PIN: ram_bank_cs_h_n_5 	: 18
+--PIN: ram_bank_cs_h_n_6 	: 67
+--PIN: ram_bank_cs_h_n_7 	: 16
+--PIN: ram_bank_cs_h_n_8 	: 49
+--PIN: ram_bank_cs_h_n_9 	: 65
+--PIN: ram_bank_cs_h_n_10 	: 44
+--PIN: ram_bank_cs_h_n_11 	: 20
+--PIN: ram_bank_cs_h_n_12 	: 54
+--PIN: ram_bank_cs_h_n_13 	: 17
+--PIN: ram_bank_cs_h_n_14 	: 77
 --PIN: umbd_n 			: 6
 --PIN: umbe_n 			: 8
 --PIN: xms_only_n 		: 57

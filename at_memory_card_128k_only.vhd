@@ -40,7 +40,6 @@ begin
 
 	-- Decode ROM
 	rom_decoded <=  '1' when la = "1111111" and refresh_n = '1' else
-					'1' when la = "0000111" and refresh_n = '1' else
 					'0';
 
 	mem_cs_16_n <= 	'0' when la_decoded = '1' else
