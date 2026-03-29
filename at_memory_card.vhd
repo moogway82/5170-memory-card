@@ -30,14 +30,14 @@ end;
 
 architecture behavioral of at_memory_card is
 	signal 	ram_bank_cs 		: std_logic_vector(15 downto 0) := (others => '0'); -- Active High, One more CS than output so that full possible RAM is decoded internally
-	signal  ram_la_decode 		: std_logic := '0';  -- This is combinational, early decoding of the address, to assert MEM_CS_16 & indicate latching
 	signal  rom_decode 			: std_logic := '0';
 	signal  card_cs 			: std_logic := '0';  -- This is the commitment to serve the bus on ALE
+	signal  ram_la_decode 		: std_logic := '0';
 
 begin
 
 	-- PROCESS: Early Chip Select Decoding as soon as it can
-	-- SETS: ram_bank_cs, ram_la_decode
+	-- SETS: ram_bank_cs
 	-- 
 	-- Provide selection signals for ALE latching later and quick asserting of MEM_CS_16
 	-- Need to be aware of jumper settings for XMS ONLY and UMB
@@ -46,7 +46,6 @@ begin
 	begin
 
 		ram_bank_cs <= (others => '0');
-		ram_la_decode <= '0';
 
 		-- Select only on memory operations and but not during DRAM refresh cycles
 		if refresh_n = '1' then
@@ -54,38 +53,26 @@ begin
 			case la(23 downto 20) is
 
 				when x"0" => 
-					-- Lower 1MB RAM space
-					-- Region is only decoded if XMS ONLY is OFF
+					-- Lower 1MB RAM space - Region is only decoded if XMS ONLY is OFF
 					if xms_only_n = '1' then 
 
 						case la(19 downto 17) is
 							-- Select the card to fill missing 128KB in Conventional RAM (0x08000-0x09FFF) on a 5170 if not XMS only
 							when "100" =>
 								ram_bank_cs <= (0 => '1', others => '0');
-								ram_la_decode <= '1';
-
-							-- We need to also check that sa16 is high at ALE before driving RAM and bus
+							-- UMB D
 							when "110" =>
 								if sa16 = '1' then
 									ram_bank_cs <= (0 => '1', others => '0');									
-									ram_la_decode <= '1';
-								else 
-									ram_bank_cs <= (others => '0');									
-									ram_la_decode <= '0';
 								end if;
-
+							-- UMB E
 							when "111" =>
 								if sa16 = '0' then
 									ram_bank_cs <= (0 => '1', others => '0');									
-									ram_la_decode <= '1';	
-								else
-									ram_bank_cs <= (others => '0');									
-									ram_la_decode <= '0';	
 								end if;
 
 							when others =>
 								ram_bank_cs <= (others => '0');
-								ram_la_decode <= '0';
 
 						end case;
 
@@ -93,11 +80,9 @@ begin
 
 				when x"1" => 
 					ram_bank_cs <= (1 => '1', others => '0');
-					ram_la_decode <= '1';
 
-				--when x"2" =>
-				--	ram_bank_cs <= (2 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"2" =>
+					ram_bank_cs <= (2 => '1', others => '0');
 
 				--when x"3" =>
 				--	ram_bank_cs <= (3 => '1', others => '0');
@@ -162,13 +147,15 @@ begin
 
 				when others =>
 					ram_bank_cs <= (others => '0');
-					ram_la_decode <= '0';
 
 			end case;
 
 		end if;
 
 	end process chip_select_decoding;
+
+	ram_la_decode <= 	'0' when ram_bank_cs = x"0000" else
+						'1';
 
 	-- Activate the 16-bit transfer signal (1-wait state) if card selected
 	-- If you don't assert this quickly, then the AT will switch to doing a
@@ -204,6 +191,8 @@ begin
 
     		if ram_la_decode <= '1' then
 
+    			card_cs <= '1';
+
 	    		-- XMS ONLY ON, 1MB (0x010000) to 15MB (0xFEFFFF)
 	    		if xms_only_n = '0' then 	
 	    			if sa0 = '0' then
@@ -225,6 +214,7 @@ begin
 	    			end if;
 
 	    		end if;
+
     		end if;
 
     		if rom_decode <= '1' then
@@ -232,6 +222,7 @@ begin
     		end if;
 
     	end if;
+    	
     end process p_latch_selection;
 
     -- TODO: Leaving this here for now, as liked how this showed the shifting even if it didn't latch properly
@@ -259,8 +250,6 @@ begin
     -- Light the RAM LED when the card is being accessed
     led_ram_cs_n <= '0' when card_cs = '1' else
     				'1';
-
-
 
 
 	--p_ram_bank_cs_lh : process(ale)
