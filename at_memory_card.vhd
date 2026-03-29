@@ -189,7 +189,7 @@ begin
 			ram_bank_cs_h_n <= (others => '1');
 			led_rom_cs_n <= '1';
 
-    		if ram_la_decode <= '1' then
+    		if ram_la_decode = '1' then
 
     			card_cs <= '1';
 
@@ -222,7 +222,7 @@ begin
     		end if;
 
     	end if;
-    	
+
     end process p_latch_selection;
 
     -- TODO: Leaving this here for now, as liked how this showed the shifting even if it didn't latch properly
