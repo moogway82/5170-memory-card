@@ -18,11 +18,11 @@ entity at_memory_card is
 		umbe_n 		: in 	std_logic;
 		xms_only_n 	: in 	std_logic;
 		-- outputs
-		md_dir 		: out 	std_logic := '1';
+		md_dir 			: out 	std_logic := '1';
 		ram_bank_cs_l_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
 		ram_bank_cs_h_n	: out 	std_logic_vector(15 downto 1) := (others => '1');
-		mem_cs_16_n : out 	std_logic := 'Z';
-		-- zero_ws  : out 	std_logic;
+		mem_cs_16_n 	: out 	std_logic := 'Z';
+		zero_ws_n  		: out 	std_logic := 'Z';
 		led_ram_cs_n 	: out 	std_logic := '1';
 		led_rom_cs_n 	: out 	std_logic := '1'
 	);
@@ -62,12 +62,12 @@ begin
 								ram_bank_cs <= (0 => '1', others => '0');
 							-- UMB D
 							when "110" =>
-								if sa16 = '1' then
+								if umbd_n = '0' and sa16 = '1' then
 									ram_bank_cs <= (0 => '1', others => '0');									
 								end if;
 							-- UMB E
 							when "111" =>
-								if sa16 = '0' then
+								if umbe_n = '0' and sa16 = '0' then
 									ram_bank_cs <= (0 => '1', others => '0');									
 								end if;
 
@@ -84,66 +84,49 @@ begin
 				when x"2" =>
 					ram_bank_cs <= (2 => '1', others => '0');
 
-				--when x"3" =>
-				--	ram_bank_cs <= (3 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"3" =>
+					ram_bank_cs <= (3 => '1', others => '0');
 
-				--when x"4" =>
-				--	ram_bank_cs <= (4 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"4" =>
+					ram_bank_cs <= (4 => '1', others => '0');
 
-				--when x"5" =>
-				--	ram_bank_cs <= (5 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"5" =>
+					ram_bank_cs <= (5 => '1', others => '0');
 
-				--when x"6" =>
-				--	ram_bank_cs <= (6 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"6" =>
+					ram_bank_cs <= (6 => '1', others => '0');
 
-				--when x"7" =>
-				--	ram_bank_cs <= (7 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"7" =>
+					ram_bank_cs <= (7 => '1', others => '0');
 
-				--when x"8" =>
-				--	ram_bank_cs <= (8 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"8" =>
+					ram_bank_cs <= (8 => '1', others => '0');
 
-				--when x"9" =>
-				--	ram_bank_cs <= (9 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"9" =>
+					ram_bank_cs <= (9 => '1', others => '0');
 
-				--when x"A" =>
-				--	ram_bank_cs <= (10 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"A" =>
+					ram_bank_cs <= (10 => '1', others => '0');
 
-				--when x"B" =>
-				--	ram_bank_cs <= (11 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"B" =>
+					ram_bank_cs <= (11 => '1', others => '0');
 
-				--when x"C" =>
-				--	ram_bank_cs <= (12 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"C" =>
+					ram_bank_cs <= (12 => '1', others => '0');
 
-				--when x"D" =>
-				--	ram_bank_cs <= (13 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"D" =>
+					ram_bank_cs <= (13 => '1', others => '0');
 
-				--when x"E" =>
-				--	ram_bank_cs <= (14 => '1', others => '0');
-				--	ram_la_decode <= '1';
+				when x"E" =>
+					ram_bank_cs <= (14 => '1', others => '0');
 
-				--when x"F" =>
-				-- Region is only decoded if XMS ONLY is ON
-
-				--	if(unsigned(a(19 downto 16)) >= x"0" and unsigned(a(19 downto 16)) < x"E") then
-				--		if(xms_only_n = '0') then 
-				--			ram_bank_cs <= (15 => '1', others => '0');
-				--			card_cs <= '1';
-				--		end if;
-				--	else
-				--		-- Light the ROM LED when in system ROM space (0xFE and 0xFF is repeat of 0x0E and 0x0F)
-				--		led_rom_cs_n <= '0';
-				--	end if;
+				when x"F" =>
+				 --Region is only decoded if XMS ONLY is ON
+				 	if xms_only_n = '0' then 
+						if unsigned(la(19 downto 17)) >= 0 and unsigned(la(19 downto 17)) < 7 then	
+							ram_bank_cs <= (15 => '1', others => '0');
+						end if;
+					end if;
 
 				when others =>
 					ram_bank_cs <= (others => '0');
@@ -225,21 +208,6 @@ begin
 
     end process p_latch_selection;
 
-    -- TODO: Leaving this here for now, as liked how this showed the shifting even if it didn't latch properly
-    ---- Shift the Chip selection if only XMS is selected to use all the available RAM
-	---- And split the Chip Selection between Hight and Low bytes
-	--ram_bank_cs_l_n 	<= 	not ram_bank_cs(15 downto 1) when sa0 = '0' and xms_only_n = '0' else
-	--				not ram_bank_cs(14 downto 0) when sa0 = '0' and xms_only_n = '1' else
-	--			 	(others => '1');
-
-	--ram_bank_cs_h_n 	<= 	not ram_bank_cs(15 downto 1) when sbhe_n = '0' and xms_only_n = '0' else
-	--				not ram_bank_cs(14 downto 0) when sbhe_n = '0' and xms_only_n = '1' else
-	--				(others => '1');
-
-    -- TODO: Look at enabling 0WS also if testing well, oooh the power
-    --zero_ws_n 	<=	'0' when card_cs = '1' else
-    --				'Z';
-
     -- Memory chip Data transciever direction
     -- same as MEMR_N unless it's not selected then it's set to INPUT (ie write) as I can't tristate it
    	-- TODO: If this doesn't work might need to mod the hardware to add the ENABLE signal so can tristate
@@ -251,54 +219,14 @@ begin
     led_ram_cs_n <= '0' when card_cs = '1' else
     				'1';
 
-
-	--p_ram_bank_cs_lh : process(ale)
-	--begin
-	--	--ram_bank_cs_l_n 	<= (others => '1');
-	--	--ram_bank_cs_h_n 	<= (others => '1');
-	--	--md_dir <= '1';
-	--	--led_ram_bank_cs_n <= '1';
-
-	--	if rising_edge(ale) then
-	--		if card_cs = '1' then
-	--			-- Shift the Chip selection if only XMS is selected to use all the available RAM
-	--			-- And split the Chip Selection between Hight and Low bytes
-	--			if sa0 = '0' and xms_only_n = '0' then
-	--				ram_bank_cs_l_n 	<= 	not ram_bank_cs(15 downto 1);
-	--			elsif sa0 = '0' and xms_only_n = '1' then
-	--				ram_bank_cs_l_n 	<= not ram_bank_cs(14 downto 0);
-	--			else
-	--				ram_bank_cs_l_n 	<= (others => '1');
-	--			end if;
-
-	--			if 	sbhe_n = '0' and xms_only_n = '0' then
-	--				ram_bank_cs_h_n 	<= 	not ram_bank_cs(15 downto 1);
-	--			elsif sbhe_n = '0' and xms_only_n = '1' then
-	--				ram_bank_cs_h_n 	<= not ram_bank_cs(14 downto 0);
-	--			else 
-	--				ram_bank_cs_h_n 	<= (others => '1');
-	--			end if;		
-
-	--			-- md_dir = 1, as input on the ISA bus. md_dir = 0, an output to the ISA bus
-	--			if memr_n = '0' then
-	--				md_dir <= '0';
-	--			else 
-	--				md_dir <= '1';
-	--			end if;
-
-	--			led_ram_bank_cs_n <= '0';
-	--		else
-	--			ram_bank_cs_l_n 	<= (others => '1');
-	--			ram_bank_cs_h_n 	<= (others => '1');
-	--			md_dir <= '1';
-	--			led_ram_bank_cs_n <= '1';
-	--		end if;
-	--	end if;
-	--end process p_ram_bank_cs_lh;
-
     -- TODO: Look at enabling 0WS also if testing well, oooh the power
-    --zero_ws_n 	<=	'0' when card_cs = '1' else
-    --				'Z';
+    -- 0WS is just wired directly the SRDY pin of the 82284. It's described as a synchronised signal which makes me
+    -- think that it needs to be carefully timed with the clock cycle, but I'm not sure, needs some experimentation
+    -- as I'm not loving the docs I can find on how to use it. ISA and EISA by Edward Solari seems to suggest needs 
+    -- fast timing from MEMR/W signal and that an 8MHz AT doesn't give enough time to do it, so isn't used much...
+    -- Also think we could observe how the Tsenglabs ET4000AX asserts it - timed or just whole cycle?
+    zero_ws_n 	<=	'0' when card_cs = '1' else
+    				'Z';
 
 
 
@@ -358,3 +286,4 @@ end behavioral;
 --PIN: xms_only_n 		: 57
 --PIN: mem_cs_16_n 		: 22
 --PIN: refresh_n 		: 10
+--PIN: zero_ws_n		: 4

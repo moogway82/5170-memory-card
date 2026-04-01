@@ -3,8 +3,8 @@
 #export ROOT=$(dirname $0)
 export ROOT="~/code/atf15xx_yosys"
 
-#NAME=$1; shift
-NAME=at_memory_card_128k_only
+NAME=$1; shift
+#NAME=at_memory_card
 
 VERSION=`yosys --version | cut -d' ' -f2`
 

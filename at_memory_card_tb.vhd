@@ -29,6 +29,7 @@ architecture behavioral of at_memory_card_tb is
 		signal ram_cs_l_n	: std_logic_vector(15 downto 1);
 		signal ram_cs_h_n	: std_logic_vector(15 downto 1);
 		signal mem_cs_16_n  : std_logic;
+		signal zero_ws 	: std_logic;
 		signal led_ram_cs_n : std_logic;
 		signal led_rom_cs_n : std_logic;
 
@@ -61,6 +62,7 @@ port map(
 	ram_bank_cs_l_n => ram_cs_l_n,
 	ram_bank_cs_h_n => ram_cs_h_n,
 	mem_cs_16_n => mem_cs_16_n,
+	zero_ws => zero_ws,
 	led_ram_cs_n => led_ram_cs_n,
 	led_rom_cs_n => led_rom_cs_n
 );

@@ -35,7 +35,7 @@ architecture behavioral of at_memory_card_128k_only is
 begin
 
 	-- Decode LA
-	la_decoded <= 	'1' when la = "0000100" and refresh_n = '1' else
+	la_decoded <= 	'1' when la(23 downto 20) = "0001" and refresh_n = '1' else
 					'0';
 
 	-- Decode ROM
