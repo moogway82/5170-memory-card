@@ -1,14 +1,16 @@
 CHIP "at_memory_card" ASSIGNED TO AN PLCC84
-id00036QN					: 602
-id00083Q					: 604
+id00051QN					: 601
+id00043QN					: 602
+id00047QN					: 603
+id00034QN					: 604
 led_ram_cs_n					: 11
 refresh_n					: 10
-id00079Q					: 606
-id00069Q					: 607
+id00039QN					: 606
+id00029QN					: 607
 sa16					: 9
-id00048Q					: 608
-id00065Q					: 609
-id00014QN					: 610
+id00025Q					: 608
+zero_ws_n_combENA					: 609
+id00011QN					: 610
 umbe_n					: 8
 mem_cs_16_n_combENA					: 612
 umbd_n					: 6
@@ -17,11 +19,18 @@ zero_ws_n					: 4
 mem_cs_16_n					: 22
 ram_bank_cs_h_n_3					: 21
 ram_bank_cs_h_n_11					: 20
+id00080Q					: 622
+id00076Q					: 623
 ram_bank_cs_h_n_5					: 18
 ram_bank_cs_h_n_13					: 17
+id00072QN					: 626
 ram_bank_cs_h_n_7					: 16
+id00068QN					: 628
 led_rom_cs_n					: 15
+id00060QN					: 630
+id00064QN					: 631
 TDI					: 14
+id00056QN					: 632
 la_5					: 31
 la_6					: 30
 memr_n					: 29
@@ -63,3 +72,4 @@ ram_bank_cs_h_n_0					: 76
 ram_bank_cs_h_n_14					: 77
 sbhe_n					: 2
 sa0					: 83
+memw_n					: 1

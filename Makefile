@@ -5,7 +5,7 @@ all: $(SOURCES) $(IMAGES)
 
 at_memory_card.svf: GHDL
 	./run_yosys.sh at_memory_card
-	./run_fitter.sh at_memory_card -preassign keep -tdi_pullup on -tms_pullup on -output_fast off -xor_synthesis on -logic_doubling off
+	./run_fitter.sh at_memory_card -preassign keep -tdi_pullup on -tms_pullup on -output_fast off -xor_synthesis on -logic_doubling off -Open_collector on
 	./run_fuseconv.sh at_memory_card
 
 GHDL:

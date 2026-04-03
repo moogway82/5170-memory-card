@@ -313,6 +313,8 @@ refresh_n <= '1';
 tb : process
 begin
 	xms_only_n <= '1';
+	umbd_n <= '0';
+	umbe_n <= '0';
 	sbhe_n <= '0';
 	sa0 <= '0';
 	wait until a_cnt(23 downto 17) = "1111111";
@@ -323,22 +325,6 @@ begin
 	sa0 <= '1';
 	wait until a_cnt(23 downto 17) = "1111111";
 
-	--wait until a = "00000000000000000000000";
-	--sa0 <= '1';
-	--wait until a = "00000000000000000000000";
-	--sbhe_n <= '1';
-	--sa0 <= '0';
-	--wait until a = "00000000000000000000000";
-	--xms_only_n <= '1';
-	--sbhe_n <= '0';
-	--sa0 <= '0';
-	--wait until a = "00000000000000000000000";
-	--wait until a = "00000000000000000000000";
-	--sa0 <= '1';
-	--wait until a = "00000000000000000000000";
-	--sbhe_n <= '1';
-	--sa0 <= '0';
-	--wait until a = "00000000000000000000000";
 	
 	-- End testing by crashing out, wheee!
 	 assert false report "End of testing, phew!" severity failure;

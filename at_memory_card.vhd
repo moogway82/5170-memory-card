@@ -29,10 +29,14 @@ entity at_memory_card is
 end;
 
 architecture behavioral of at_memory_card is
+	attribute keep : string;
+
 	signal 	ram_bank_cs 		: std_logic_vector(15 downto 0) := (others => '0'); -- Active High, One more CS than output so that full possible RAM is decoded internally
 	signal  rom_decode 			: std_logic := '0';
 	signal  card_cs 			: std_logic := '0';  -- This is the commitment to serve the bus on ALE
 	signal  ram_la_decode 		: std_logic := '0';
+	signal  zero_ws_n_OE 		: std_logic := '1';
+	attribute keep of zero_ws_n_OE : signal is "true";
 
 begin
 
@@ -57,7 +61,7 @@ begin
 					if xms_only_n = '1' then 
 
 						case la(19 downto 17) is
-							-- Select the card to fill missing 128KB in Conventional RAM (0x08000-0x09FFF) on a 5170 if not XMS only
+							-- Upper 128KB in Conventional RAM (0x08000-0x09FFF)
 							when "100" =>
 								ram_bank_cs <= (0 => '1', others => '0');
 							-- UMB D
@@ -121,9 +125,11 @@ begin
 					ram_bank_cs <= (14 => '1', others => '0');
 
 				when x"F" =>
-				 --Region is only decoded if XMS ONLY is ON
+				 --Top 1MB space - Region is only decoded if XMS ONLY is ON
 				 	if xms_only_n = '0' then 
-						if unsigned(la(19 downto 17)) >= 0 and unsigned(la(19 downto 17)) < 7 then	
+				 		-- 0xF00000 to 0xFDFFFF only as 0xFE0000 to 0xFFFFFF mirrors 0x0E0000 to 0x0FFFFF 
+				 		if not la(19 downto 17) = "111" then
+						-- if unsigned(la(19 downto 17)) >= 0 and unsigned(la(19 downto 17)) < 7 then	
 							ram_bank_cs <= (15 => '1', others => '0');
 						end if;
 					end if;
@@ -225,8 +231,19 @@ begin
     -- as I'm not loving the docs I can find on how to use it. ISA and EISA by Edward Solari seems to suggest needs 
     -- fast timing from MEMR/W signal and that an 8MHz AT doesn't give enough time to do it, so isn't used much...
     -- Also think we could observe how the Tsenglabs ET4000AX asserts it - timed or just whole cycle?
-    zero_ws_n 	<=	'0' when card_cs = '1' else
+    -- #1 Whole Bus Cycle
+
+    -- zero_ws_n 	<=	'0' when card_cs = '1' else
+    --				'Z';
+
+    -- #2 Only during the command
+    zero_ws_n_OE 	<= 	'1' when card_cs = '1' and (memr_n = '0' or memw_n = '0') else 
+    					'0';
+
+    zero_ws_n 	<= 	'0' when zero_ws_n_OE = '1' else
     				'Z';
+
+
 
 
 
