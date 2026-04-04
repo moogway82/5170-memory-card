@@ -1,4 +1,4 @@
-Atmel ATF1508 Fitter Version 1918 ,running Fri Apr 03 16:32:06 2026
+Atmel ATF1508 Fitter Version 1918 ,running Sat Apr 04 12:08:10 2026
 
 
 
@@ -17,7 +17,6 @@ fit1508
 -output_fast off
 -xor_synthesis on
 -logic_doubling off
--Open_collector on
 
 ****** Initial fitting strategy and property ******
  Netlist_in_file = at_memory_card.edif
@@ -45,7 +44,7 @@ fit1508
  TDI pullup = ON
  TMS pullup = ON
  MC_power = OFF
- Open_collector = ON
+ Open_collector = OFF
  ITD0 = ON
  ITD1 = ON
  ITD2 = ON
@@ -707,138 +706,138 @@ SO Pin Options Field = Summary of Allocations.
 
 
 MCell Pin# Oe   PinDrive           DCERP  FBDrive        DCERP  Foldback  CascadeOut        TotPT SO
-MC1   0         --                        id00051QN      C----  --        --                2     so 
-MC2   0         --                        id00043QN      C----  --        --                2     so 
-MC3   12        --                        id00047QN      C----  --        --                2     so 
-MC4   0         --                        id00034QN      C----  --        --                2     so 
-MC5   11   on   led_ram_cs_n       C----  --                    --        --                1     so 
-MC6   10   --   refresh_n          INPUT  id00039QN      C----  --        --                2     so 
-MC7   0         --                        id00029QN      C----  --        --                2     so 
-MC8   9    --   sa16               INPUT  id00025Q       C----  --        --                2     so 
-MC9   0         --                        zero_ws_n.OE   C----  --        --                2     so 
-MC10  0         --                        id00011QN      C----  --        --                3     so 
-MC11  8    --   umbe_n             INPUT  --                    NA        -> mem_cs_16_n.OE 5     so 
-MC12  0         --                        mem_cs_16_n.OE C----  NA        --                5     so 
-MC13  6    --   umbd_n             INPUT  --                    --        -> card_cs_comb   5     so 
-MC14  5         --                        --                    --        -> card_cs_comb   5     so 
-MC15  0         --                        card_cs_comb   Lc---  --        --                1     so 
-MC16  4    PT   zero_ws_n          C----  --                    --        --                1     so 
-MC17  22   PT   mem_cs_16_n        C----  --                    --        --                1     so 
-MC18  0         --                        --                    --        --                0     so 
-MC19  21   on   ram_bank_cs_h_n_3  Lc---  --                    --        --                2     so 
-MC20  0         --                        --                    --        --                0     so 
-MC21  20   on   ram_bank_cs_h_n_11 Lc---  --                    --        --                2     so 
-MC22  0         --                        id00080Q       C----  --        --                2     so 
-MC23  0         --                        id00076Q       C----  --        --                2     so 
-MC24  18   on   ram_bank_cs_h_n_5  Lc---  --                    --        --                2     so 
-MC25  17   on   ram_bank_cs_h_n_13 Lc---  --                    --        --                2     so 
-MC26  0         --                        id00072QN      C----  --        --                2     so 
-MC27  16   on   ram_bank_cs_h_n_7  Lc---  --                    --        --                2     so 
-MC28  0         --                        id00068QN      C----  --        --                2     so 
-MC29  15   on   led_rom_cs_n       C----  --                    --        --                0     so 
-MC30  0         --                        id00060QN      C----  --        --                2     so 
-MC31  0         --                        id00064QN      C----  --        --                2     so 
-MC32  14   --   TDI                INPUT  id00056QN      C----  --        --                2     so 
-MC33  0         --                        --                    --        --                0     so 
-MC34  0         --                        --                    --        --                0     so 
-MC35  31   --   la_5               INPUT  --                    --        --                0     so 
-MC36  0         --                        --                    --        --                0     so 
-MC37  30   --   la_6               INPUT  --                    --        --                0     so 
-MC38  29   --   memr_n             INPUT  --                    --        --                0     so 
-MC39  0         --                        --                    --        --                0     so 
-MC40  28   on   md_dir             C----  --                    --        --                1     so 
-MC41  0         --                        --                    --        --                0     so 
-MC42  0         --                        --                    --        --                0     so 
-MC43  27   on   ram_bank_cs_l_n_11 Lc---  --                    --        --                2     so 
-MC44  0         --                        --                    --        --                0     so 
-MC45  25   on   ram_bank_cs_l_n_9  Lc---  --                    --        --                2     so 
-MC46  24   on   ram_bank_cs_l_n_1  Lc---  --                    --        --                2     so 
-MC47  0         --                        --                    --        --                0     so 
-MC48  23   --   TMS                INPUT  --                    --        --                0     so 
-MC49  41        --                        --                    --        --                0     so 
-MC50  0         --                        --                    --        --                0     so 
-MC51  40        --                        --                    --        --                0     so 
-MC52  0         --                        --                    --        --                0     so 
-MC53  39        --                        --                    --        --                0     so 
-MC54  0         --                        --                    --        --                0     so 
-MC55  0         --                        --                    --        --                0     so 
-MC56  37   --   la_0               INPUT  --                    --        --                0     so 
-MC57  36   --   la_3               INPUT  --                    --        --                0     so 
-MC58  0         --                        --                    --        --                0     so 
-MC59  35   --   la_1               INPUT  --                    --        --                0     so 
-MC60  0         --                        --                    --        --                0     so 
-MC61  34   --   la_4               INPUT  --                    --        --                0     so 
-MC62  0         --                        --                    --        --                0     so 
-MC63  0         --                        --                    --        --                0     so 
-MC64  33   --   la_2               INPUT  --                    --        --                0     so 
-MC65  44   on   ram_bank_cs_h_n_10 Lc---  --                    --        --                2     so 
-MC66  0         --                        --                    --        --                0     so 
-MC67  45        --                        --                    --        --                0     so 
-MC68  0         --                        --                    --        --                0     so 
-MC69  46   --   ale                INPUT  --                    --        --                0     so 
-MC70  0         --                        --                    --        --                0     so 
-MC71  0         --                        --                    --        --                0     so 
-MC72  48   on   ram_bank_cs_l_n_10 Lc---  --                    --        --                2     so 
-MC73  49   on   ram_bank_cs_h_n_8  Lc---  --                    --        --                2     so 
-MC74  0         --                        --                    --        --                0     so 
-MC75  50   on   ram_bank_cs_l_n_14 Lc---  --                    --        --                3     so 
-MC76  0         --                        --                    --        --                0     so 
-MC77  51   on   ram_bank_cs_l_n_12 Lc---  --                    --        --                2     so 
-MC78  0         --                        --                    --        --                0     so 
-MC79  0         --                        --                    --        --                0     so 
-MC80  52        --                        --                    --        --                0     so 
-MC81  0         --                        --                    --        --                0     so 
-MC82  0         --                        --                    --        --                0     so 
-MC83  54   on   ram_bank_cs_h_n_12 Lc---  --                    --        --                2     so 
-MC84  0         --                        --                    --        --                0     so 
-MC85  55        --                        --                    --        --                0     so 
-MC86  56   on   ram_bank_cs_l_n_8  Lc---  --                    --        --                2     so 
-MC87  0         --                        --                    --        --                0     so 
-MC88  57   --   xms_only_n         INPUT  --                    --        --                0     so 
-MC89  0         --                        --                    --        --                0     so 
-MC90  0         --                        --                    --        --                0     so 
-MC91  58   on   ram_bank_cs_l_n_3  Lc---  --                    --        --                2     so 
-MC92  0         --                        --                    --        --                0     so 
-MC93  60   on   ram_bank_cs_l_n_13 Lc---  --                    --        --                2     so 
-MC94  61   on   ram_bank_cs_l_n_5  Lc---  --                    --        --                2     so 
-MC95  0         --                        --                    --        --                0     so 
-MC96  62   --   TCK                INPUT  --                    --        --                0     so 
-MC97  63   on   ram_bank_cs_l_n_7  Lc---  --                    --        --                2     so 
-MC98  0         --                        --                    --        --                0     so 
-MC99  64   on   ram_bank_cs_h_n_1  Lc---  --                    --        --                2     so 
-MC100 0         --                        --                    --        --                0     so 
-MC101 65   on   ram_bank_cs_h_n_9  Lc---  --                    --        --                2     so 
-MC102 0         --                        --                    --        --                0     so 
-MC103 0         --                        --                    --        --                0     so 
-MC104 67   on   ram_bank_cs_h_n_6  Lc---  --                    --        --                2     so 
-MC105 68   on   ram_bank_cs_l_n_4  Lc---  --                    --        --                2     so 
-MC106 0         --                        --                    --        --                0     so 
-MC107 69   on   ram_bank_cs_h_n_2  Lc---  --                    --        --                2     so 
-MC108 0         --                        --                    --        --                0     so 
-MC109 70   on   ram_bank_cs_l_n_2  Lc---  --                    --        --                2     so 
-MC110 0         --                        --                    --        --                0     so 
-MC111 0         --                        --                    --        --                0     so 
-MC112 71   --   TDO                C----  --                    --        --                0     so 
-MC113 0         --                        --                    --        --                0     so 
-MC114 0         --                        --                    --        --                0     so 
-MC115 73   on   ram_bank_cs_h_n_4  Lc---  --                    --        --                2     so 
-MC116 0         --                        --                    --        --                0     so 
-MC117 74   on   ram_bank_cs_l_n_0  Lc---  --                    --        --                3     so 
-MC118 75   on   ram_bank_cs_l_n_6  Lc---  --                    --        --                2     so 
-MC119 0         --                        --                    --        --                0     so 
-MC120 76   on   ram_bank_cs_h_n_0  Lc---  --                    --        --                3     so 
-MC121 0         --                        --                    --        --                0     so 
-MC122 0         --                        --                    --        --                0     so 
-MC123 77   on   ram_bank_cs_h_n_14 Lc---  --                    --        --                3     so 
-MC124 0         --                        --                    --        --                0     so 
-MC125 79        --                        --                    --        --                0     so 
-MC126 80        --                        --                    --        --                0     so 
-MC127 0         --                        --                    --        --                0     so 
-MC128 81        --                        --                    --        --                0     so 
-MC0   2         sbhe_n             INPUT  --                    --        --                0     so 
-MC0   1         memw_n             INPUT  --                    --        --                0     so 
-MC0   84        --                        --                    --        --                0     so 
-MC0   83        sa0                INPUT  --                    --        --                0     so 
+MC1   0         --                        id00051QN      C----  --        --                2     s- 
+MC2   0         --                        id00043QN      C----  --        --                2     s- 
+MC3   12        --                        id00047QN      C----  --        --                2     s- 
+MC4   0         --                        id00034QN      C----  --        --                2     s- 
+MC5   11   on   led_ram_cs_n       C----  --                    --        --                1     s- 
+MC6   10   --   refresh_n          INPUT  id00039QN      C----  --        --                2     s- 
+MC7   0         --                        id00029QN      C----  --        --                2     s- 
+MC8   9    --   sa16               INPUT  id00025Q       C----  --        --                2     s- 
+MC9   0         --                        zero_ws_n.OE   C----  --        --                2     s- 
+MC10  0         --                        id00011QN      C----  --        --                3     s- 
+MC11  8    --   umbe_n             INPUT  --                    NA        -> mem_cs_16_n.OE 5     s- 
+MC12  0         --                        mem_cs_16_n.OE C----  NA        --                5     s- 
+MC13  6    --   umbd_n             INPUT  --                    --        -> card_cs_comb   5     s- 
+MC14  5         --                        --                    --        -> card_cs_comb   5     s- 
+MC15  0         --                        card_cs_comb   Lc---  --        --                1     s- 
+MC16  4    PT   zero_ws_n          C----  --                    --        --                1     s- 
+MC17  22   PT   mem_cs_16_n        C----  --                    --        --                1     s- 
+MC18  0         --                        --                    --        --                0     s- 
+MC19  21   on   ram_bank_cs_h_n_3  Lc---  --                    --        --                2     s- 
+MC20  0         --                        --                    --        --                0     s- 
+MC21  20   on   ram_bank_cs_h_n_11 Lc---  --                    --        --                2     s- 
+MC22  0         --                        id00080Q       C----  --        --                2     s- 
+MC23  0         --                        id00076Q       C----  --        --                2     s- 
+MC24  18   on   ram_bank_cs_h_n_5  Lc---  --                    --        --                2     s- 
+MC25  17   on   ram_bank_cs_h_n_13 Lc---  --                    --        --                2     s- 
+MC26  0         --                        id00072QN      C----  --        --                2     s- 
+MC27  16   on   ram_bank_cs_h_n_7  Lc---  --                    --        --                2     s- 
+MC28  0         --                        id00068QN      C----  --        --                2     s- 
+MC29  15   on   led_rom_cs_n       C----  --                    --        --                0     s- 
+MC30  0         --                        id00060QN      C----  --        --                2     s- 
+MC31  0         --                        id00064QN      C----  --        --                2     s- 
+MC32  14   --   TDI                INPUT  id00056QN      C----  --        --                2     s- 
+MC33  0         --                        --                    --        --                0     s- 
+MC34  0         --                        --                    --        --                0     s- 
+MC35  31   --   la_5               INPUT  --                    --        --                0     s- 
+MC36  0         --                        --                    --        --                0     s- 
+MC37  30   --   la_6               INPUT  --                    --        --                0     s- 
+MC38  29   --   memr_n             INPUT  --                    --        --                0     s- 
+MC39  0         --                        --                    --        --                0     s- 
+MC40  28   on   md_dir             C----  --                    --        --                1     s- 
+MC41  0         --                        --                    --        --                0     s- 
+MC42  0         --                        --                    --        --                0     s- 
+MC43  27   on   ram_bank_cs_l_n_11 Lc---  --                    --        --                2     s- 
+MC44  0         --                        --                    --        --                0     s- 
+MC45  25   on   ram_bank_cs_l_n_9  Lc---  --                    --        --                2     s- 
+MC46  24   on   ram_bank_cs_l_n_1  Lc---  --                    --        --                2     s- 
+MC47  0         --                        --                    --        --                0     s- 
+MC48  23   --   TMS                INPUT  --                    --        --                0     s- 
+MC49  41        --                        --                    --        --                0     s- 
+MC50  0         --                        --                    --        --                0     s- 
+MC51  40        --                        --                    --        --                0     s- 
+MC52  0         --                        --                    --        --                0     s- 
+MC53  39        --                        --                    --        --                0     s- 
+MC54  0         --                        --                    --        --                0     s- 
+MC55  0         --                        --                    --        --                0     s- 
+MC56  37   --   la_0               INPUT  --                    --        --                0     s- 
+MC57  36   --   la_3               INPUT  --                    --        --                0     s- 
+MC58  0         --                        --                    --        --                0     s- 
+MC59  35   --   la_1               INPUT  --                    --        --                0     s- 
+MC60  0         --                        --                    --        --                0     s- 
+MC61  34   --   la_4               INPUT  --                    --        --                0     s- 
+MC62  0         --                        --                    --        --                0     s- 
+MC63  0         --                        --                    --        --                0     s- 
+MC64  33   --   la_2               INPUT  --                    --        --                0     s- 
+MC65  44   on   ram_bank_cs_h_n_10 Lc---  --                    --        --                2     s- 
+MC66  0         --                        --                    --        --                0     s- 
+MC67  45        --                        --                    --        --                0     s- 
+MC68  0         --                        --                    --        --                0     s- 
+MC69  46   --   ale                INPUT  --                    --        --                0     s- 
+MC70  0         --                        --                    --        --                0     s- 
+MC71  0         --                        --                    --        --                0     s- 
+MC72  48   on   ram_bank_cs_l_n_10 Lc---  --                    --        --                2     s- 
+MC73  49   on   ram_bank_cs_h_n_8  Lc---  --                    --        --                2     s- 
+MC74  0         --                        --                    --        --                0     s- 
+MC75  50   on   ram_bank_cs_l_n_14 Lc---  --                    --        --                3     s- 
+MC76  0         --                        --                    --        --                0     s- 
+MC77  51   on   ram_bank_cs_l_n_12 Lc---  --                    --        --                2     s- 
+MC78  0         --                        --                    --        --                0     s- 
+MC79  0         --                        --                    --        --                0     s- 
+MC80  52        --                        --                    --        --                0     s- 
+MC81  0         --                        --                    --        --                0     s- 
+MC82  0         --                        --                    --        --                0     s- 
+MC83  54   on   ram_bank_cs_h_n_12 Lc---  --                    --        --                2     s- 
+MC84  0         --                        --                    --        --                0     s- 
+MC85  55        --                        --                    --        --                0     s- 
+MC86  56   on   ram_bank_cs_l_n_8  Lc---  --                    --        --                2     s- 
+MC87  0         --                        --                    --        --                0     s- 
+MC88  57   --   xms_only_n         INPUT  --                    --        --                0     s- 
+MC89  0         --                        --                    --        --                0     s- 
+MC90  0         --                        --                    --        --                0     s- 
+MC91  58   on   ram_bank_cs_l_n_3  Lc---  --                    --        --                2     s- 
+MC92  0         --                        --                    --        --                0     s- 
+MC93  60   on   ram_bank_cs_l_n_13 Lc---  --                    --        --                2     s- 
+MC94  61   on   ram_bank_cs_l_n_5  Lc---  --                    --        --                2     s- 
+MC95  0         --                        --                    --        --                0     s- 
+MC96  62   --   TCK                INPUT  --                    --        --                0     s- 
+MC97  63   on   ram_bank_cs_l_n_7  Lc---  --                    --        --                2     s- 
+MC98  0         --                        --                    --        --                0     s- 
+MC99  64   on   ram_bank_cs_h_n_1  Lc---  --                    --        --                2     s- 
+MC100 0         --                        --                    --        --                0     s- 
+MC101 65   on   ram_bank_cs_h_n_9  Lc---  --                    --        --                2     s- 
+MC102 0         --                        --                    --        --                0     s- 
+MC103 0         --                        --                    --        --                0     s- 
+MC104 67   on   ram_bank_cs_h_n_6  Lc---  --                    --        --                2     s- 
+MC105 68   on   ram_bank_cs_l_n_4  Lc---  --                    --        --                2     s- 
+MC106 0         --                        --                    --        --                0     s- 
+MC107 69   on   ram_bank_cs_h_n_2  Lc---  --                    --        --                2     s- 
+MC108 0         --                        --                    --        --                0     s- 
+MC109 70   on   ram_bank_cs_l_n_2  Lc---  --                    --        --                2     s- 
+MC110 0         --                        --                    --        --                0     s- 
+MC111 0         --                        --                    --        --                0     s- 
+MC112 71   --   TDO                C----  --                    --        --                0     s- 
+MC113 0         --                        --                    --        --                0     s- 
+MC114 0         --                        --                    --        --                0     s- 
+MC115 73   on   ram_bank_cs_h_n_4  Lc---  --                    --        --                2     s- 
+MC116 0         --                        --                    --        --                0     s- 
+MC117 74   on   ram_bank_cs_l_n_0  Lc---  --                    --        --                3     s- 
+MC118 75   on   ram_bank_cs_l_n_6  Lc---  --                    --        --                2     s- 
+MC119 0         --                        --                    --        --                0     s- 
+MC120 76   on   ram_bank_cs_h_n_0  Lc---  --                    --        --                3     s- 
+MC121 0         --                        --                    --        --                0     s- 
+MC122 0         --                        --                    --        --                0     s- 
+MC123 77   on   ram_bank_cs_h_n_14 Lc---  --                    --        --                3     s- 
+MC124 0         --                        --                    --        --                0     s- 
+MC125 79        --                        --                    --        --                0     s- 
+MC126 80        --                        --                    --        --                0     s- 
+MC127 0         --                        --                    --        --                0     s- 
+MC128 81        --                        --                    --        --                0     s- 
+MC0   2         sbhe_n             INPUT  --                    --        --                0     s- 
+MC0   1         memw_n             INPUT  --                    --        --                0     s- 
+MC0   84        --                        --                    --        --                0     s- 
+MC0   83        sa0                INPUT  --                    --        --                0     s- 
 
 Logic Array Block			Macro Cells	I/O Pins	Foldbacks	TotalPT	FanIN		Cascades
 A: MC1	- MC16		13/16(81%)	6/16(37%)	0/16(0%)	42/80(52%)	17/40(42%)	3

@@ -35,8 +35,8 @@ architecture behavioral of at_memory_card is
 	signal  rom_decode 			: std_logic := '0';
 	signal  card_cs 			: std_logic := '0';  -- This is the commitment to serve the bus on ALE
 	signal  ram_la_decode 		: std_logic := '0';
-	signal  zero_ws_n_OE 		: std_logic := '1';
-	attribute keep of zero_ws_n_OE : signal is "true";
+	signal  zero_ws_n_oe 		: std_logic := '1';
+	attribute keep of zero_ws_n_oe : signal is "true";
 
 begin
 
@@ -225,28 +225,18 @@ begin
     led_ram_cs_n <= '0' when card_cs = '1' else
     				'1';
 
-    -- TODO: Look at enabling 0WS also if testing well, oooh the power
-    -- 0WS is just wired directly the SRDY pin of the 82284. It's described as a synchronised signal which makes me
-    -- think that it needs to be carefully timed with the clock cycle, but I'm not sure, needs some experimentation
-    -- as I'm not loving the docs I can find on how to use it. ISA and EISA by Edward Solari seems to suggest needs 
-    -- fast timing from MEMR/W signal and that an 8MHz AT doesn't give enough time to do it, so isn't used much...
-    -- Also think we could observe how the Tsenglabs ET4000AX asserts it - timed or just whole cycle?
-    -- #1 Whole Bus Cycle
+    -- Experimental 0WS stuff, didn't seem to crash the 386SX I was testing on, but not sure
+    -- if it sped it up either. Leaving it in and if folks want to try it can connect pin 4
+    -- to the 0WS signal.
 
-    -- zero_ws_n 	<=	'0' when card_cs = '1' else
-    --				'Z';
+    -- #2 Only during the command - might not be fast enough, I measured between 17 and 20ns from MEMR/W, but
+    -- docs say need like 10ish ns from MEMR/W to work
+    zero_ws_n_oe 	<= 	'1' when card_cs = '1' and memr_n = '0' else 
+    					'1' when card_cs = '1' and memw_n = '0' else
+       					'0';
 
-    -- #2 Only during the command
-    zero_ws_n_OE 	<= 	'1' when card_cs = '1' and (memr_n = '0' or memw_n = '0') else 
-    					'0';
-
-    zero_ws_n 	<= 	'0' when zero_ws_n_OE = '1' else
+    zero_ws_n 	<= 	'0' when zero_ws_n_oe = '1' else
     				'Z';
-
-
-
-
-
 
 end behavioral;
 
